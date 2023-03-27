@@ -1,0 +1,93 @@
+@media (min-width: 576px) {
+    body::before {
+      content: "SM";
+    }
+  }
+  
+  @media (min-width: 768px) {
+    body::before {
+      content: "MD";
+    }
+  }
+  
+  @media (min-width: 992px) {
+    body::before {
+      content: "LG";
+    }
+  }
+  
+  @media (min-width: 1200px) {
+    body::before {
+      content: "XL";
+    }
+  }
+  
+  @media (min-width: 1400px) {
+    body::before {
+      content: "XXL";
+    }
+  }
+
+  @media (max-width: 575px){
+    body::before{
+        content:"XS";
+    }
+    .space{
+      margin-top: 10% !important;
+    }
+  }
+
+  @media (max-width: 575px){
+
+  }
+
+  .card{
+    background-color: #f56c67;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  }
+
+  .card-body{
+    background-color: #FBFBFB!important;
+    border-radius: 0% 0% 3% 3%;
+    margin: 1px 0.5px 2px 1px;
+  }
+
+  .form-floating .form-control{
+    height: 47px;
+  }
+  
+  body{
+    background-color: #F4F4F4 !important;
+  }
+
+  .btn-red{
+    color:white;
+    background-color: #f56c67;
+    width: 120px;
+    height: 40px;
+  }
+
+  .btn-red:hover{
+    color:white;
+    background-color: #f04c46;
+  }
+
+  .btn-red:focus{
+    color:white !important;
+    background-color: #f04c46 !important;
+  }
+
+  .form-floating>.form-control:focus~label/*, .form-floating>.form-control:not(:placeholder-shown)~label, .form-floating>.form-select~label */{
+    opacity: .65;
+    transform: scale(.85) translateY(-0.8rem) translateX(0.15rem) !important;
+  }
+
+  .logo-header{
+    display: block;
+    width:200px;
+    height:110px;
+    margin: auto;
+    margin-bottom: 10px;
+    border-radius: 4%;
+    opacity: 80%;
+  }
