@@ -31,7 +31,7 @@
                         $pass = $passSuperior;
                     }
 
-                    $query->free();
+                    //$query->free();
                     $query->close();
                     $conn->close();
                     unset($result);

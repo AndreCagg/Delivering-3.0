@@ -91,3 +91,7 @@
     border-radius: 4%;
     opacity: 80%;
   }
+
+  .is-valid{
+    background-image: none !important;
+  }
