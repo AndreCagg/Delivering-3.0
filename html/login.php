@@ -42,7 +42,7 @@
                     <div class="card-body">
                         <div class="card-text">
                             <form action="../php/validateLogin.php" method="post">
-                                <div class="input-group has-validation">
+                                <div class="input-group">
                                     <div class="input-group-text">
                                         <img src="../icons/username.png" width="23px">
                                     </div>
@@ -53,12 +53,11 @@
                                         <label for="username" class="form-label">Username</label>
                                     </div>
                                     
-                                    <div class="invalid-feedback text-left">ciao</div>
                                 </div>
 
                                 <br><br>
 
-                                <div class="input-group has-validation">
+                                <div class="input-group">
                                     <div class="input-group-text">
                                         <img src="../icons/password.png" width="23px">
                                     </div>
@@ -84,22 +83,5 @@
             <div class="col-xxl-4 col-lg-3 col-md-3 col-sm-2 col-1"></div><!--spazio dx-->
         </div>
     </div>
-
-
-    <script>
-        let username=document.getElementById("username");
-        let usernameForm=document.getElementById("usernameForm");
-        let password=document.getElementById("password");
-        let passwordForm=document.getElementById("passwordForm");
-
-        username.addEventListener("keypress",validForm.bind(null,usernameForm,username));
-        password.addEventListener("keypress",validForm.bind(null,passwordForm,password))
-
-        function validForm(campo,form){
-            campo.classList.add("is-invalid");
-            form.classList.add("is-invalid");
-            console.log("scrivi "+campo);
-        }
-    </script>
 </body>
 </html>
