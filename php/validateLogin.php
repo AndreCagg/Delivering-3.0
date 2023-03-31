@@ -10,6 +10,7 @@
         
         class InvalidUser extends Exception {};
         
+        //genera eccezioni agli errori
         mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
         
         try {
@@ -104,5 +105,7 @@
 
             goLogin("../html/login.php");
         }
+    }else{
+        goLogin("../html/login.php");
     }
 ?>
