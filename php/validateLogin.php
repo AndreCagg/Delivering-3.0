@@ -1,12 +1,12 @@
 <?php
-    if(isset($_POST["username"]) && isset($_POST["password"])){
+    require_once "tool.php"; 
+    if(isset($_REQUEST["username"]) && isset($_REQUEST["password"])){
         session_start();
 
-        require_once "tool.php"; 
         require_once "../conf.php";
         
-        $username = $_POST["username"];
-        $password = $_POST["password"];
+        $username = $_REQUEST["username"];
+        $password = $_REQUEST["password"];
         
         class InvalidUser extends Exception {};
         
@@ -64,9 +64,8 @@
                     $_SESSION["login"]["logged"] = true;
                     $_SESSION["login"]["id"] = $id;
                     $_SESSION["login"]["name"] = $name;
-
-                    //cookie -due giorni
-                    setcookie("logged",$id."-".$name,time()+172800,"/");
+                    
+                    header("Location: ../html/dashboard.php");
                 } catch(Exception $e){
                     //echo $e->getMessage();
                     $conn->rollback();
@@ -83,6 +82,7 @@
 
                     throw new mysqli_sql_exception();
                 }
+
 
             } else {
                 throw new InvalidUser("Utente non trovato");

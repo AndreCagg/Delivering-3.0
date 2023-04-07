@@ -18,16 +18,15 @@
                 <div class="col-xxl-4 col-lg-6 col-md-6 col-sm-8 col-10">
                     <?php
                         session_start();
-                        if(isset($_SESSION["error"])){?>
-                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        if(isset($_SESSION["error"])){
+                            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">
                                 <button class="btn-close" aria-label="close" data-bs-dismiss="alert"></button>
                                 <img src="../icons/error.png" width="40px">
-                                <hr>
-                            <?php 
+                                <hr>';
                                 echo $_SESSION["error"]["message"];
-                                unset($_SESSION["error"]);?>
-                            </div>
-                        <?php } ?>
+                                unset($_SESSION["error"]);
+                            echo '</div>';
+                        } ?>
                     <img src="../icons/logo.png" class="logo-header">
                     <div class="card text-center">
                         <div class="card-header fw-bold text-white fs-4">
@@ -35,7 +34,7 @@
                         </div>
                         <div class="card-body">
                             <div class="card-text">
-                                <form action="../php/validateLogin.php" method="POST" id="id-form">
+                                <form action="../php/validateLogin.php" method="post" id="id-form">
                                     <div class="input-group">
                                         <div class="input-group-text">
                                             <img src="../icons/username.png" width="23px">
