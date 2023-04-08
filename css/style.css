@@ -95,3 +95,11 @@
   .is-valid{
     background-image: none !important;
   }
+
+  .side-menu span{
+    color: #e60000;
+  }
+
+  .menu-icon{
+    margin-right: 5px;
+  }
