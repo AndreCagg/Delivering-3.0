@@ -1,15 +1,12 @@
 <?php
-    echo "benvenuto<br>";
+    echo "<a href='../'>home</a>";
 
     session_start();
-    /*unset($_SESSION["login"]["logged"]);
-    unset($_SESSION["login"]["id"]);
-    unset($_SESSION["login"]["name"]);*/
-    
-    
-
-    echo "<a href='../'>home</a>";
+    require_once "../php/tool.php";
+    isLogged("../");
 ?>
+
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -23,51 +20,156 @@
     <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row flex-nowrap">
-        <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 side-menu">
-            <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 shadow">
-                <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none link-dark">
-                    <b><span class="fs-5 d-none d-sm-inline">Menu</span></b>
-                </a>
-                <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
-                    <li>
-                        <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i><img src="../icons/box.png" width="27px"/></i><span class="ms-1 d-none d-sm-inline">Servizi</span> </a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu" style="font-size:14px;padding-left:15px;">
-                            <li class="w-100">
-                            <a href="#" class="nav-link px-0"><i><img src="../icons/add.png" width="20px"/></i><span class="d-none d-sm-inline">Inserisci</span></a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"><i><img src="../icons/search.png" width="23px"/></i> <span class="d-none d-sm-inline">Ricerca</span></a>
-                            </li>
-                        </ul>
-                    </li>
+    <div class="container-fluid">
+        <div class="row dashboard-banner full-width-row">
+            <div class="d-flex flex-row-reverse fw-bold p-1 fs-6">
+                    <?php
+                        echo "Benvenuto, ".$_SESSION["login"]["name"];
+                    ?>
+                <button class="mx-2 rounded logout-btn d-flex">Esci <img src="../icons/logout.png" width="23px" class="mx-1"></button>
 
-                    <li class="nav-item">
-                        <a href="#" class="nav-link align-middle px-0">
-                            <i><img src="../icons/magazzino.png" width="23px"/></i><span class="ms-1 d-none d-sm-inline">Magazzino</span>
-                        </a>
-                    </li>
+            </div>
+        </div>
+        <div class="row flex-nowrap">
+            <div class="col-auto col-md-3 col-xl-2 px-sm-2 px-0 side-menu">
+                <div class="d-flex flex-column align-items-center align-items-sm-start px-3 pt-2 min-vh-100 shadow">
+                    <a href="/" class="d-flex align-items-center pb-3 mb-md-0 me-md-auto text-decoration-none link-dark">
+                        <b><span class="fs-5 d-none d-sm-inline">Menu</span></b>
+                    </a>
+                    <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
+                        <li>
+                            <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i><img src="../icons/box.png" width="27px"/></i><span class="ms-1 d-none d-sm-inline">Servizi</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu" style="font-size:14px;padding-left:15px;">
+                                <li class="w-100">
+                                <a href="../php/setService.php?service=1" class="nav-link px-0"><i><img src="../icons/add.png" width="20px"/></i><span class="d-none d-sm-inline">Inserisci</span></a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-link px-0"><i><img src="../icons/search.png" width="23px"/></i> <span class="d-none d-sm-inline">Ricerca</span></a>
+                                </li>
+                            </ul>
+                        </li>
 
-                    <li>
-                        <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                            <i><img src="../icons/bordero.png" width="27px"/></i><span class="ms-1 d-none d-sm-inline">Borderò</span> </a>
-                        <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu" style="font-size:14px;padding-left:15px;">
-                            <li class="w-100">
-                                <a href="#" class="nav-link px-0"><i><img src="../icons/visualizza.png" width="18px" /></i> <span class="d-none d-sm-inline">Visualizza</span></a>
-                            </li>
-                            <li>
-                                <a href="#" class="nav-link px-0"><i><img src="../icons/crea.png" width="21px"/></i> <span class="d-none d-sm-inline">Crea</span></a>
-                            </li>
-                        </ul>
-                    </li>
-                <hr>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link align-middle px-0">
+                                <i><img src="../icons/magazzino.png" width="23px"/></i><span class="ms-1 d-none d-sm-inline">Magazzino</span>
+                            </a>
+                        </li>
+
+                        <li>
+                            <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
+                                <i><img src="../icons/bordero.png" width="27px"/></i><span class="ms-1 d-none d-sm-inline">Borderò</span> </a>
+                            <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu" style="font-size:14px;padding-left:15px;">
+                                <li class="w-100">
+                                    <a href="#" class="nav-link px-0"><i><img src="../icons/visualizza.png" width="18px" /></i> <span class="d-none d-sm-inline">Visualizza</span></a>
+                                </li>
+                                <li>
+                                    <a href="#" class="nav-link px-0"><i><img src="../icons/crea.png" width="21px"/></i> <span class="d-none d-sm-inline">Crea</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    <hr>
+                </div>
+            </div>
+            <div class="col py-3">
+                <!--CODICI SERVIZI 
+                1: INSERIMENTO-->
+                <?php
+                    if(!isset($_SESSION["service"])) die();
+                    switch($_SESSION["service"]){
+                        case 1:
+                            ?>
+
+                            <form action="#" method="post">
+                                <div class="row justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        ID&nbsp;<input type="text" name="id" size="14" class="form-control" style="width:170px;height:35px;">&nbsp; rif. DDT n. <input type="number" name="ddtN" min="0" max="1000" class="form-control" style="width:170px;height:35px;">&nbsp; del &nbsp;<input type="date" name="ddtD" class="form-control" style="width:170px;height:35px;">
+                                    </div>
+                                    <br>
+                                    <br>
+                                    <div class="col-4">
+                                        <fieldset class="border rounded-3 p-3" id="field-set">
+                                            <legend class="float-none w-auto px-3">Mittente</legend>
+                                            Seleziona <select name="clientiMitt" class="form-select" style="width:250px;"><select>
+
+                                            <div class="label-form" for="RagSocMitt">Ragione sociale</div>
+                                            <input type="text" name="RagSocMitt" id="RagSocMitt" class="form-control my-1" style="width:230px;">
+                                            
+                                            <div class="label-form" for="IndirizzoMitt">Indirizzo</div>
+                                            <input type="text" name="IndirizzoMitt" id="IndirizzoMitt" class="form-control my-1" style="width:250px;">
+                                        
+                                            <div class="label-form" for="CittaMitt">Citt&agrave;</div>
+                                            <input type="text" name="cittaMitt" id="CittaMitt" class="form-control my-1" style="width:240px;">
+
+                                            <div class="label-form" for="ProvMitt">Prov</div>
+                                            <input type="text" name="ProvMitt" id="ProvMitt" class="form-control my-1" style="width:100px;">
+                                            
+                                            <div class="label-form" for="CapMitt">Cap</div>
+                                            <input type="number" name="capMitt" id="capMitt" class="form-control my-1" style="width:100px;">
+
+                                            <div class="label-form" for="CellMitt">Cellulare</div>
+                                            <input type="text" name="CellMitt" id="CellMitt" class="form-control my-1" style="width:170px;">
+                                        </fieldset>
+                                    </div>
+
+    
+
+                                    <div class="col-4">
+                                        <fieldset class="border rounded-3 p-3" id="field-set">
+                                            <legend class="float-none w-auto px-3">Destinatario</legend>
+                                            Seleziona <select name="clientiMitt" class="form-select" style="width:250px;"><select>
+
+                                            <div class="label-form" for="RagSocMitt">Ragione sociale</div>
+                                            <input type="text" name="RagSocMitt" id="RagSocMitt" class="form-control my-1" style="width:230px;">
+                                            
+                                            <div class="label-form" for="IndirizzoMitt">Indirizzo</div>
+                                            <input type="text" name="IndirizzoMitt" id="IndirizzoMitt" class="form-control my-1" style="width:250px;">
+                                        
+                                            <div class="label-form" for="CittaMitt">Citt&agrave;</div>
+                                            <input type="text" name="cittaMitt" id="CittaMitt" class="form-control my-1" style="width:240px;">
+
+                                            <div class="label-form" for="ProvMitt">Prov</div>
+                                            <input type="text" name="ProvMitt" id="ProvMitt" class="form-control my-1" style="width:100px;">
+                                            
+                                            <div class="label-form" for="CapMitt">Cap</div>
+                                            <input type="number" name="capMitt" id="capMitt" class="form-control my-1" style="width:100px;">
+
+                                            <div class="label-form" for="CellMitt">Cellulare</div>
+                                            <input type="text" name="CellMitt" id="CellMitt" class="form-control my-1" style="width:170px;">
+                                        </fieldset>
+                                    </div>
+
+                                    <br><br>
+
+                                    <div class="d-flex align-items-center" style="margin-top:25px;">
+                                        <div class="label-form" for="Epal">Epal</div>&nbsp;
+                                        <input type="number" name="Epal" id="Epal" class="form-control my-1" min="0" max="1000" value="0" style="width:80px;margin-right:20px;">&nbsp; <div class="label-form" for="tipo">Tipologia</div>&nbsp; <select name="tipo" id="tipo" class="form-select" style="width:200px;margin-right:20px;"><select>&nbsp; <div class="label-form" for="dataConsegna">Data consegna</div>&nbsp;
+                                        <input type="date" name="dataConsegna" id="dataConsegna" class="form-control my-1" min="0" max="1000" style="width:150px;">
+                                    </div>
+                                </div><br>
+                                <hr style="width:90%;">
+                                <div class="row">
+                                    <div class="col-8">
+                                        <h5 class="fw-normal">Colli/Bancali</h3>
+
+                                        <div class="label-form" for="segnacollo">Segnacollo</div>
+                                        <input type="text" id="segnacollo" class="form-control my-1" style="width:200px;">
+
+                                        <div class="label-form" for="peso">Peso</div>
+                                        <input type="number" step="0.01" id="peso" class="form-control my-1" style="width:100px;">
+
+                                        <div class="label-form" for="dimensioni">Dimensioni</div>
+                                        <input type="text" id="dimensioni" class="form-control my-1" style="width:200px;">
+                                    </div>
+                                </div>
+                            </form>
+
+                        <?php
+                        // unset($_SESSION["service"]);
+                        break;
+                    }
+                ?>
+            </div>
         </div>
-        <div class="col py-3">
-            Content area...
-        </div>
-    </div>
-</div>
-</body>
+    </body>
 </html>

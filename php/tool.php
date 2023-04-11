@@ -27,4 +27,11 @@
 
         return $conn;
     }
+
+    function isLogged($home){
+        if(!isset($_SESSION["login"])){
+            session_destroy();
+            header("Location:$home");
+        }
+    }
 ?>
