@@ -1,12 +1,12 @@
 <?php
     require_once "tool.php"; 
-    if(isset($_REQUEST["username"]) && isset($_REQUEST["password"])){
+    if(isset($_POST["username"]) && isset($_POST["password"])){
         session_start();
 
         require_once "../conf.php";
         
-        $username = $_REQUEST["username"];
-        $password = $_REQUEST["password"];
+        $username = $_POST["username"];
+        $password = $_POST["password"];
         
         class InvalidUser extends Exception {};
         
