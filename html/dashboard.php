@@ -18,6 +18,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/controlPanel.css">
+    <link rel="stylesheet" href="../css/style.css">
 </head>
 <body>
     <div class="container-fluid">
@@ -26,7 +27,7 @@
                     <?php
                         echo "Benvenuto, ".$_SESSION["login"]["name"];
                     ?>
-                <button class="mx-2 rounded logout-btn d-flex">Esci <img src="../icons/logout.png" width="23px" class="mx-1"></button>
+                <button class="mx-2 rounded logout-btn d-flex">Esci <img alt="Esci" src="../icons/logout.png" width="23px" class="mx-1"></button>
 
             </div>
         </div>
@@ -39,32 +40,32 @@
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                         <li>
                             <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i><img src="../icons/box.png" width="27px"/></i><span class="ms-1 d-none d-sm-inline">Servizi</span> </a>
+                                <i><img src="../icons/box.png" width="27px" alt="Gestisci un servizio"/></i><span class="ms-1 d-none d-sm-inline">Servizi</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu" style="font-size:14px;padding-left:15px;">
                                 <li class="w-100">
-                                <a href="../php/setService.php?service=1" class="nav-link px-0"><i><img src="../icons/add.png" width="20px"/></i><span class="d-none d-sm-inline">Inserisci</span></a>
+                                <a href="../php/setService.php?service=1" class="nav-link px-0"><i><img src="../icons/add.png" width="20px" alt="Inserisci un servizio"/></i><span class="d-none d-sm-inline">Inserisci</span></a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link px-0"><i><img src="../icons/search.png" width="23px"/></i> <span class="d-none d-sm-inline">Ricerca</span></a>
+                                    <a href="#" class="nav-link px-0"><i><img src="../icons/search.png" width="23px" alt="Ricerca un servizio"/></i> <span class="d-none d-sm-inline">Ricerca</span></a>
                                 </li>
                             </ul>
                         </li>
 
                         <li class="nav-item">
                             <a href="#" class="nav-link align-middle px-0">
-                                <i><img src="../icons/magazzino.png" width="23px"/></i><span class="ms-1 d-none d-sm-inline">Magazzino</span>
+                                <i><img src="../icons/magazzino.png" width="23px" alt="Gestisci il magazzino"/></i><span class="ms-1 d-none d-sm-inline">Magazzino</span>
                             </a>
                         </li>
 
                         <li>
                             <a href="#submenu2" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i><img src="../icons/bordero.png" width="27px"/></i><span class="ms-1 d-none d-sm-inline">Borderò</span> </a>
+                                <i><img src="../icons/bordero.png" width="27px" alt="Gestisci borderò"/></i><span class="ms-1 d-none d-sm-inline">Borderò</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu2" data-bs-parent="#menu" style="font-size:14px;padding-left:15px;">
                                 <li class="w-100">
-                                    <a href="#" class="nav-link px-0"><i><img src="../icons/visualizza.png" width="18px" /></i> <span class="d-none d-sm-inline">Visualizza</span></a>
+                                    <a href="#" class="nav-link px-0"><i><img src="../icons/visualizza.png" width="18px" alt="Visualizza borderò"/></i> <span class="d-none d-sm-inline">Visualizza</span></a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link px-0"><i><img src="../icons/crea.png" width="21px"/></i> <span class="d-none d-sm-inline">Crea</span></a>
+                                    <a href="#" class="nav-link px-0"><i><img src="../icons/crea.png" width="21px" alt="Crea borderò"/></i> <span class="d-none d-sm-inline">Crea</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -106,7 +107,7 @@
                                     <div class="col-4">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Mittente</legend>
-                                            Seleziona <select name="clientiMitt" class="form-select" style="width:250px;"><select>
+                                            Seleziona <select name="clientiMitt" class="form-select" style="width:250px;"></select>
 
                                             <div class="label-form" for="RagSocMitt">Ragione sociale</div>
                                             <input type="text" name="RagSocMitt" id="RagSocMitt" class="form-control my-1" style="width:230px;">
@@ -133,7 +134,7 @@
                                     <div class="col-4">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Destinatario</legend>
-                                            Seleziona <select name="clientiDest" class="form-select" style="width:250px;"><select>
+                                            Seleziona <select name="clientiDest" class="form-select" style="width:250px;"></select>
 
                                             <div class="label-form" for="RagSocMitt">Ragione sociale</div>
                                             <input type="text" name="RagSocDest" id="RagSocDest" class="form-control my-1" style="width:230px;">
@@ -178,9 +179,13 @@
                                         <input type="text" id="segnacollo" class="form-control my-1" style="width:200px;">
 
                                         <div class="label-form" for="peso">Peso</div>
-                                        <input type="number" step="0.01" id="peso" class="form-control my-1" style="width:100px;">
+                                        <input type="number" step="0.01" id="peso" class="form-control my-1" style="width:100px;">&nbsp;
+                                        <select name="um" class="form-select" style="width:70px;margin-right:20px;margin-bottom:10px;">
+                                            <option value="1">Kg</option>
+                                            <option value="2">Q.li</option>
+                                        </select>
 
-                                        <div class="label-form" for="dimensioni">Dimensioni</div>
+                                        <div class="label-form" for="dimensioni">Dimensioni (h x l x p)</div>
                                         <input type="text" id="dimensioni" class="form-control my-1" style="width:200px;">
                                         <div>
                                             <br>
@@ -189,7 +194,7 @@
                                     </div>
                                     <div class="col-1 flex-nowrap p-0" style="width:1px; background-color:#bfc0c1;"></div>
                                     <div class="col-4 flex-nowrap justify-content-end scrollable-tbody mb-5 mx-5">
-                                        <table class="table">
+                                        <table class="table table-striped table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>SEGNACOLLO</th>
@@ -304,7 +309,7 @@
                                 </div>
                                 <div class="row justify-content-right mx-1 mt-3">
                                 <hr style="width:90%; opacity:20%;">
-                                    <h3 class="fw-normal">Note</h3>
+                                    <h5 class="fw-normal">Note</h5>
                                     <textarea class="form-control w-25" id="note" name="note" rows="5"></textarea>
                                 </div>
 
