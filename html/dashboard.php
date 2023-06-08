@@ -19,6 +19,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/controlPanel.css">
     <link rel="stylesheet" href="../css/style.css">
+    <script src="../js/dashboard_insert.js"></script>
 </head>
 <body>
     <div class="container-fluid">
@@ -72,7 +73,7 @@
                     <hr>
                 </div>
             </div>
-            <div class="col py-3">
+            <div class="col mx-5 py-3">
                 <!--CODICI SERVIZI 
                 1: INSERIMENTO-->
                 <?php
@@ -172,7 +173,7 @@
                                 </div><br>
                                 <hr style="width:90%;">
                                 <div class="row">
-                                    <div class="col-6 flex-nowrap">
+                                    <div class="col-4 flex-nowrap">
                                         <h5 class="fw-normal">Colli/Bancali</h3>
 
                                         <div class="label-form" for="segnacollo">Segnacollo</div>
@@ -180,129 +181,37 @@
 
                                         <div class="label-form" for="peso">Peso</div>
                                         <input type="number" step="0.01" id="peso" class="form-control my-1" style="width:100px;">&nbsp;
-                                        <select name="um" class="form-select" style="width:70px;margin-right:20px;margin-bottom:10px;">
+                                        <select name="um" id="um" class="form-select" style="width:75px;margin-right:20px;margin-bottom:10px;">
                                             <option value="1">Kg</option>
                                             <option value="2">Q.li</option>
                                         </select>
 
                                         <div class="label-form" for="dimensioni">Dimensioni (h x l x p)</div>
                                         <input type="text" id="dimensioni" class="form-control my-1" style="width:200px;">
+
+                                        <small style="color:red;display:none;" id="alert">
+                                            <img src="../icons/!.png" width="15px" height="16px">
+                                            Il segnacollo e il peso sono obbligatori
+                                        </small>
+
                                         <div>
                                             <br>
-                                            <button type="button" class="btn btn-danger">Aggiungi</button>
+                                            <button type="button" class="btn btn-danger" id="addPack">Aggiungi</button>
                                         </div>
                                     </div>
                                     <div class="col-1 flex-nowrap p-0" style="width:1px; background-color:#bfc0c1;"></div>
                                     <div class="col-4 flex-nowrap justify-content-end scrollable-tbody mb-5 mx-5">
-                                        <table class="table table-striped table-hover">
+                                        <table class="table table-striped table-hover" id="colliList">
                                             <thead>
                                                 <tr>
                                                     <th>SEGNACOLLO</th>
                                                     <th>PESO</th>
                                                     <th>DIMENSIONI</th>
+                                                    <th></th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody class="text-center">
-                                            <tr>
-                                                <td>r1</td>
-                                                <td>r1</td>
-                                                <td>r1</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r2</td>
-                                                <td>r2</td>
-                                                <td>r2</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r3</td>
-                                                <td>r3</td>
-                                                <td>r3</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r4</td>
-                                                <td>r4</td>
-                                                <td>r4</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r5</td>
-                                                <td>r5</td>
-                                                <td>r5</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r6</td>
-                                                <td>r6</td>
-                                                <td>r6</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r7</td>
-                                                <td>r7</td>
-                                                <td>r7</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r8</td>
-                                                <td>r8</td>
-                                                <td>r8</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r9</td>
-                                                <td>r9</td>
-                                                <td>r9</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r10</td>
-                                                <td>r10</td>
-                                                <td>r10</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r11</td>
-                                                <td>r11</td>
-                                                <td>r11</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r12</td>
-                                                <td>r12</td>
-                                                <td>r12</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r13</td>
-                                                <td>r13</td>
-                                                <td>r13</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r14</td>
-                                                <td>r14</td>
-                                                <td>r14</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r15</td>
-                                                <td>r15</td>
-                                                <td>r15</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r16</td>
-                                                <td>r16</td>
-                                                <td>r16</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r17</td>
-                                                <td>r17</td>
-                                                <td>r17</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r18</td>
-                                                <td>r18</td>
-                                                <td>r18</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r19</td>
-                                                <td>r19</td>
-                                                <td>r19</td>
-                                            </tr>
-                                            <tr>
-                                                <td>r20</td>
-                                                <td>r20</td>
-                                                <td>r20</td>
-                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -325,5 +234,9 @@
                 ?>
             </div>
         </div>
+
+        <script>
+            document.getElementById("addPack").addEventListener("click",loadPack);
+        </script>
     </body>
 </html>
