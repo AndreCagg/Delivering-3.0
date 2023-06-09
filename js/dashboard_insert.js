@@ -71,7 +71,7 @@ function loadPack(){
 
         let del=document.createElement("button");
         del.innerHTML='<img src="../icons/elimina.png" width="11px" height="12px">&nbsp;Elimina';
-        del.setAttribute("onclick","event.preventDefault(); deletePack("+String(table.rows.length-1)+")");
+        del.setAttribute("onclick","event.preventDefault(); deletePack("+String(rowId)+")");
         del.classList.add("btn");
         del.classList.add("btn-warning");
         del.classList.add("btn-sm");
@@ -111,5 +111,28 @@ function deletePack(line){
 
     let list=table.rows;
 
-    //rearrange button id
+    //ricrea i pulsanti
+    for(let k=1;k<list.length;k++){
+        list[k].deleteCell(4);
+        list[k].deleteCell(3);
+        let editCell=list[k].insertCell(3);
+        let delCell=list[k].insertCell(4);
+
+        let edit=document.createElement("button");
+        edit.innerHTML='<img src="../icons/modifica.png" width="10px" height="10px">&nbsp;Modifica';
+        edit.setAttribute("onclick","event.preventDefault(); updatePack("+k+")");
+        edit.classList.add("btn");
+        edit.classList.add("btn-info");
+        edit.classList.add("btn-sm");
+        editCell.appendChild(edit);
+
+        let del=document.createElement("button");
+        del.innerHTML='<img src="../icons/elimina.png" width="11px" height="12px">&nbsp;Elimina';
+        del.setAttribute("onclick","event.preventDefault(); deletePack("+k+")");
+        del.classList.add("btn");
+        del.classList.add("btn-warning");
+        del.classList.add("btn-sm");
+        delCell.appendChild(del);
+
+    }
 }
