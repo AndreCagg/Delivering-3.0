@@ -5,6 +5,7 @@ function loadPack(){
     let id=document.getElementById("segnacollo");
     let peso=document.getElementById("peso");
     let dimensione=document.getElementById("dimensioni");
+    let descrizione=document.getElementById("descrizione");
     
     let alert=document.getElementById("alert");
     if(id.value=="" || peso.value==""){
@@ -38,6 +39,7 @@ function loadPack(){
         let cell3=line.insertCell(2);
         let cell4=line.insertCell(3);
         let cell5=line.insertCell(4);
+        let cell6=line.insertCell(5);
 
 
         let literalUM="";
@@ -54,6 +56,7 @@ function loadPack(){
         cell1.appendChild(document.createTextNode(segnacollo.value));
         cell2.appendChild(document.createTextNode(peso.value+" "+literalUM));
         cell3.appendChild(document.createTextNode(dimensione.value));
+        cell4.appendChild(document.createTextNode(descrizione.value));
         
         let edit=document.createElement("button");
         edit.innerHTML='<img src="../icons/modifica.png" width="10px" height="10px">&nbsp;Modifica';
@@ -67,7 +70,7 @@ function loadPack(){
         edit.classList.add("btn");
         edit.classList.add("btn-info");
         edit.classList.add("btn-sm");
-        cell4.appendChild(edit);
+        cell5.appendChild(edit);
 
         let del=document.createElement("button");
         del.innerHTML='<img src="../icons/elimina.png" width="11px" height="12px">&nbsp;Elimina';
@@ -75,13 +78,14 @@ function loadPack(){
         del.classList.add("btn");
         del.classList.add("btn-warning");
         del.classList.add("btn-sm");
-        cell5.appendChild(del);
+        cell6.appendChild(del);
         
         row=-1;
 
         id.value="";
         dimensione.value="";
         peso.value="";
+        descrizione.value="";
         document.getElementById("addPack").innerHTML="Aggiungi";
     }
 }
@@ -92,6 +96,7 @@ function updatePack(line){
     let peso=document.getElementById("peso");
     let dimensione=document.getElementById("dimensioni");
     let umF=document.getElementById("um");
+    let descrizione=document.getElementById("descrizione");
     let um=riga.cells[1].innerHTML.split(" ");
 
 
@@ -99,6 +104,7 @@ function updatePack(line){
     peso.value=um[0];
     umF.value=(um[1]=="Kg")?1:2;
     dimensione.value=riga.cells[2].innerHTML;
+    descrizione.value=riga.cells[3].innerHTML;
 
     row=line;
     state="updating";
@@ -113,10 +119,10 @@ function deletePack(line){
 
     //ricrea i pulsanti
     for(let k=1;k<list.length;k++){
+        list[k].deleteCell(5);
         list[k].deleteCell(4);
-        list[k].deleteCell(3);
-        let editCell=list[k].insertCell(3);
-        let delCell=list[k].insertCell(4);
+        let editCell=list[k].insertCell(4);
+        let delCell=list[k].insertCell(5);
 
         let edit=document.createElement("button");
         edit.innerHTML='<img src="../icons/modifica.png" width="10px" height="10px">&nbsp;Modifica';
@@ -135,4 +141,10 @@ function deletePack(line){
         delCell.appendChild(del);
 
     }
+}
+
+function generateID(){
+    let id=Math.round(Math.random()*(9999999999999-1000000000000)+9999999999999);
+    let segnacollo=document.getElementById("segnacollo");
+    segnacollo.value=id;
 }

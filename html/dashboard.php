@@ -178,6 +178,7 @@
 
                                         <div class="label-form" for="segnacollo">Segnacollo</div>
                                         <input type="text" id="segnacollo" class="form-control my-1" style="width:200px;">
+                                        <button class="btn btn-success btn-sm mb-3" id="generaID" onclick="event.preventDefault();"><b>GENERA</b></button>
 
                                         <div class="label-form" for="peso">Peso</div>
                                         <input type="number" step="0.01" id="peso" class="form-control my-1" style="width:100px;">&nbsp;
@@ -185,6 +186,9 @@
                                             <option value="1">Kg</option>
                                             <option value="2">Q.li</option>
                                         </select>
+
+                                        <div class="label-form" for="descrizione">Descrizione</div>
+                                        <input type="text" id="descrizione" class="form-control my-1" style="width:200px;">
 
                                         <div class="label-form" for="dimensioni">Dimensioni (h x l x p)</div>
                                         <input type="text" id="dimensioni" class="form-control my-1" style="width:200px;">
@@ -207,6 +211,7 @@
                                                     <th>SEGNACOLLO</th>
                                                     <th>PESO</th>
                                                     <th>DIMENSIONI</th>
+                                                    <th>DESCRIZIONE</th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
@@ -237,6 +242,7 @@
 
         <script>
             document.getElementById("addPack").addEventListener("click",loadPack);
+            document.getElementById("generaID").addEventListener("click",generateID)
         </script>
     </body>
 </html>
