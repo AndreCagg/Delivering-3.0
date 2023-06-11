@@ -197,6 +197,10 @@
                                             <img src="../icons/!.png" width="15px" height="16px">
                                             Il segnacollo e il peso sono obbligatori
                                         </small>
+                                        <small style="color:red;display:none;" id="duplicateID-alert">
+                                            <img src="../icons/!.png" width="15px" height="16px">
+                                            Il segnacollo risulta già inserito
+                                        </small>
 
                                         <div>
                                             <br>

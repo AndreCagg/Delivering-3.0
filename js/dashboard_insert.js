@@ -6,26 +6,28 @@ function loadPack(){
     let peso=document.getElementById("peso");
     let dimensione=document.getElementById("dimensioni");
     let descrizione=document.getElementById("descrizione");
-    
+    let duplicateID=document.getElementById("duplicateID-alert");
     let alert=document.getElementById("alert");
+
     if(id.value=="" || peso.value==""){
         alert.style.display="block";
     }else{
         alert.style.display="none";
-        let um=document.getElementById("um");
-
-        // let obj={
-        //     segnacollo: id.value,
-        //     peso:{
-        //         peso: peso.value,
-        //         um: um.value
-        //     },
-        //     dimensione: dimensione.value
-        // }
-
-        // console.log(obj);
 
         let table=document.getElementById("colliList");
+
+        // controllo se è gia presente il segnacollo
+        for(let k=1;k<table.rows.length;k++){
+            if(table.rows[k].cells[0].innerHTML==id.value){
+                duplicateID.style.display="block";
+                return;
+            }
+        }
+
+        duplicateID.style.display="none";
+        let um=document.getElementById("um");
+
+
         let tbody=table.getElementsByTagName("tbody")[0];
         let line=tbody.insertRow(row);
 
@@ -53,10 +55,10 @@ function loadPack(){
             break;
         }
 
-        cell1.appendChild(document.createTextNode(segnacollo.value));
+        cell1.appendChild(document.createTextNode(segnacollo.value.trim()));
         cell2.appendChild(document.createTextNode(peso.value+" "+literalUM));
-        cell3.appendChild(document.createTextNode(dimensione.value));
-        cell4.appendChild(document.createTextNode(descrizione.value));
+        cell3.appendChild(document.createTextNode(dimensione.value.trim()));
+        cell4.appendChild(document.createTextNode(descrizione.value.trim()));
         
         let edit=document.createElement("button");
         edit.innerHTML='<img src="../icons/modifica.png" width="10px" height="10px">&nbsp;Modifica';
