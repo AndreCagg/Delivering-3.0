@@ -76,3 +76,14 @@
         top: 0%;
         background-color: #f4f4f4;
     }
+
+    .word-wrap {
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .colliList td:nth-child(4) {
+      width: 200px!important;
+      max-width: 200px!important;
+      white-space: normal!important;
+    }

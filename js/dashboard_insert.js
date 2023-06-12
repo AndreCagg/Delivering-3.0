@@ -18,7 +18,7 @@ function loadPack(){
 
         // controllo se è gia presente il segnacollo
         for(let k=1;k<table.rows.length;k++){
-            if(table.rows[k].cells[0].innerHTML==id.value){
+            if((table.rows[k].cells[0].innerHTML==id.value) && state=="none"){
                 duplicateID.style.display="block";
                 return;
             }
@@ -58,6 +58,7 @@ function loadPack(){
         cell1.appendChild(document.createTextNode(segnacollo.value.trim()));
         cell2.appendChild(document.createTextNode(peso.value+" "+literalUM));
         cell3.appendChild(document.createTextNode(dimensione.value.trim()));
+        cell4.className="word-wrap";
         cell4.appendChild(document.createTextNode(descrizione.value.trim()));
         
         let edit=document.createElement("button");

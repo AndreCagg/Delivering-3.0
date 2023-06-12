@@ -172,13 +172,13 @@
                                     </div>
                                 </div><br>
                                 <hr style="width:90%;">
-                                <div class="row">
-                                    <div class="col-4 flex-nowrap">
+                                <div class="row d-flex">
+                                    <div class="col-4 flex-nowrap" id="pack-form">
                                         <h5 class="fw-normal">Colli/Bancali</h3>
 
                                         <div class="label-form" for="segnacollo">Segnacollo</div>
                                         <input type="text" id="segnacollo" class="form-control my-1" style="width:200px;">
-                                        <button class="btn btn-success btn-sm mb-3" id="generaID" onclick="event.preventDefault();"><b>GENERA</b></button>
+                                        <button type="button" class="btn btn-success btn-sm mb-3" id="generaID"><b>GENERA</b></button>
 
                                         <div class="label-form" for="peso">Peso</div>
                                         <input type="number" step="0.01" id="peso" class="form-control my-1" style="width:100px;">&nbsp;
@@ -232,7 +232,7 @@
                                 </div>
 
                                 <div class="row m-4 mt-5 justify-content-center">
-                                    <button class="btn btn-danger w-25" type="submit">Inserisci</button>
+                                    <button class="btn btn-danger w-25" type="submit" onclick="event.preventDefault()">Inserisci</button>
                                 </div>
                             </form>
 
@@ -246,7 +246,14 @@
 
         <script>
             document.getElementById("addPack").addEventListener("click",loadPack);
-            document.getElementById("generaID").addEventListener("click",generateID)
+            document.getElementById("generaID").addEventListener("click",generateID);
+            document.getElementById("pack-form").addEventListener("keydown",ev=>{
+                if(ev.keyCode==13){
+                    ev.preventDefault();
+                    loadPack();
+                }
+
+            });
         </script>
     </body>
 </html>
