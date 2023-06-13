@@ -58,7 +58,7 @@ function loadPack(){
         cell1.appendChild(document.createTextNode(segnacollo.value.trim()));
         cell2.appendChild(document.createTextNode(peso.value+" "+literalUM));
         cell3.appendChild(document.createTextNode(dimensione.value.trim()));
-        cell4.className="word-wrap";
+        cell4.className="text-break";
         cell4.appendChild(document.createTextNode(descrizione.value.trim()));
         
         let edit=document.createElement("button");

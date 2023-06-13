@@ -172,8 +172,8 @@
                                     </div>
                                 </div><br>
                                 <hr style="width:90%;">
-                                <div class="row d-flex">
-                                    <div class="col-4 flex-nowrap" id="pack-form">
+                                <div class="row flex-nowrap">
+                                    <div class="col-4" id="pack-form">
                                         <h5 class="fw-normal">Colli/Bancali</h3>
 
                                         <div class="label-form" for="segnacollo">Segnacollo</div>
@@ -207,8 +207,8 @@
                                             <button type="button" class="btn btn-danger" id="addPack">Aggiungi</button>
                                         </div>
                                     </div>
-                                    <div class="col-1 flex-nowrap p-0" style="width:1px; background-color:#bfc0c1;"></div>
-                                    <div class="col-4 flex-nowrap justify-content-end scrollable-tbody mb-5 mx-5">
+                                    <div class="col-1 p-0" style="width:1px; background-color:#bfc0c1;"></div>
+                                    <div class="col-4 justify-content-end scrollable-tbody mb-5 mx-5">
                                         <table class="table table-striped table-hover" id="colliList">
                                             <thead>
                                                 <tr>
@@ -251,6 +251,7 @@
                 if(ev.keyCode==13){
                     ev.preventDefault();
                     loadPack();
+                    document.activeElement.blur();
                 }
 
             });
