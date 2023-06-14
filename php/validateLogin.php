@@ -17,6 +17,7 @@
             $conn = new mysqli($dbAddress,$userLoger,$passLoger,$dbName);
             $id = null;
             $name = null;
+            $lvl=null;
             $query = $conn->query("SELECT id,user,password,level,nome FROM utenti");
             
             while ($row = $query->fetch_assoc()) {
@@ -24,6 +25,7 @@
                     $name = $row["nome"];
                     $id = $row["id"];
 
+                    $lvl=$row["level"];
                     if($row["level"] == false){
                         $user = $userOperator;
                         $pass = $passOperator;
@@ -64,6 +66,7 @@
                     $_SESSION["login"]["logged"] = true;
                     $_SESSION["login"]["id"] = $id;
                     $_SESSION["login"]["name"] = $name;
+                    $_SESSION["login"]["level"]=$lvl;
                     
                     header("Location: ../html/dashboard.php");
                 } catch(Exception $e){

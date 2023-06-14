@@ -151,3 +151,12 @@ function generateID(){
     let segnacollo=document.getElementById("segnacollo");
     segnacollo.value=id;
 }
+
+async function loadCostumers(){
+    //estrazione 
+    if(document.getElementById("clientiMitt").value==""){
+        const response=await fetch("../php/getCustomers.php");
+        const data=await response.json();
+        console.log(data);
+    }
+}

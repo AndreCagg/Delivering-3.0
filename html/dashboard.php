@@ -105,10 +105,10 @@
                                     </div>
                                     <br>
                                     <br>
-                                    <div class="col-4">
+                                    <div class="col-4" id="Mitt-field">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Mittente</legend>
-                                            Seleziona <select name="clientiMitt" class="form-select" style="width:250px;"></select>
+                                            Seleziona <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;"></select>
 
                                             <div class="label-form" for="RagSocMitt">Ragione sociale</div>
                                             <input type="text" name="RagSocMitt" id="RagSocMitt" class="form-control my-1" style="width:230px;">
@@ -255,6 +255,7 @@
                 }
 
             });
+            window.addEventListener("DOMContentLoaded",loadCostumers);
         </script>
     </body>
 </html>
