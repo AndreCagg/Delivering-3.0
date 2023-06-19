@@ -1,5 +1,6 @@
 var state="none";
 var row=-1;
+
 function loadPack(){
     //NON E OBBLIGATORIO IL CAMPO DIMENSIONE
     let id=document.getElementById("segnacollo");
@@ -155,8 +156,65 @@ function generateID(){
 async function loadCostumers(){
     //estrazione 
     if(document.getElementById("clientiMitt").value==""){
-        const response=await fetch("../php/getCustomers.php");
-        const data=await response.json();
-        console.log(data);
     }
+    const response=await fetch("../php/getCustomers.php");
+    const data=await response.json();
+    console.log(data);
+    if(data.error==true){
+        //alert "impossibile caricare i clienti"
+        console.log("errore trovato");
+    }else{
+        localStorage.clienti=JSON.stringify(data);
+        let selectMitt=document.getElementById("clientiMitt");
+        let selectDest=document.getElementById("clientiDest");
+        for(let k in data.clienti){
+            let opt=document.createElement("option");
+            opt.text=data.clienti[k]["ragioneSociale"];
+            opt.value=data.clienti[k]["id"];
+
+            let opt2=document.createElement("option");
+            opt2.text=data.clienti[k]["ragioneSociale"];
+            opt2.value=data.clienti[k]["id"];
+
+            selectMitt.appendChild(opt);
+            selectDest.appendChild(opt2);
+        }
+    }
+}
+
+async function fillCustomer(target,type){
+    let clienti=JSON.parse(localStorage.clienti);
+
+    if(target.value!="" && target.value!=0){
+        for(let k in clienti["clienti"]){
+            $("#clientiDest option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
+            $("#clientiMitt option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
+
+            if(clienti["clienti"][k]["id"]==target.value){
+                //rimozione del cliente dall'altra select
+                if(type=="Mitt"){
+                    $("#clientiDest option[value='"+target.value+"']").css("display","none");
+                }else{
+                    $("#clientiMitt option[value='"+target.value+"']").css("display","none");
+                    //fare in modo che se si cerca di invertire mitt e dest venga fatto in automatico
+                    if(target.value==document.getElementById("clientiMitt").value)
+                        document.getElementById("clientiMitt").value=target.value;
+                }
+                fillField(type,clienti["clienti"][k]["ragioneSociale"],clienti["clienti"][k]["indirizzo"],
+                clienti["clienti"][k]["citta"],clienti["clienti"][k]["prov"],clienti["clienti"][k]["cap"],clienti["clienti"][k]["cellulare"]);
+            }
+
+        }
+    }else{
+        fillField(type);
+    }
+}
+
+async function fillField(type,ragioneSociale="",indirizzo="",cittaF="",provF="",capF="",cellF=""){
+    let ragsoc=document.getElementById("RagSoc"+type).value=ragioneSociale;
+    let ind=document.getElementById("Indirizzo"+type).value=indirizzo;
+    let citta=document.getElementById("Citta"+type).value=cittaF;
+    let prov=document.getElementById("Prov"+type).value=provF;
+    let cap=document.getElementById("cap"+type).value=capF;
+    let cell=document.getElementById("Cell"+type).value=cellF;
 }

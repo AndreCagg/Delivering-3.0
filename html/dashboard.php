@@ -17,6 +17,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/controlPanel.css">
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/dashboard_insert.js"></script>
@@ -105,10 +106,13 @@
                                     </div>
                                     <br>
                                     <br>
-                                    <div class="col-4" id="Mitt-field">
+                                    <div class="col-4">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Mittente</legend>
-                                            Seleziona <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;"></select>
+                                            Seleziona <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;">
+                                            <option></option>
+                                            <option value="0">NUOVO</option>
+                                            </select>
 
                                             <div class="label-form" for="RagSocMitt">Ragione sociale</div>
                                             <input type="text" name="RagSocMitt" id="RagSocMitt" class="form-control my-1" style="width:230px;">
@@ -135,7 +139,10 @@
                                     <div class="col-4">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Destinatario</legend>
-                                            Seleziona <select name="clientiDest" class="form-select" style="width:250px;"></select>
+                                            Seleziona <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;">
+                                                <option></option>
+                                                <option value="0">NUOVO</option>
+                                            </select>
 
                                             <div class="label-form" for="RagSocMitt">Ragione sociale</div>
                                             <input type="text" name="RagSocDest" id="RagSocDest" class="form-control my-1" style="width:230px;">
@@ -144,7 +151,7 @@
                                             <input type="text" name="IndirizzoDest" id="IndirizzoDest" class="form-control my-1" style="width:250px;">
                                         
                                             <div class="label-form" for="CittaMitt">Citt&agrave;</div>
-                                            <input type="text" name="cittaDest" id="cittaDest" class="form-control my-1" style="width:240px;">
+                                            <input type="text" name="cittaDest" id="CittaDest" class="form-control my-1" style="width:240px;">
 
                                             <div class="label-form" for="ProvMitt">Prov</div>
                                             <input type="text" name="ProvDest" id="ProvDest" class="form-control my-1" style="width:100px;">
@@ -256,6 +263,8 @@
 
             });
             window.addEventListener("DOMContentLoaded",loadCostumers);
+            document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
+            document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});
         </script>
     </body>
 </html>

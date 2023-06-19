@@ -10,7 +10,7 @@
     $tmp=[];
     try{
         $conn=new mysqli($dbAddress,$userOperator,$passOperator,$dbName);
-        $query=$conn->query("SELECT * FROM clienti");
+        $query=$conn->query("SELECT * FROM clienti ORDER BY ragioneSociale ASC");
 
         while($row=$query->fetch_object()){
             $clienti[]=$row;
