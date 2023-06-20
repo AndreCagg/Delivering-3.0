@@ -82,7 +82,7 @@
                         case 1:
                             ?>
 
-                            <form action="#" method="post">
+                            <form action="#" method="post" id="main-form">
                                 <div class="row justify-content-between">
                                     <div class="d-flex align-items-center">
                                         ID&nbsp;
@@ -105,7 +105,11 @@
                                     </div>
                                     <br>
                                     <br>
+<<<<<<< Updated upstream
                                     <div class="col-4" id="Mitt-field">
+=======
+                                    <div class="col-4" id="colMitt">
+>>>>>>> Stashed changes
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Mittente</legend>
                                             Seleziona <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;"></select>
@@ -132,7 +136,7 @@
 
     
 
-                                    <div class="col-4">
+                                    <div class="col-4" id="colDest">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Destinatario</legend>
                                             Seleziona <select name="clientiDest" class="form-select" style="width:250px;"></select>
@@ -232,7 +236,7 @@
                                 </div>
 
                                 <div class="row m-4 mt-5 justify-content-center">
-                                    <button class="btn btn-danger w-25" type="submit" onclick="event.preventDefault()">Inserisci</button>
+                                    <button class="btn btn-danger w-25" type="submit" onclick="event.preventDefault();checkForm();">Inserisci</button>
                                 </div>
                             </form>
 
@@ -256,6 +260,28 @@
 
             });
             window.addEventListener("DOMContentLoaded",loadCostumers);
+<<<<<<< Updated upstream
+=======
+            document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
+            document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});
+            document.getElementById("peso").addEventListener("keydown",(e)=>{
+                if(e.key=="."){
+                    e.preventDefault();
+                }
+            });
+            document.getElementById("colMitt").addEventListener("keydown",e=>{
+                if(e.key=="Enter"){
+                    e.preventDefault();
+                    checkForm();
+                }
+            });
+            document.getElementById("colDest").addEventListener("keydown",e=>{
+                if(e.key=="Enter"){
+                    e.preventDefault();
+                    checkForm();
+                }
+            });
+>>>>>>> Stashed changes
         </script>
     </body>
 </html>
