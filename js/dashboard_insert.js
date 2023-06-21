@@ -4,6 +4,7 @@ var row=-1;
 function loadPack(){
     //NON E OBBLIGATORIO IL CAMPO DIMENSIONE
     let id=document.getElementById("segnacollo");
+    let bancale=document.getElementById("bancale");
     let peso=document.getElementById("peso");
     let dimensione=document.getElementById("dimensioni");
     let descrizione=document.getElementById("descrizione");
@@ -43,6 +44,7 @@ function loadPack(){
         let cell4=line.insertCell(3);
         let cell5=line.insertCell(4);
         let cell6=line.insertCell(5);
+        let cell7=line.insertCell(6);
 
 
         let literalUM="";
@@ -57,8 +59,13 @@ function loadPack(){
         }
 
         cell1.appendChild(document.createTextNode(segnacollo.value.trim()));
+        if(segnacollo.value.trim().length>14)
+            cell1.className="text-break"; 
+
+        cell2.className="text-break";
         cell2.appendChild(document.createTextNode(peso.value+" "+literalUM));
         cell3.appendChild(document.createTextNode(dimensione.value.trim()));
+        cell3.className="text-break";
         cell4.className="text-break";
         cell4.appendChild(document.createTextNode(descrizione.value.trim()));
         
@@ -70,11 +77,24 @@ function loadPack(){
         else
             rowId=table.rows.length-1;
 
+
+        let tipo=document.createElement("img");
+        tipo.width="30";
+        if(bancale.checked){
+            tipo.src="../icons/bancale.png";
+            tipo.toSet="true";
+        }else{
+            tipo.src="../icons/box.png";
+            tipo.toSet="false";
+        }
+        tipo.id="packTipo";
+        cell5.appendChild(tipo);
+        
         edit.setAttribute("onclick","event.preventDefault(); updatePack("+String(rowId)+")");
         edit.classList.add("btn");
         edit.classList.add("btn-info");
         edit.classList.add("btn-sm");
-        cell5.appendChild(edit);
+        cell6.appendChild(edit);
 
         let del=document.createElement("button");
         del.innerHTML='<img src="../icons/elimina.png" width="11px" height="12px">&nbsp;Elimina';
@@ -82,7 +102,7 @@ function loadPack(){
         del.classList.add("btn");
         del.classList.add("btn-warning");
         del.classList.add("btn-sm");
-        cell6.appendChild(del);
+        cell7.appendChild(del);
         
         row=-1;
 
@@ -90,13 +110,17 @@ function loadPack(){
         dimensione.value="";
         peso.value="";
         descrizione.value="";
+        bancale.checked=false;
         document.getElementById("addPack").innerHTML="Aggiungi";
     }
 }
 
 function updatePack(line){
+    document.getElementById("alert").style.display="none";
+    document.getElementById("duplicateID-alert").style.display="none";
     let riga=document.getElementById("colliList").rows[line];
     let id=document.getElementById("segnacollo");
+    let bancale=document.getElementById("bancale");
     let peso=document.getElementById("peso");
     let dimensione=document.getElementById("dimensioni");
     let umF=document.getElementById("um");
@@ -109,6 +133,8 @@ function updatePack(line){
     umF.value=(um[1]=="Kg")?1:2;
     dimensione.value=riga.cells[2].innerHTML;
     descrizione.value=riga.cells[3].innerHTML;
+    bancale.checked=riga.cells[4].querySelector("#packTipo").toSet=="true"?true:false;
+    console.log(riga.cells[4].querySelector("#packTipo").toSet);
 
     row=line;
     state="updating";
@@ -123,10 +149,10 @@ function deletePack(line){
 
     //ricrea i pulsanti
     for(let k=1;k<list.length;k++){
+        list[k].deleteCell(6);
         list[k].deleteCell(5);
-        list[k].deleteCell(4);
-        let editCell=list[k].insertCell(4);
-        let delCell=list[k].insertCell(5);
+        let editCell=list[k].insertCell(5);
+        let delCell=list[k].insertCell(6);
 
         let edit=document.createElement("button");
         edit.innerHTML='<img src="../icons/modifica.png" width="10px" height="10px">&nbsp;Modifica';
@@ -159,7 +185,7 @@ async function loadCostumers(){
     }
     const response=await fetch("../php/getCustomers.php");
     const data=await response.json();
-    console.log(data);
+    // console.log(data);
     if(data.error==true){
         //alert "impossibile caricare i clienti"
         console.log("errore trovato");
@@ -187,24 +213,31 @@ async function fillCustomer(target,type){
 
     if(target.value!="" && target.value!=0){
         for(let k in clienti["clienti"]){
-            $("#clientiDest option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
-            $("#clientiMitt option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
-
+            // $("#clientiDest option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
+            // $("#clientiMitt option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
+            
             if(clienti["clienti"][k]["id"]==target.value){
-                //rimozione del cliente dall'altra select
-                if(type=="Mitt"){
-                    $("#clientiDest option[value='"+target.value+"']").css("display","none");
-                }else{
-                    $("#clientiMitt option[value='"+target.value+"']").css("display","none");
-                    //fare in modo che se si cerca di invertire mitt e dest venga fatto in automatico
-                    if(target.value==document.getElementById("clientiMitt").value)
-                        document.getElementById("clientiMitt").value=target.value;
-                }
+                //rimozione del cliente dall'altra select - non funziona bene
+                // if(type=="Mitt"){
+                //     $("#clientiDest option[value='"+target.value+"']").css("display","none");
+                //     // if(document.getElementById("clientiDest").value!="" && document.getElementById("clientiDest").value!=0){
+                //     //     document.getElementById("clientiDest").value="";
+                //     //     await fillField("Dest");
+                //     // }
+                // }else{
+                //     // if(document.getElementById("clientiMitt").value!="" && document.getElementById("clientiMitt").value!=0){
+                //     //     document.getElementById("clientiMitt").value="";
+                //     //     await fillField("Mitt");
+                //     // }
+                //     $("#clientiMitt option[value='"+target.value+"']").css("display","none");
+                // }
                 fillField(type,clienti["clienti"][k]["ragioneSociale"],clienti["clienti"][k]["indirizzo"],
                 clienti["clienti"][k]["citta"],clienti["clienti"][k]["prov"],clienti["clienti"][k]["cap"],clienti["clienti"][k]["cellulare"]);
             }
-
+            
         }
+
+        localStorage.lastCustomer=target.value;
     }else{
         fillField(type);
     }
@@ -217,4 +250,117 @@ async function fillField(type,ragioneSociale="",indirizzo="",cittaF="",provF="",
     let prov=document.getElementById("Prov"+type).value=provF;
     let cap=document.getElementById("cap"+type).value=capF;
     let cell=document.getElementById("Cell"+type).value=cellF;
+}
+
+function checkForm(){
+    //controllo campi
+    let id=document.getElementById("ddt");
+    if(id.value.trim()==""){
+        id.classList.add("is-invalid");
+        return;
+    }else{
+        id.classList.remove("is-invalid");
+    }
+
+    let ddtN=document.getElementById("ddtN");
+    console.log(ddtN.getAttribute("disabled"));
+    if(!ddtN.hasAttribute("disabled")){
+        if(ddtN.value.trim()==""){
+            ddtN.classList.add("is-invalid");
+            return;
+        }else{
+            ddtN.classList.remove("is-invalid");
+        }
+    }else{
+    }
+
+    let ddtD=document.getElementById("ddtD");
+    let oggi=new Date(Date.now());
+    if(!ddtD.hasAttribute("disabled")){
+        let dataDdtD=new Date(ddtD.value);
+        dataDdtD.setHours(0,0,0,0);
+    
+        if(ddtD.value==""){
+            ddtD.classList.add("is-invalid");
+            return;
+        }else{
+            ddtD.classList.remove("is-invalid");
+        }
+    
+        oggi.setHours(0,0,0,0);
+        if(dataDdtD>oggi){
+            ddtD.classList.add("is-invalid");
+            return;
+        }else{
+            ddtD.classList.remove("is-invalid");
+        }
+    }
+
+    let mittAlert=document.getElementById("Mitt-alert");
+    if(!checkField("Mitt")){
+        mittAlert.style.display="block";
+        return;
+    }else{
+        mittAlert.style.display="none";
+    }
+
+    let destAlert=document.getElementById("Dest-alert");
+    if(!checkField("Dest")){
+        destAlert.style.display="block";
+        return;
+    }else{
+        destAlert.style.display="none";
+    }
+
+    let tipo=document.getElementById("tipo");
+    if(tipo.value==""){
+        tipo.classList.add("is-invalid");
+        return;
+    }else{
+        tipo.classList.remove("is-invalid");
+    }
+
+    let dataCons=document.getElementById("dataConsegna");
+    let consegna=new Date(dataCons.value);
+    consegna.setHours(0,0,0,0);
+
+    if(dataCons.value==""){
+        dataCons.classList.add("is-invalid");
+        return;
+    }else{
+        dataCons.classList.remove("is-invalid");
+    }
+
+    let dateAlert=document.getElementById("invaliDate-alert");
+    if(consegna<oggi){
+        dateAlert.style.display="block";
+        return;
+    }else{
+        dateAlert.style.display="none";
+    }
+
+
+    let form=document.getElementById("main-form");
+    form.submit();
+}
+
+function checkField(type){
+    let ragsoc=document.getElementById("RagSoc"+type).value;
+    let ind=document.getElementById("Indirizzo"+type).value;
+    let citta=document.getElementById("Citta"+type).value;
+    let prov=document.getElementById("Prov"+type).value;
+    let cap=document.getElementById("cap"+type).value;
+    let cell=document.getElementById("Cell"+type).value;
+
+    ragsoc=ragsoc.trim();
+    ind=ind.trim();
+    citta=citta.trim();
+    prov=prov.trim();
+    cap=cap.trim();
+    cell=cell.trim();
+
+    if(ragsoc!="" && ind!="" && citta!="" && prov!="" && cap!="" && cell!="")
+        return true;
+    else
+        return false;
 }

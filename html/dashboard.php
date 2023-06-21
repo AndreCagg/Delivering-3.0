@@ -86,9 +86,9 @@
                                 <div class="row justify-content-between">
                                     <div class="d-flex align-items-center">
                                         ID&nbsp;
-                                        <input type="text" name="id" size="14" class="form-control" style="width:170px;height:35px;">&nbsp;
-                                        rif. DDT n. <input type="number" name="ddtN" min="0" max="1000" class="form-control" style="width:170px;height:35px;">&nbsp;
-                                        del &nbsp;<input type="date" name="ddtD" class="form-control" style="width:170px;height:35px;">&nbsp;&nbsp;
+                                        <input type="text" name="id" id="ddt" size="14" class="form-control" style="width:170px;height:35px;">&nbsp;
+                                        rif. DDT n. <input type="text" name="ddtN" id="ddtN" class="form-control" style="width:170px;height:35px;">&nbsp;
+                                        del &nbsp;<input type="date" name="ddtD" id="ddtD" class="form-control" style="width:170px;height:35px;">&nbsp;&nbsp;
                                         <div class="form-check" style="width:10%;">
                                             <input class="form-check-input form-check-input-xl" type="checkbox" name="interno" id="interno" style="width:20%;height:50%;">&nbsp;
                                             <label class="form-check-label" for="interno">
@@ -105,14 +105,13 @@
                                     </div>
                                     <br>
                                     <br>
-<<<<<<< Updated upstream
-                                    <div class="col-4" id="Mitt-field">
-=======
                                     <div class="col-4" id="colMitt">
->>>>>>> Stashed changes
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Mittente</legend>
-                                            Seleziona <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;"></select>
+                                            Seleziona <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;">
+                                            <option value=""></option>
+                                            <option value="0">NUOVO</option>
+                                        </select>
 
                                             <div class="label-form" for="RagSocMitt">Ragione sociale</div>
                                             <input type="text" name="RagSocMitt" id="RagSocMitt" class="form-control my-1" style="width:230px;">
@@ -132,6 +131,10 @@
                                             <div class="label-form" for="CellMitt">Cellulare</div>
                                             <input type="text" name="CellMitt" id="CellMitt" class="form-control my-1" style="width:170px;">
                                         </fieldset>
+                                        <small style="color:red;display:none;" id="Mitt-alert">
+                                            <img src="../icons/!.png" width="15px" height="16px">
+                                            Compila correttamente tutti i campi
+                                        </small>
                                     </div>
 
     
@@ -139,7 +142,10 @@
                                     <div class="col-4" id="colDest">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Destinatario</legend>
-                                            Seleziona <select name="clientiDest" class="form-select" style="width:250px;"></select>
+                                            Seleziona <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;">
+                                            <option value=""></option>
+                                            <option value="0">NUOVO</option>
+                                        </select>
 
                                             <div class="label-form" for="RagSocMitt">Ragione sociale</div>
                                             <input type="text" name="RagSocDest" id="RagSocDest" class="form-control my-1" style="width:230px;">
@@ -148,7 +154,7 @@
                                             <input type="text" name="IndirizzoDest" id="IndirizzoDest" class="form-control my-1" style="width:250px;">
                                         
                                             <div class="label-form" for="CittaMitt">Citt&agrave;</div>
-                                            <input type="text" name="cittaDest" id="cittaDest" class="form-control my-1" style="width:240px;">
+                                            <input type="text" name="cittaDest" id="CittaDest" class="form-control my-1" style="width:240px;">
 
                                             <div class="label-form" for="ProvMitt">Prov</div>
                                             <input type="text" name="ProvDest" id="ProvDest" class="form-control my-1" style="width:100px;">
@@ -159,6 +165,10 @@
                                             <div class="label-form" for="CellMitt">Cellulare</div>
                                             <input type="text" name="CellDest" id="CellDest" class="form-control my-1" style="width:170px;">
                                         </fieldset>
+                                        <small style="color:red;display:none;" id="Dest-alert">
+                                            <img src="../icons/!.png" width="15px" height="16px">
+                                            Compila correttamente tutti i campi
+                                        </small>
                                     </div>
 
                                     <br><br>
@@ -167,12 +177,16 @@
                                         <div class="label-form" for="Epal">Epal</div>&nbsp;
                                         <input type="number" name="Epal" id="Epal" class="form-control my-1" min="0" max="1000" value="0" style="width:80px;margin-right:20px;">&nbsp; <div class="label-form" for="tipo">Tipologia</div>&nbsp; 
                                         <select name="tipo" id="tipo" class="form-select" style="width:200px;margin-right:20px;">
-                                            <option value="00"></option>
+                                            <option value=""></option>
                                             <option value="1">SPEDIZIONE</option>
                                             <option value="2">RITIRO</option>
                                         </select>&nbsp;
                                         <div class="label-form" for="dataConsegna">Data consegna</div>&nbsp;
-                                        <input type="date" name="dataConsegna" id="dataConsegna" class="form-control my-1" min="0" max="1000" style="width:150px;">
+                                        <input type="date" name="dataConsegna" id="dataConsegna" class="form-control my-1" min="0" max="1000" style="width:150px;">&nbsp;
+                                        <small style="color:red;display:none;" id="invaliDate-alert">
+                                                <img src="../icons/!.png" width="15px" height="16px">
+                                                La data di consegna non è valida
+                                        </small>
                                     </div>
                                 </div><br>
                                 <hr style="width:90%;">
@@ -180,9 +194,14 @@
                                     <div class="col-4" id="pack-form">
                                         <h5 class="fw-normal">Colli/Bancali</h3>
 
-                                        <div class="label-form" for="segnacollo">Segnacollo</div>
+                                        <div class="label-form" for="segnacollo">Identificativo</div>
                                         <input type="text" id="segnacollo" class="form-control my-1" style="width:200px;">
                                         <button type="button" class="btn btn-success btn-sm mb-3" id="generaID"><b>GENERA</b></button>
+
+                                        <br>
+
+                                        <div class="form-check-label" for="bancale">Bancale</div>
+                                        <input type="checkbox" id="bancale" class="form-check-input my-1">
 
                                         <div class="label-form" for="peso">Peso</div>
                                         <input type="number" step="0.01" id="peso" class="form-control my-1" style="width:100px;">&nbsp;
@@ -212,7 +231,7 @@
                                         </div>
                                     </div>
                                     <div class="col-1 p-0" style="width:1px; background-color:#bfc0c1;"></div>
-                                    <div class="col-4 justify-content-end scrollable-tbody mb-5 mx-5">
+                                    <div class="col-4 justify-content-end scrollable-tbody mb-5 mx-4">
                                         <table class="table table-striped table-hover" id="colliList">
                                             <thead>
                                                 <tr>
@@ -220,6 +239,7 @@
                                                     <th>PESO</th>
                                                     <th>DIMENSIONI</th>
                                                     <th>DESCRIZIONE</th>
+                                                    <th></th>
                                                     <th></th>
                                                     <th></th>
                                                 </tr>
@@ -260,8 +280,6 @@
 
             });
             window.addEventListener("DOMContentLoaded",loadCostumers);
-<<<<<<< Updated upstream
-=======
             document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
             document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});
             document.getElementById("peso").addEventListener("keydown",(e)=>{
@@ -281,7 +299,21 @@
                     checkForm();
                 }
             });
->>>>>>> Stashed changes
+            document.getElementById("interno").addEventListener("change",function(){
+                if(this.checked){
+                    let ddtn=document.getElementById("ddtN");
+                    let ddtd=document.getElementById("ddtD");
+                    ddtn.value="";
+                    ddtd.value="0000-00-00";
+                    ddtn.setAttribute("disabled","");
+                    ddtd.setAttribute("disabled","");
+                    ddtn.classList.remove("is-invalid");
+                    ddtd.classList.remove("is-invalid");
+                }else{
+                    document.getElementById("ddtN").removeAttribute("disabled");
+                    document.getElementById("ddtD").removeAttribute("disabled");
+                }
+            });
         </script>
     </body>
 </html>
