@@ -83,29 +83,38 @@
                             ?>
 
                             <form action="#" method="post" id="main-form">
-                                <div class="row justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        ID&nbsp;
-                                        <input type="text" name="id" id="ddt" size="14" class="form-control" style="width:170px;height:35px;">&nbsp;
-                                        rif. DDT n. <input type="text" name="ddtN" id="ddtN" class="form-control" style="width:170px;height:35px;">&nbsp;
-                                        del &nbsp;<input type="date" name="ddtD" id="ddtD" class="form-control" style="width:170px;height:35px;">&nbsp;&nbsp;
-                                        <div class="form-check" style="width:10%;">
-                                            <input class="form-check-input form-check-input-xl" type="checkbox" name="interno" id="interno" style="width:20%;height:50%;">&nbsp;
+                                <div class="row">
+                                    <div class="col-auto me-2">
+                                        ID&nbsp;<input type="text" name="id" id="ddt" size="14" class="form-control" style="width:170px;height:35px;"><br>
+                                        <button type="button" class="btn btn-success btn-sm mb-3" id="generaIDDDT"><b>GENERA</b></button>
+                                    </div>
+                                    <div class="col-auto">
+                                        rif. DDT n. <input type="text" name="ddtN" id="ddtN" class="form-control" style="width:170px;height:35px;"><br>
+                                        del &nbsp;<input type="date" name="ddtD" id="ddtD" class="form-control" style="width:170px;height:35px;">
+                                    </div>
+                                    <div class="col-auto mt-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input form-check-input-xl" type="checkbox" name="interno" id="interno">
                                             <label class="form-check-label" for="interno">
                                                 Interna
                                             </label>
                                         </div>
+                                    </div>
 
-                                        <div class="form-check" style="width:10%;">
-                                            <input class="form-check-input form-check-input-xl" type="checkbox" name="riserva" id="riserva" style="width:20%;height:50%;">&nbsp;
+                                    <div class="col-auto mt-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input form-check-input-xl" type="checkbox" name="riserva" id="riserva">
                                             <label class="form-check-label" for="riserva">
                                                 Riserva
                                             </label>
                                         </div>
                                     </div>
+                                </div>
+                                <hr style="width:90%;">
+                                <div class="row mt-3">
                                     <br>
                                     <br>
-                                    <div class="col-4" id="colMitt">
+                                    <div class="col-4 me-5" id="colMitt">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Mittente</legend>
                                             Seleziona <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;">
@@ -247,6 +256,10 @@
                                             <tbody class="text-center">
                                             </tbody>
                                         </table>
+                                        <small style="color:red;display:none;" id="tableAlert">
+                                                <img src="../icons/!.png" width="15px" height="16px">
+                                                Ci deve essere almeno un collo/bancale
+                                        </small>
                                     </div>
                                 </div>
                                 <div class="row justify-content-right mx-1 mt-3">
@@ -270,7 +283,12 @@
 
         <script>
             document.getElementById("addPack").addEventListener("click",loadPack);
-            document.getElementById("generaID").addEventListener("click",generateID);
+            document.getElementById("generaID").addEventListener("click",()=>{
+                generateID(document.getElementById("segnacollo"));
+            });
+            document.getElementById("generaIDDDT").addEventListener("click",()=>{
+                generateID(document.getElementById("ddt"));
+            });
             document.getElementById("pack-form").addEventListener("keydown",ev=>{
                 if(ev.keyCode==13){
                     ev.preventDefault();
@@ -280,6 +298,10 @@
 
             });
             window.addEventListener("DOMContentLoaded",loadCostumers);
+            window.addEventListener("DOMContentLoaded",()=>{
+                setVisibility("Mitt",true);
+                setVisibility("Dest",true);
+            });
             document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
             document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});
             document.getElementById("peso").addEventListener("keydown",(e)=>{

@@ -1,8 +1,12 @@
 var state="none";
 var row=-1;
 
+async function removeAlertPack(){
+    let tableAlert=document.getElementById("tableAlert").style.display="none";
+}
+
 function loadPack(){
-    //NON E OBBLIGATORIO IL CAMPO DIMENSIONE
+    //NON E OBBLIGATORIO IL CAMPO 
     let id=document.getElementById("segnacollo");
     let bancale=document.getElementById("bancale");
     let peso=document.getElementById("peso");
@@ -10,14 +14,14 @@ function loadPack(){
     let descrizione=document.getElementById("descrizione");
     let duplicateID=document.getElementById("duplicateID-alert");
     let alert=document.getElementById("alert");
-
+    
     if(id.value=="" || peso.value==""){
         alert.style.display="block";
     }else{
         alert.style.display="none";
-
+        
         let table=document.getElementById("colliList");
-
+        
         // controllo se è gia presente il segnacollo
         for(let k=1;k<table.rows.length;k++){
             if((table.rows[k].cells[0].innerHTML==id.value) && state=="none"){
@@ -25,19 +29,19 @@ function loadPack(){
                 return;
             }
         }
-
+        
         duplicateID.style.display="none";
         let um=document.getElementById("um");
-
-
+        
+        
         let tbody=table.getElementsByTagName("tbody")[0];
         let line=tbody.insertRow(row);
-
+        
         if(state=="updating"){
             table.deleteRow(row);
             state="none";
         }
-
+        
         let cell1=line.insertCell(0);
         let cell2=line.insertCell(1);
         let cell3=line.insertCell(2);
@@ -45,10 +49,10 @@ function loadPack(){
         let cell5=line.insertCell(4);
         let cell6=line.insertCell(5);
         let cell7=line.insertCell(6);
-
-
+        
+        
         let literalUM="";
-
+        
         switch(um.value){
             case "1":
                 literalUM="Kg";
@@ -57,15 +61,16 @@ function loadPack(){
                 literalUM="Q.li";
             break;
         }
-
+                
         cell1.appendChild(document.createTextNode(segnacollo.value.trim()));
         if(segnacollo.value.trim().length>14)
-            cell1.className="text-break"; 
-
+        cell1.className="text-break"; 
+        
         cell2.className="text-break";
         cell2.appendChild(document.createTextNode(peso.value+" "+literalUM));
         cell3.appendChild(document.createTextNode(dimensione.value.trim()));
         cell3.className="text-break";
+
         cell4.className="text-break";
         cell4.appendChild(document.createTextNode(descrizione.value.trim()));
         
@@ -73,11 +78,11 @@ function loadPack(){
         edit.innerHTML='<img src="../icons/modifica.png" width="10px" height="10px">&nbsp;Modifica';
         let rowId=-1;
         if(row!=-1)
-            rowId=row;
+        rowId=row;
         else
-            rowId=table.rows.length-1;
-
-
+        rowId=table.rows.length-1;
+        
+        
         let tipo=document.createElement("img");
         tipo.width="30";
         if(bancale.checked){
@@ -95,7 +100,7 @@ function loadPack(){
         edit.classList.add("btn-info");
         edit.classList.add("btn-sm");
         cell6.appendChild(edit);
-
+        
         let del=document.createElement("button");
         del.innerHTML='<img src="../icons/elimina.png" width="11px" height="12px">&nbsp;Elimina';
         del.setAttribute("onclick","event.preventDefault(); deletePack("+String(rowId)+")");
@@ -105,13 +110,14 @@ function loadPack(){
         cell7.appendChild(del);
         
         row=-1;
-
+        
         id.value="";
         dimensione.value="";
         peso.value="";
         descrizione.value="";
         bancale.checked=false;
         document.getElementById("addPack").innerHTML="Aggiungi";
+        removeAlertPack();
     }
 }
 
@@ -173,10 +179,13 @@ function deletePack(line){
     }
 }
 
-function generateID(){
+function generateID(target){
     let id=Math.round(Math.random()*(9999999999999-1000000000000)+9999999999999);
-    let segnacollo=document.getElementById("segnacollo");
-    segnacollo.value=id;
+    target.value=id;
+
+    if(target===document.getElementById("ddt")){
+        target.classList.remove("is-invalid");
+    }
 }
 
 async function loadCostumers(){
@@ -208,8 +217,31 @@ async function loadCostumers(){
     }
 }
 
+async function setVisibility(type,readonly){
+    if(readonly){
+        document.getElementById("RagSoc"+type).setAttribute("readonly","");
+        document.getElementById("Indirizzo"+type).setAttribute("readonly","");
+        document.getElementById("Citta"+type).setAttribute("readonly","");
+        document.getElementById("Prov"+type).setAttribute("readonly","");
+        document.getElementById("cap"+type).setAttribute("readonly","");
+        document.getElementById("Cell"+type).setAttribute("readonly","");
+    }else{
+        document.getElementById("RagSoc"+type).removeAttribute("readonly");
+        document.getElementById("Indirizzo"+type).removeAttribute("readonly");
+        document.getElementById("Citta"+type).removeAttribute("readonly");
+        document.getElementById("Prov"+type).removeAttribute("readonly");
+        document.getElementById("cap"+type).removeAttribute("readonly");
+        document.getElementById("Cell"+type).removeAttribute("readonly");
+    }
+
+}
+
 async function fillCustomer(target,type){
     let clienti=JSON.parse(localStorage.clienti);
+    if(target.value=="")
+        setVisibility(type,true);
+    else
+        setVisibility(type,false);
 
     if(target.value!="" && target.value!=0){
         for(let k in clienti["clienti"]){
@@ -244,12 +276,12 @@ async function fillCustomer(target,type){
 }
 
 async function fillField(type,ragioneSociale="",indirizzo="",cittaF="",provF="",capF="",cellF=""){
-    let ragsoc=document.getElementById("RagSoc"+type).value=ragioneSociale;
-    let ind=document.getElementById("Indirizzo"+type).value=indirizzo;
-    let citta=document.getElementById("Citta"+type).value=cittaF;
-    let prov=document.getElementById("Prov"+type).value=provF;
-    let cap=document.getElementById("cap"+type).value=capF;
-    let cell=document.getElementById("Cell"+type).value=cellF;
+    document.getElementById("RagSoc"+type).value=ragioneSociale;
+    document.getElementById("Indirizzo"+type).value=indirizzo;
+    document.getElementById("Citta"+type).value=cittaF;
+    document.getElementById("Prov"+type).value=provF;
+    document.getElementById("cap"+type).value=capF;
+    document.getElementById("Cell"+type).value=cellF;
 }
 
 function checkForm(){
@@ -263,7 +295,6 @@ function checkForm(){
     }
 
     let ddtN=document.getElementById("ddtN");
-    console.log(ddtN.getAttribute("disabled"));
     if(!ddtN.hasAttribute("disabled")){
         if(ddtN.value.trim()==""){
             ddtN.classList.add("is-invalid");
@@ -337,6 +368,15 @@ function checkForm(){
         return;
     }else{
         dateAlert.style.display="none";
+    }
+
+    let table=document.getElementById("colliList");
+    let tableAlert=document.getElementById("tableAlert");
+    if((table.rows.length-1)==0){
+        tableAlert.style.display="block";
+        return;
+    }else{
+        tableAlert.style.display="none";
     }
 
 
