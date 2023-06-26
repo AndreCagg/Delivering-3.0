@@ -82,7 +82,7 @@
                         case 1:
                             ?>
 
-                            <form action="#" method="post" id="main-form">
+                            <form action="../php/validateInsert.php" method="post" id="main-form">
                                 <div class="row">
                                     <div class="col-auto me-2">
                                         ID&nbsp;<input type="text" name="id" id="ddt" size="14" class="form-control" style="width:170px;height:35px;"><br>
@@ -227,11 +227,11 @@
 
                                         <small style="color:red;display:none;" id="alert">
                                             <img src="../icons/!.png" width="15px" height="16px">
-                                            Il segnacollo e il peso sono obbligatori
+                                            L'ID e il peso sono obbligatori
                                         </small>
                                         <small style="color:red;display:none;" id="duplicateID-alert">
                                             <img src="../icons/!.png" width="15px" height="16px">
-                                            Il segnacollo risulta già inserito
+                                            L'ID risulta già inserito
                                         </small>
 
                                         <div>
@@ -241,7 +241,7 @@
                                     </div>
                                     <div class="col-1 p-0" style="width:1px; background-color:#bfc0c1;"></div>
                                     <div class="col-4 justify-content-end scrollable-tbody mb-5 mx-4">
-                                        <table class="table table-striped table-hover" id="colliList">
+                                        <table class="table table-striped table-hover" id="colliList" name="colliList">
                                             <thead>
                                                 <tr>
                                                     <th>SEGNACOLLO</th>
@@ -301,6 +301,11 @@
             window.addEventListener("DOMContentLoaded",()=>{
                 setVisibility("Mitt",true);
                 setVisibility("Dest",true);
+                document.getElementById("packs").remove();
+                if(localStorage.refresh){
+                    localStorage.removeItem("refresh");
+                    location.reload();
+                }
             });
             document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
             document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});

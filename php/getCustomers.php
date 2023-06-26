@@ -19,12 +19,10 @@
         $tmp["clienti"]=$clienti;
         $tmp["error"]="false";
         $query->close();
-        echo json_encode($tmp);
-        unset($tmp);
     }catch(Exception $e){
         $tmp["error"]="true";
-        echo json_encode($tmp);
     } finally {
+        echo json_encode($tmp);
         if ($conn) {
             $conn->close();
         }

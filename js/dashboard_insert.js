@@ -2,7 +2,7 @@ var state="none";
 var row=-1;
 
 async function removeAlertPack(){
-    let tableAlert=document.getElementById("tableAlert").style.display="none";
+    document.getElementById("tableAlert").style.display="none";
 }
 
 function loadPack(){
@@ -62,6 +62,15 @@ function loadPack(){
             break;
         }
                 
+        // let inCell1=document.createElement("input");
+        // inCell1.name="segnacollo[]";
+        // inCell1.type="text";
+        // inCell1.setAttribute("readonly","");
+        // inCell1.style.backgroundColor="transparent";
+        // inCell1.style.borderStyle="inset";
+        // inCell1.style.borderWidth="0";
+        // inCell1.value=segnacollo.value.trim();
+
         cell1.appendChild(document.createTextNode(segnacollo.value.trim()));
         if(segnacollo.value.trim().length>14)
         cell1.className="text-break"; 
@@ -193,27 +202,30 @@ async function loadCostumers(){
     if(document.getElementById("clientiMitt").value==""){
     }
     const response=await fetch("../php/getCustomers.php");
+
     const data=await response.json();
-    // console.log(data);
-    if(data.error==true){
-        //alert "impossibile caricare i clienti"
-        console.log("errore trovato");
-    }else{
+       
+
+    if(data.error!="true"){
         localStorage.clienti=JSON.stringify(data);
         let selectMitt=document.getElementById("clientiMitt");
         let selectDest=document.getElementById("clientiDest");
         for(let k in data.clienti){
             let opt=document.createElement("option");
-            opt.text=data.clienti[k]["ragioneSociale"];
-            opt.value=data.clienti[k]["id"];
-
-            let opt2=document.createElement("option");
-            opt2.text=data.clienti[k]["ragioneSociale"];
-            opt2.value=data.clienti[k]["id"];
-
-            selectMitt.appendChild(opt);
-            selectDest.appendChild(opt2);
+                opt.text=data.clienti[k]["ragioneSociale"];
+                opt.value=data.clienti[k]["id"];
+                
+                let opt2=document.createElement("option");
+                opt2.text=data.clienti[k]["ragioneSociale"];
+                opt2.value=data.clienti[k]["id"];
+                
+                selectMitt.appendChild(opt);
+                selectDest.appendChild(opt2);
         }
+    }else{
+        alert("!! IMPOSSIBILE CARICARE I CLIENTI !!");
+        localStorage.refresh=true;
+        window.location="../php/setService.php?service=0";
     }
 }
 
@@ -245,24 +257,8 @@ async function fillCustomer(target,type){
 
     if(target.value!="" && target.value!=0){
         for(let k in clienti["clienti"]){
-            // $("#clientiDest option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
-            // $("#clientiMitt option[value='"+clienti["clienti"][k]["id"]+"']").css("display","block");
             
             if(clienti["clienti"][k]["id"]==target.value){
-                //rimozione del cliente dall'altra select - non funziona bene
-                // if(type=="Mitt"){
-                //     $("#clientiDest option[value='"+target.value+"']").css("display","none");
-                //     // if(document.getElementById("clientiDest").value!="" && document.getElementById("clientiDest").value!=0){
-                //     //     document.getElementById("clientiDest").value="";
-                //     //     await fillField("Dest");
-                //     // }
-                // }else{
-                //     // if(document.getElementById("clientiMitt").value!="" && document.getElementById("clientiMitt").value!=0){
-                //     //     document.getElementById("clientiMitt").value="";
-                //     //     await fillField("Mitt");
-                //     // }
-                //     $("#clientiMitt option[value='"+target.value+"']").css("display","none");
-                // }
                 fillField(type,clienti["clienti"][k]["ragioneSociale"],clienti["clienti"][k]["indirizzo"],
                 clienti["clienti"][k]["citta"],clienti["clienti"][k]["prov"],clienti["clienti"][k]["cap"],clienti["clienti"][k]["cellulare"]);
             }
@@ -378,6 +374,23 @@ function checkForm(){
     }else{
         tableAlert.style.display="none";
     }
+
+    let tbody=document.getElementsByTagName("tbody")[0].rows;
+    let arr={};
+    for(let k=0;k<tbody.length;k++){
+        arr[tbody[k].cells[0].innerHTML]={
+        bancale:tbody[k].cells[4].querySelector("#packTipo").toSet,
+        peso:tbody[k].cells[1].innerHTML,
+        descrizione:tbody[k].cells[3].innerHTML,
+        dimensioni:tbody[k].cells[2].innerHTML};
+    }
+    
+    let input=document.createElement("input");
+    input.type="hidden";
+    input.name="packs";
+    input.id="packs";
+    input.value=JSON.stringify(arr);
+    document.getElementById("main-form").appendChild(input);
 
 
     let form=document.getElementById("main-form");
