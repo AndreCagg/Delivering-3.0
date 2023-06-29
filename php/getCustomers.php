@@ -8,6 +8,7 @@
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     $clienti=[];
     $tmp=[];
+    $conn=null;
     try{
         $conn=new mysqli($dbAddress,$userOperator,$passOperator,$dbName);
         $query=$conn->query("SELECT * FROM clienti");
