@@ -203,8 +203,7 @@ async function loadCostumers(){
     }
     const response=await fetch("../php/getCustomers.php");
 
-    const data=await response.json();
-       
+    const data=await response.json();       
 
     if(data.error!="true"){
         localStorage.clienti=JSON.stringify(data);
@@ -264,7 +263,7 @@ async function fillCustomer(target,type){
             }
             
         }
-
+        
         localStorage.lastCustomer=target.value;
     }else{
         fillField(type);
@@ -303,6 +302,7 @@ function checkForm(){
 
     let ddtD=document.getElementById("ddtD");
     let oggi=new Date(Date.now());
+    oggi.setHours(0,0,0,0);
     if(!ddtD.hasAttribute("disabled")){
         let dataDdtD=new Date(ddtD.value);
         dataDdtD.setHours(0,0,0,0);
@@ -314,7 +314,6 @@ function checkForm(){
             ddtD.classList.remove("is-invalid");
         }
     
-        oggi.setHours(0,0,0,0);
         if(dataDdtD>oggi){
             ddtD.classList.add("is-invalid");
             return;
@@ -416,4 +415,15 @@ function checkField(type){
         return true;
     else
         return false;
+}
+
+function disableRif(){
+    let ddtn=document.getElementById("ddtN");
+    let ddtd=document.getElementById("ddtD");
+    ddtn.value="";
+    ddtd.value="0000-00-00";
+    ddtn.setAttribute("disabled","");
+    ddtd.setAttribute("disabled","");
+    ddtn.classList.remove("is-invalid");
+    ddtd.classList.remove("is-invalid");
 }

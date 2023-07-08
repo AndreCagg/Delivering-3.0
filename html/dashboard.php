@@ -17,6 +17,7 @@
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.slim.min.js" integrity="sha256-tG5mcZUtJsZvyKAxYLVXrmjKBVLd6VpVccqz/r4ypFE=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="../css/controlPanel.css">
     <link rel="stylesheet" href="../css/style.css">
     <script src="../js/dashboard_insert.js"></script>
@@ -80,17 +81,23 @@
                     if(!isset($_SESSION["service"])) die();
                     switch($_SESSION["service"]){
                         case 1:
+                            if(isset($_SESSION["draft"])){
                             ?>
+                            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                               Si è verificato un errore durante il salvataggio dell'incarico: (<?php echo $_SESSION["draft"]["error"]["code"]; ?>) <?php echo $_SESSION["draft"]["error"]["message"]; ?>.
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                            <?php } ?>
 
                             <form action="../php/validateInsert.php" method="post" id="main-form">
                                 <div class="row">
                                     <div class="col-auto me-2">
-                                        ID&nbsp;<input type="text" name="id" id="ddt" size="14" class="form-control" style="width:170px;height:35px;"><br>
+                                        ID&nbsp;<input type="text" name="id" id="ddt" size="14" class="form-control" style="width:170px;height:35px;" value="<?php echo isset($_SESSION["draft"]["id"])?$_SESSION["draft"]["id"]:"" ?>"><br>
                                         <button type="button" class="btn btn-success btn-sm mb-3" id="generaIDDDT"><b>GENERA</b></button>
                                     </div>
                                     <div class="col-auto">
-                                        rif. DDT n. <input type="text" name="ddtN" id="ddtN" class="form-control" style="width:170px;height:35px;"><br>
-                                        del &nbsp;<input type="date" name="ddtD" id="ddtD" class="form-control" style="width:170px;height:35px;">
+                                        rif. DDT n. <input type="text" name="ddtN" id="ddtN" class="form-control" style="width:170px;height:35px;" value="<?php echo isset($_SESSION["draft"]["ddtN"])?$_SESSION["draft"]["ddtN"]:"" ?>"><br>
+                                        del &nbsp;<input type="date" name="ddtD" id="ddtD" class="form-control" style="width:170px;height:35px;" value="<?php echo isset($_SESSION["draft"]["ddtD"])?$_SESSION["draft"]["ddtD"]:"" ?>">
                                     </div>
                                     <div class="col-auto mt-3">
                                         <div class="form-check">
@@ -109,6 +116,21 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <script>
+                                        <?php
+                                            if(isset($_SESSION["draft"]["riserva"]) && $_SESSION["draft"]["riserva"]==1){
+                                                ?>
+                                                document.getElementById("riserva").setAttribute("checked","checked");
+                                                <?php
+                                            }
+
+                                            if(isset($_SESSION["draft"]["interno"]) && $_SESSION["draft"]["interno"]==1){
+                                                ?>
+                                                document.getElementById("interno").setAttribute("checked","checked");
+                                                <?php
+                                            }
+                                        ?>
+                                    </script>
                                 </div>
                                 <hr style="width:90%;">
                                 <div class="row mt-3">
@@ -151,7 +173,7 @@
                                     <div class="col-4" id="colDest">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Destinatario</legend>
-                                            Seleziona <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;">
+                                            Seleziona <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;" value="<?php echo isset($_SESSION["draft"]["clientiDest"])?$_SESSION["draft"]["clientiDest"]:"" ?>">
                                             <option value=""></option>
                                             <option value="0">NUOVO</option>
                                         </select>
@@ -184,14 +206,23 @@
 
                                     <div class="d-flex align-items-center" style="margin-top:25px;">
                                         <div class="label-form" for="Epal">Epal</div>&nbsp;
-                                        <input type="number" name="Epal" id="Epal" class="form-control my-1" min="0" max="1000" value="0" style="width:80px;margin-right:20px;">&nbsp; <div class="label-form" for="tipo">Tipologia</div>&nbsp; 
-                                        <select name="tipo" id="tipo" class="form-select" style="width:200px;margin-right:20px;">
+                                        <input type="number" name="Epal" id="Epal" class="form-control my-1" min="0" max="1000" value="0" style="width:80px;margin-right:20px;" value="<?php echo isset($_SESSION["draft"]["epal"])?$_SESSION["draft"]["epal"]:"" ?>">&nbsp; <div class="label-form" for="tipo">Tipologia</div>&nbsp; 
+                                        <select name="tipo" id="tipo" class="form-select" style="width:200px;margin-right:20px;" value="<?php echo isset($_SESSION["draft"]["tipo"])?$_SESSION["draft"]["tipo"]:"" ?>">
                                             <option value=""></option>
                                             <option value="1">SPEDIZIONE</option>
                                             <option value="2">RITIRO</option>
                                         </select>&nbsp;
+                                        <script>
+                                            <?php
+                                            if(isset($_SESSION["draft"]["tipo"])){
+                                                ?>
+                                                $("#tipo option[value="+<?php echo $_SESSION["draft"]["tipo"];?>+"]").attr("selected","selected");
+                                                <?php
+                                            }
+                                            ?>
+                                        </script>
                                         <div class="label-form" for="dataConsegna">Data consegna</div>&nbsp;
-                                        <input type="date" name="dataConsegna" id="dataConsegna" class="form-control my-1" min="0" max="1000" style="width:150px;">&nbsp;
+                                        <input type="date" name="dataConsegna" id="dataConsegna" class="form-control my-1" min="0" max="1000" style="width:150px;" value="<?php echo isset($_SESSION["draft"]["dataConsegna"])?$_SESSION["draft"]["dataConsegna"]:"" ?>">&nbsp;
                                         <small style="color:red;display:none;" id="invaliDate-alert">
                                                 <img src="../icons/!.png" width="15px" height="16px">
                                                 La data di consegna non è valida
@@ -260,12 +291,32 @@
                                                 <img src="../icons/!.png" width="15px" height="16px">
                                                 Ci deve essere almeno un collo/bancale
                                         </small>
+                                            <script>
+                                                let packs=<?php echo $_SESSION["draft"]["packs"];?>;
+                                                for(let k in packs){
+                                                    document.getElementById("segnacollo").value=k;
+                                                    document.getElementById("bancale").checked=packs[k]["bancale"]=="true"?true:false;
+                                                    let peso=packs[k]["peso"].split(" ");
+                                                    document.getElementById("peso").value=peso[0];
+                                                    document.getElementById("um").value=peso[1]=="Kg"?1:2;
+                                                    document.getElementById("descrizione").value=packs[k]["descrizione"];
+                                                    document.getElementById("dimensioni").value=packs[k]["dimensioni"];
+                                                    loadPack();
+                                                }
+
+                                                document.getElementById("segnacollo").value="";
+                                                document.getElementById("bancale").checked=false;
+                                                document.getElementById("peso").value="";
+                                                document.getElementById("um").value="";
+                                                document.getElementById("descrizione").value="";
+                                                document.getElementById("dimensioni").value="";
+                                            </script>
                                     </div>
                                 </div>
                                 <div class="row justify-content-right mx-1 mt-3">
                                 <hr style="width:90%; opacity:20%;">
                                     <h5 class="fw-normal">Note</h5>
-                                    <textarea class="form-control w-25" id="note" name="note" rows="5"></textarea>
+                                    <textarea class="form-control w-25" id="note" name="note" rows="5"><?php echo isset($_SESSION["draft"]["note"])?$_SESSION["draft"]["note"]:"" ?></textarea>
                                 </div>
 
                                 <div class="row m-4 mt-5 justify-content-center">
@@ -277,10 +328,10 @@
                         // unset($_SESSION["service"]);
                         break;
                     }
-                ?>
+                    ?>
             </div>
         </div>
-
+        
         <script>
             document.getElementById("addPack").addEventListener("click",loadPack);
             document.getElementById("generaID").addEventListener("click",()=>{
@@ -295,10 +346,31 @@
                     loadPack();
                     document.activeElement.blur();
                 }
-
+                
             });
-            window.addEventListener("DOMContentLoaded",loadCostumers);
+            
+            window.addEventListener("DOMContentLoaded",async ()=>{
+                await loadCostumers();
+                <?php
+                    if(isset($_SESSION["draft"]["Mitt"])){
+                        ?>
+                            $("#clientiMitt option[value='<?php echo $_SESSION["draft"]["Mitt"]; ?>']").attr("selected","selected");
+                            fillCustomer(document.getElementById("clientiMitt"), "Mitt");
+                            <?php
+                    }
+
+                    if(isset($_SESSION["draft"]["Dest"])){
+                        ?>
+                            $("#clientiDest option[value='<?php echo $_SESSION["draft"]["Dest"]; ?>']").attr("selected","selected");
+                            fillCustomer(document.getElementById("clientiDest"), "Dest");
+                            <?php
+                    }
+                    ?>
+            });
             window.addEventListener("DOMContentLoaded",()=>{
+                if(document.getElementById("interno").hasAttribute("checked"))
+                    disableRif();
+                    
                 setVisibility("Mitt",true);
                 setVisibility("Dest",true);
                 document.getElementById("packs").remove();
@@ -307,8 +379,8 @@
                     location.reload();
                 }
             });
-            document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
             document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});
+            document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
             document.getElementById("peso").addEventListener("keydown",(e)=>{
                 if(e.key=="."){
                     e.preventDefault();
@@ -328,19 +400,17 @@
             });
             document.getElementById("interno").addEventListener("change",function(){
                 if(this.checked){
-                    let ddtn=document.getElementById("ddtN");
-                    let ddtd=document.getElementById("ddtD");
-                    ddtn.value="";
-                    ddtd.value="0000-00-00";
-                    ddtn.setAttribute("disabled","");
-                    ddtd.setAttribute("disabled","");
-                    ddtn.classList.remove("is-invalid");
-                    ddtd.classList.remove("is-invalid");
+                    disableRif();
                 }else{
                     document.getElementById("ddtN").removeAttribute("disabled");
                     document.getElementById("ddtD").removeAttribute("disabled");
                 }
             });
-        </script>
+
+            <?php
+                if(isset($_SESSION["draft"]))
+                    unset($_SESSION["draft"]);
+            ?>
+            </script>
     </body>
-</html>
+    </html>
