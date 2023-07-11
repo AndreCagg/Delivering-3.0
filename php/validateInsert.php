@@ -3,7 +3,7 @@
     //login
     require_once("tool.php");
     session_start();
-    isLogged("../");
+    isLogged("../",$_SESSION["login"]["level"],"0");
     date_default_timezone_set("Europe/Rome");
     $goback=false;
 

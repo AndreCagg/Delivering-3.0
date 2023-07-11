@@ -3,7 +3,7 @@
 
     session_start();
     require_once "../php/tool.php";
-    isLogged("../");
+    isLogged("../",$_SESSION["login"]["level"],"0");
 ?>
 
 

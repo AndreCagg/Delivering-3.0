@@ -3,7 +3,7 @@
     require_once("tool.php");
 
     session_start();
-    isLogged("../");
+    isLogged("../",$_SESSION["login"]["level"],"0");
 
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     $clienti=[];

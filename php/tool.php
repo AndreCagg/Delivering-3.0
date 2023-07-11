@@ -28,8 +28,8 @@
         return $conn;
     }
 
-    function isLogged($home){
-        if(!isset($_SESSION["login"])){
+    function isLogged($home,$actualLvl,$minReqLvl){
+        if(!isset($_SESSION["login"]) || $actualLvl<$minReqLvl){
             session_destroy();
             header("Location:$home");
         }
