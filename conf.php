@@ -8,6 +8,9 @@
     $userLoger="loger";
     $passLoger="";
 
+    $userLogger="logger";
+    $passLogger="";
+
     $userOperator="operator";
     $passOperator="";
 

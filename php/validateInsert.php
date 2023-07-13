@@ -1,5 +1,4 @@
 <?php
-    print_r($_POST);
     //login
     require_once("tool.php");
     session_start();
@@ -7,55 +6,96 @@
     date_default_timezone_set("Europe/Rome");
     $goback=false;
 
-    if($_POST["id"]==""){
-        echo "compila le informazioni correttamente (id)";
-        die();
-    }
-
-    if(!isset($_POST["interno"])){
-        if($_POST["ddtN"]=="" || $_POST["ddtD"]=="0000-00-00"){
-            echo "compila le informazioni correttamente (interno)";
-            die();
-        }
-    }
-
-    if(!checkCustomerField("Mitt") || !checkCustomerField("Dest")){
-        echo "compila le informazioni correttamente (clienti)";
-        die();
-    }
-
-    if($_POST["tipo"]==""){
-        echo "compila le informazioni correttamente (tipo)";
-        die();
-    }
-    
-    if($_POST["dataConsegna"]=="0000-00-00" || $_POST["dataConsegna"]<date("Y-m-d")){
-        echo "compila le informazioni correttamente (consegna)";
-        die();
-    }
-
-    if(count(json_decode($_POST["packs"],true))<=0){
-        echo "compila le informazioni correttamente (colli)";
-        die();
-    }
-    
-    if($_POST["Epal"]=="")
-        $_POST["Epal"]=0;
-    
-    // $idServ=$_POST["id"];
     $rifddt=null;
     $rifddtD=null;
-    $interno=1;
-    if(!isset($_POST["interno"])){
+    $interno=0;
+    $riserva=0;
+
+    require_once("../conf.php");
+    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $conn=null;
+    try{
+        if($_POST["id"]==""){
+            $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
+            goback($interno,$riserva,true,$conn,null);
+            header("Location:setService.php?service=1");
+            die();
+        }
+    }finally{
+        if(isset($conn))
+            $conn->close();
+    }
+
+    try{
+        if(!isset($_POST["interno"])){
+            if($_POST["ddtN"]=="" || $_POST["ddtD"]=="0000-00-00"){
+                $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
+                goback($interno,$riserva,true,$conn,null);
+                die();
+            }
+        }
+    }finally{
+        if(isset($conn))
+            $conn->close();
+    }
+
+    try{
+        if(!checkCustomerField("Mitt") || !checkCustomerField("Dest")){
+            $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
+            goback($interno,$riserva,true,$conn,null);
+            die();
+        }
+    }finally{
+        if(isset($conn))
+            $conn->close();
+    }
+
+    try{
+        if($_POST["tipo"]==""){
+            $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
+            goback($interno,$riserva,true,$conn,null);
+            die();
+        }
+    }finally{
+        if(isset($conn))
+            $conn->close();
+    }
+    
+    try{
+        if($_POST["dataConsegna"]=="0000-00-00" || $_POST["dataConsegna"]<date("Y-m-d")){
+            $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
+            goback($interno,$riserva,true,$conn,null);
+            die();
+        }
+    }finally{
+        if(isset($conn))
+            $conn->close();
+    }
+
+    try{
+        if(count(json_decode($_POST["packs"],true))<=0){
+            $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
+            goback($interno,$riserva,true,$conn,null);
+            die();
+        }
+    }finally{
+        if(isset($conn))
+            $conn->close();
+    }
+    
+    if(empty($_POST["Epal"]))
+        $_POST["Epal"]=0;
+    
+    if(isset($_POST["interno"])){
+        $interno=1;
+    }else{
         $rifddt=trim($_POST["ddtN"]);
         $rifddtD=trim($_POST["ddtD"]);
-        $interno=0;
     }
     
     $epal=trim($_POST["Epal"]);
     $tipo=$_POST["tipo"];
     $consegna=$_POST["dataConsegna"];
-    $riserva=0;
     if(isset($_POST["riserva"]))
         $riserva=1;
 
@@ -65,8 +105,6 @@
     
     
     //parte la transazione
-    require_once("../conf.php");
-    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     try{
         $conn=new mysqli($dbAddress,$userOperator,$passOperator,$dbName);
         $conn->begin_transaction();
@@ -132,16 +170,14 @@
         // $movimenti->bind_param("sss",$id,$oggi,$stato);
         // $movimenti->execute();
         // $movimenti->close();
-        
-        $log=$conn->prepare("INSERT INTO logoffice (autore, descrizione, data) VALUES (?,?,?)");
+
         $operatore=$_SESSION["login"]["id"];
         $descrizione="inserito incarico ".$id;
-        $adesso=date("Y-m-d H:i:s");
-        $log->bind_param("iss",$operatore,$descrizione,$adesso);
-        $log->execute();
-        $log->close();
+
+        logActivity($operatore,$descrizione,$conn);
         
         $conn->commit();
+        $_SESSION["success"]="Incarico salvato correttamente!";
     }catch(Exception $e){
         if(isset($conn))
             $conn->rollback();
@@ -149,7 +185,7 @@
         $goback=true;
         $message=$e->getMessage();
         $code=$e->getCode();
-        // echo "<br>(".$e->getCode().") ".$e->getMessage();
+        goback($interno,$riserva,true,new mysqli($dbAddress,$userLogger,$passLogger,$dbName),$code);
     }finally{
         if(isset($conn)){
             $conn->close();
@@ -172,58 +208,69 @@
     }
 
     //torno indietro
-    if($goback){
-        $_SESSION["draft"]["id"]=$_POST["id"];
-        $_SESSION["draft"]["interno"]=$interno;
-        $_SESSION["draft"]["ddtN"]=$rifddt;
-        $_SESSION["draft"]["ddtD"]=$rifddtD;
-        $_SESSION["draft"]["riserva"]=$riserva;
-        $_SESSION["draft"]["Mitt"]=$_POST["clientiMitt"];
-        $_SESSION["draft"]["Dest"]=$_POST["clientiDest"];
-        $_SESSION["draft"]["epal"]=$_POST["epal"];
-        $_SESSION["draft"]["tipo"]=$_POST["tipo"];
-        $_SESSION["draft"]["dataConsegna"]=$_POST["dataConsegna"];
-        $_SESSION["draft"]["note"]=$_POST["note"];
-        $_SESSION["draft"]["packs"]=$_POST["packs"];
-        $_SESSION["draft"]["error"]["code"]=$code;
-        
-        switch($code){
-            case 1044:
-                $message="Impossibile trovare il Database";
-            break;
-            case 1045:
-                $message="Errore di login al Database";
-            break;
-            case 1062:
-                $message="Codice identificativo dell'incarico e/o già esistene nel Database, generarne uno nuovo";
-            break;
-            case 1146:
-                $message="Impossibile salvare l'incarico a causa di una tabella inesistente";
-            break;
-            case 1216:
-                $message="Impossibile salvare l'incarico a causa di una chiave esterna inesistente";
-            break;
-            case 1451:
-                $message="Impossibile salvare l'incarico, violazione vincolo di chiave esterna";
-            break;
-            case 1064:
-                $message="Impossibile salvare l'incarico, chiamare un tecnico per risolvere i problemi di sintassi";
-            break;
-            case 2006:
-                $message="Connessione al Database persa, riprovare";
-            break;
-            case 2013:
-                $message="Impossibile salvare i dati a causa di una configurazione che va in conflitto con quella esistente, riprovare. Se il problema persiste contattare un tecnico";
-            break;
-            default:
-                $message="Impossibile salvare i dati. Errore generico. Se il problema persiste contattare il tecnico";
-            break;
+    function goback($interno,$riserva,$goback,$conn,$code){
+        if($goback==true){
+            $_SESSION["draft"]["id"]=isset($_POST["id"])?$_POST["id"]:"";
+            $_SESSION["draft"]["interno"]=$interno==1?$interno:0;
+            $_SESSION["draft"]["ddtN"]=isset($rifddt)?$rifddt:null;
+            $_SESSION["draft"]["ddtD"]=isset($rifddtD)?$rifddtD:null;
+            $_SESSION["draft"]["riserva"]=$riserva==1?$riserva:0;
+            $_SESSION["draft"]["Mitt"]=isset($_POST["clientiMitt"])?$_POST["clientiMitt"]:"";
+            $_SESSION["draft"]["Dest"]=isset($_POST["clientiDest"])?$_POST["clientiDest"]:"";
+            $_SESSION["draft"]["epal"]=isset($_POST["epal"])?$_POST["epal"]:"";
+            $_SESSION["draft"]["tipo"]=isset($_POST["tipo"])?$_POST["tipo"]:"";
+            $_SESSION["draft"]["dataConsegna"]=isset($_POST["dataConsegna"])?$_POST["dataConsegna"]:"";
+            $_SESSION["draft"]["note"]=isset($_POST["note"])?$_POST["note"]:"";
+            $_SESSION["draft"]["packs"]=isset($_POST["packs"])?$_POST["packs"]:"";
+            
+            if($code!=null){
+                $_SESSION["draft"]["error"]["code"]=$code;
+                switch($code){
+                    case 1044:
+                        $message="Impossibile trovare il Database";
+                    break;
+                    case 1045:
+                        $message="Errore di login al Database";
+                    break;
+                    case 1062:
+                        $message="Codice identificativo dell'incarico e/o già esistene nel Database, generarne uno nuovo";
+                    break;
+                    case 1146:
+                        $message="Impossibile salvare l'incarico a causa di una tabella inesistente";
+                    break;
+                    case 1216:
+                        $message="Impossibile salvare l'incarico a causa di una chiave esterna inesistente";
+                    break;
+                    case 1451:
+                        $message="Impossibile salvare l'incarico, violazione vincolo di chiave esterna";
+                    break;
+                    case 1064:
+                        $message="Impossibile salvare l'incarico, chiamare un tecnico per risolvere i problemi di sintassi";
+                    break;
+                    case 2006:
+                        $message="Connessione al Database persa, riprovare";
+                    break;
+                    case 2013:
+                        $message="Impossibile salvare i dati a causa di una configurazione che va in conflitto con quella esistente, riprovare. Se il problema persiste contattare un tecnico";
+                    break;
+                    default:
+                        $message="Impossibile salvare i dati. Errore generico. Se il problema persiste contattare il tecnico";
+                    break;
+                }
+            }else{
+                $message="Errore vincoli dei dati inseriti. Ricontrolla i dati nel form, potrebbero non essere corretti";
+                $code="Unk";
+                $_SESSION["draft"]["error"]["code"]=$code;
+            }
+
+            $_SESSION["draft"]["error"]["message"]=$message.". Ricontrolla i dati nel form, potrebbero non essere corretti";
+
         }
 
-        $_SESSION["draft"]["error"]["message"]=$message;
+        $operatore=$_SESSION["login"]["id"];
+        $descrizione="Generated Error ".$code;
 
-    }else{
-        $_SESSION["success"]="Incarico salvato correttamente!";
+        logActivity($operatore,$descrizione,$conn);
     }
     header("Location:setService.php?service=1");
     ?>
