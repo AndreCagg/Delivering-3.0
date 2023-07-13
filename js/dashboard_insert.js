@@ -378,10 +378,10 @@ function checkForm(){
     let arr={};
     for(let k=0;k<tbody.length;k++){
         arr[tbody[k].cells[0].innerHTML]={
-        bancale:tbody[k].cells[4].querySelector("#packTipo").toSet,
-        peso:tbody[k].cells[1].innerHTML,
-        descrizione:tbody[k].cells[3].innerHTML,
-        dimensioni:tbody[k].cells[2].innerHTML};
+        bancale:tbody[k].cells[4].querySelector("#packTipo").toSet.trim(),
+        peso:tbody[k].cells[1].innerHTML.trim(),
+        descrizione:tbody[k].cells[3].innerHTML.trim(),
+        dimensioni:tbody[k].cells[2].innerHTML.trim()};
     }
     
     let input=document.createElement("input");

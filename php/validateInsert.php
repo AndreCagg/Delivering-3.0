@@ -47,19 +47,19 @@
     $rifddtD=null;
     $interno=1;
     if(!isset($_POST["interno"])){
-        $rifddt=$_POST["ddtN"];
-        $rifddtD=$_POST["ddtD"];
+        $rifddt=trim($_POST["ddtN"]);
+        $rifddtD=trim($_POST["ddtD"]);
         $interno=0;
     }
     
-    $epal=$_POST["Epal"];
+    $epal=trim($_POST["Epal"]);
     $tipo=$_POST["tipo"];
     $consegna=$_POST["dataConsegna"];
     $riserva=0;
     if(isset($_POST["riserva"]))
         $riserva=1;
 
-    $note=$_POST["note"];
+    $note=trim($_POST["note"]);
     $message="";
     $code="";
     
@@ -72,7 +72,7 @@
         $conn->begin_transaction();
         
         //controllo utente
-        $id=$_POST["id"];
+        $id=trim($_POST["id"]);
         $idMitt="";
         if($_POST["clientiMitt"]=="0"){
             $inserisciCliente=$conn->prepare("INSERT INTO clienti (ragioneSociale,indirizzo,citta,prov,cap,cellulare) VALUES (?,?,?,?,?,?)");
@@ -222,8 +222,8 @@
 
         $_SESSION["draft"]["error"]["message"]=$message;
 
-        header("Location:setService.php?service=1");
     }else{
-        echo "INCARICO SALVATO";
+        $_SESSION["success"]="Incarico salvato correttamente!";
     }
+    header("Location:setService.php?service=1");
     ?>

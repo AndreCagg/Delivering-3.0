@@ -74,20 +74,47 @@
                     <hr>
                 </div>
             </div>
-            <div class="col mx-5 py-3">
+            <div class="col mx-4 py-3">
                 <!--CODICI SERVIZI 
                 1: INSERIMENTO-->
                 <?php
-                    if(!isset($_SESSION["service"])) die();
+                    if(!isset($_SESSION["service"]) || $_SESSION["service"]==0) die();
                     switch($_SESSION["service"]){
                         case 1:
                             if(isset($_SESSION["draft"])){
                             ?>
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                               Si è verificato un errore durante il salvataggio dell'incarico: (<?php echo $_SESSION["draft"]["error"]["code"]; ?>) <?php echo $_SESSION["draft"]["error"]["message"]; ?>.
+                                Si è verificato un errore durante il salvataggio dell'incarico: (<?php echo $_SESSION["draft"]["error"]["code"]; ?>) <?php echo $_SESSION["draft"]["error"]["message"]; ?>.
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
-                            <?php } ?>
+                            <?php } 
+                            if(isset($_SESSION["success"])){
+                                ?>
+                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                    Incarico salvato correttamente!
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                                <?php 
+                                unset($_SESSION["success"]);
+                            } ?>
+
+                            <div class="modal" tabindex="-1" id="avviso">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Modal title</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Modal body text goes here.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary">Save changes</button>
+                                </div>
+                                </div>
+                            </div>
+                            </div>
 
                             <form action="../php/validateInsert.php" method="post" id="main-form">
                                 <div class="row">
@@ -170,7 +197,7 @@
 
     
 
-                                    <div class="col-4" id="colDest">
+                                    <div class="col-4 ms-5" id="colDest">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="float-none w-auto px-3">Destinatario</legend>
                                             Seleziona <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;" value="<?php echo isset($_SESSION["draft"]["clientiDest"])?$_SESSION["draft"]["clientiDest"]:"" ?>">
@@ -325,10 +352,12 @@
                             </form>
 
                         <?php
-                        // unset($_SESSION["service"]);
                         break;
                     }
                     ?>
+            </div>
+            <div class="col-1 mt-2" style="right:0;">
+                <a href="../php/setService.php?service=0"><button type="button" class="btn btn-danger">X</button></a>
             </div>
         </div>
         
@@ -358,7 +387,7 @@
                             fillCustomer(document.getElementById("clientiMitt"), "Mitt");
                             <?php
                     }
-
+                    
                     if(isset($_SESSION["draft"]["Dest"])){
                         ?>
                             $("#clientiDest option[value='<?php echo $_SESSION["draft"]["Dest"]; ?>']").attr("selected","selected");
@@ -369,8 +398,8 @@
             });
             window.addEventListener("DOMContentLoaded",()=>{
                 if(document.getElementById("interno").hasAttribute("checked"))
-                    disableRif();
-                    
+                disableRif();
+                
                 setVisibility("Mitt",true);
                 setVisibility("Dest",true);
                 document.getElementById("packs").remove();
@@ -407,10 +436,17 @@
                 }
             });
 
+
+
+
+            
             <?php
+                if(isset($_SESSION["service"]))
+                    unset($_SESSION["service"]);
+
                 if(isset($_SESSION["draft"]))
                     unset($_SESSION["draft"]);
-            ?>
+                ?>
             </script>
-    </body>
+        </body>
     </html>
