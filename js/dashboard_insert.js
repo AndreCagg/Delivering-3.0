@@ -197,29 +197,33 @@ function generateID(target){
     }
 }
 
-async function loadCostumers(){
+async function loadCostumers(fCustomer,sCustomer){
     //estrazione 
-    if(document.getElementById("clientiMitt").value==""){
-    }
     const response=await fetch("../php/getCustomers.php");
 
     const data=await response.json();       
 
     if(data.error!="true"){
         localStorage.clienti=JSON.stringify(data);
-        let selectMitt=document.getElementById("clientiMitt");
-        let selectDest=document.getElementById("clientiDest");
+        let selectMitt=document.getElementById(fCustomer);
+        let selectDest=null;
+        if(sCustomer!=null)
+            selectDest=document.getElementById(sCustomer);
+
         for(let k in data.clienti){
             let opt=document.createElement("option");
-                opt.text=data.clienti[k]["ragioneSociale"];
-                opt.value=data.clienti[k]["id"];
-                
-                let opt2=document.createElement("option");
+            opt.text=data.clienti[k]["ragioneSociale"];
+            opt.value=data.clienti[k]["id"];
+            
+            let opt2=null;
+            if(sCustomer!=null){
+                opt2=document.createElement("option");
                 opt2.text=data.clienti[k]["ragioneSociale"];
                 opt2.value=data.clienti[k]["id"];
-                
-                selectMitt.appendChild(opt);
                 selectDest.appendChild(opt2);
+            }
+            
+            selectMitt.appendChild(opt);
         }
     }else{
         alert("!! IMPOSSIBILE CARICARE I CLIENTI !!");

@@ -40,13 +40,13 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                     <ul class="nav nav-pills flex-column mb-sm-auto mb-0 align-items-center align-items-sm-start" id="menu">
                         <li>
                             <a href="#submenu1" data-bs-toggle="collapse" class="nav-link px-0 align-middle">
-                                <i><img src="../icons/box.png" width="27px" alt="Gestisci un servizio"/></i><span class="ms-1 d-none d-sm-inline">Servizi</span> </a>
+                                <i><img src="../icons/box.png" width="27px" alt="Gestisci un servizio"/></i><span class="ms-1 d-none d-sm-inline">Incarichi</span> </a>
                             <ul class="collapse nav flex-column ms-1" id="submenu1" data-bs-parent="#menu" style="font-size:14px;padding-left:15px;">
                                 <li class="w-100">
-                                <a href="../php/setService.php?service=1" class="nav-link px-0"><i><img src="../icons/add.png" width="20px" alt="Inserisci un servizio"/></i><span class="d-none d-sm-inline">Inserisci</span></a>
+                                <a href="../php/setService.php?service=1" class="nav-link px-0"><i><img src="../icons/add.png" width="20px" alt="Inserisci un incarico"/></i><span class="d-none d-sm-inline">Inserisci</span></a>
                                 </li>
                                 <li>
-                                    <a href="#" class="nav-link px-0"><i><img src="../icons/search.png" width="23px" alt="Ricerca un servizio"/></i> <span class="d-none d-sm-inline">Ricerca</span></a>
+                                    <a href="../php/setService.php?service=2" class="nav-link px-0"><i><img src="../icons/search.png" width="23px" alt="Ricerca un incarico"/></i> <span class="d-none d-sm-inline">Ricerca</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -74,7 +74,8 @@ isLogged("../", $_SESSION["login"]["level"], "0");
             </div>
             <div class="col mx-4 py-3">
                 <!--CODICI SERVIZI 
-                1: INSERIMENTO-->
+                1: INSERIMENTO
+                2: RICERCA-->
                 <?php
                 require_once "services.php";
                 if (!isset($_SESSION["service"]) || $_SESSION["service"] == 0) {
@@ -98,6 +99,192 @@ isLogged("../", $_SESSION["login"]["level"], "0");
 
                         insert();
 
+                        ?>
+                        <script>
+                            document.getElementById("addPack").addEventListener("click",loadPack);
+                            document.getElementById("generaID").addEventListener("click",()=>{
+                                generateID(document.getElementById("segnacollo"));
+                            });
+                            document.getElementById("generaIDDDT").addEventListener("click",()=>{
+                                generateID(document.getElementById("ddt"));
+                            });
+                            document.getElementById("pack-form").addEventListener("keydown",ev=>{
+                                if(ev.keyCode==13){
+                                    ev.preventDefault();
+                                    loadPack();
+                                    document.activeElement.blur();
+                                }
+                                
+                            });
+                            
+                            window.addEventListener("DOMContentLoaded",async ()=>{
+                                await loadCostumers("clientiMitt","clientiDest");
+                                <?php
+                                if (isset($_SESSION["draft"]["Mitt"])) { ?>
+                                            $("#clientiMitt option[value='<?php echo $_SESSION[
+                                                "draft"
+                                            ]["Mitt"]; ?>']").attr("selected","selected");
+                                            fillCustomer(document.getElementById("clientiMitt"), "Mitt");
+                                            <?php }
+
+                                if (isset($_SESSION["draft"]["Dest"])) { ?>
+                                            $("#clientiDest option[value='<?php echo $_SESSION[
+                                                "draft"
+                                            ]["Dest"]; ?>']").attr("selected","selected");
+                                            fillCustomer(document.getElementById("clientiDest"), "Dest");
+                                            <?php }
+                                ?>
+                            });
+                            window.addEventListener("DOMContentLoaded",()=>{
+                                if(document.getElementById("interno").hasAttribute("checked"))
+                                disableRif();
+                                
+                                setVisibility("Mitt",true);
+                                setVisibility("Dest",true);
+                                document.getElementById("packs").remove();
+                                if(localStorage.refresh){
+                                    localStorage.removeItem("refresh");
+                                    location.reload();
+                                }
+                            });
+                            document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});
+                            document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
+                            document.getElementById("peso").addEventListener("keydown",(e)=>{
+                                if(e.key=="."){
+                                    e.preventDefault();
+                                }
+                            });
+                            document.getElementById("colMitt").addEventListener("keydown",e=>{
+                                if(e.key=="Enter"){
+                                    e.preventDefault();
+                                    checkForm();
+                                }
+                            });
+                            document.getElementById("colDest").addEventListener("keydown",e=>{
+                                if(e.key=="Enter"){
+                                    e.preventDefault();
+                                    checkForm();
+                                }
+                            });
+                            document.getElementById("interno").addEventListener("change",function(){
+                                if(this.checked){
+                                    disableRif();
+                                }else{
+                                    document.getElementById("ddtN").removeAttribute("disabled");
+                                    document.getElementById("ddtD").removeAttribute("disabled");
+                                }
+                            });
+
+                        </script>
+                        <?php
+                        break;
+                        case 2:?>
+                            <script src="../js/dashboard_find.js"></script>
+                            <div class="row">
+                                <div class="col-auto">
+                                    <div class="col-auto mb-2">
+                                        <fieldset class="border rounded-3 p-3" id="field-set">
+                                            <legend class="fs-5 float-none w-auto px-3">ID</legend>
+                                            <form action="#" method="get" id="id-form">
+                                                <input type="text" class="form-control form-control-sm" name="id" id="id" style="min-width:30%;">
+                                            </form>
+                                        </fieldset>
+                                    </div>
+                                    <div class="col-auto">
+                                        <fieldset class="border rounded-3 p-3" id="field-set">
+                                            <legend class="fs-5 float-none w-auto px-3">ID collo/bancale</legend>
+                                            <form action="#" method="get" id="packs">
+                                                <input type="text" class="form-control form-control-sm" name="idCollo" id="idCollo" style="min-width:30%;">
+                                            </form>
+                                        </fieldset>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <fieldset class="border rounded-3 p-3" id="field-set">
+                                        <legend class="fs-5 float-none w-auto px-3">Riferimenti</legend>
+                                        <form action="#" method="get" id="ext">
+                                            <label for="rifddtN" class="form-label">Rif. num</label>
+                                            <input type="text" class="form-control form-control-sm" name="rifddtN" id="rifddtN"><br>
+                                            <label for="rifddtN" class="form-label">Data rif.</label>
+                                            <input type="date" class="form-control form-control-sm" name="rifddtD" id="rifddtD">
+                                        </form>
+                                    </fieldset>
+                                </div>
+                                <div class="col-auto">
+                                    <form action="#" method="get" id="customer">
+                                        <fieldset class="border rounded-3 p-3" id="field-set">
+                                            <legend class="float-none w-auto px-3">Cliente</legend>
+                                            <div class="row">
+                                                <div class="col">
+                                                    Seleziona 
+                                                    <select name="clienti" id="clienti" class="form-select" style="min-width:50%;">
+                                                        <option value=""></option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="label-form" for="Cell">Cellulare</div>
+                                                    <input type="text" name="Cell" id="Cell" class="form-control my-1" style="width:170px;">
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-auto">
+                                                    <div class="label-form" for="RagSoc">Ragione sociale</div>
+                                                    <input type="text" name="RagSoc" id="RagSoc" class="form-control my-1" style="width:250px;">
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="label-form" for="Indirizzo">Indirizzo</div>
+                                                    <input type="text" name="Indirizzo" id="Indirizzo" class="form-control my-1" style="width:250px;">
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-auto">
+                                                    <div class="label-form" for="Citta">Citt&agrave;</div>
+                                                    <input type="text" name="citta" id="Citta" class="form-control my-1" style="width:240px;">
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="label-form" for="Prov">Prov</div>
+                                                    <input type="text" name="Prov" id="Prov" class="form-control my-1" style="width:100px;">
+                                                </div>
+                                                <div class="col-auto">
+                                                    <div class="label-form" for="Cap">Cap</div>
+                                                    <input type="number" name="cap" id="cap" class="form-control my-1" style="width:100px;">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button class="btn" style="background-color:#ffb3b3;" type="button" ><img src="../icons/cerca.png" width="18" class="me-1 pb-1">Cerca</button>
+                            </div>
+                            <script>
+                                window.addEventListener("DOMContentLoaded",async()=>{
+                                    await loadCostumers("clienti",null);
+                                });
+                                document.getElementById("clienti").addEventListener("change",()=>{fillCustomer(document.getElementById("clienti"),"");});
+                                document.getElementById("id-form").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("id-form"));
+                                });
+
+                                document.getElementById("ext").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("ext"));
+                                });
+
+                                document.getElementById("customer").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("customer"));
+                                });
+
+                                document.getElementById("packs").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("packs"));
+                                });
+                            </script>
+
+                        <?php
                         break;
                 }
                 ?>
@@ -106,91 +293,14 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                 <a href="../php/setService.php?service=0"><button type="button" class="btn btn-danger">X</button></a>
             </div>
         </div>
-        
-        <script>
-            document.getElementById("addPack").addEventListener("click",loadPack);
-            document.getElementById("generaID").addEventListener("click",()=>{
-                generateID(document.getElementById("segnacollo"));
-            });
-            document.getElementById("generaIDDDT").addEventListener("click",()=>{
-                generateID(document.getElementById("ddt"));
-            });
-            document.getElementById("pack-form").addEventListener("keydown",ev=>{
-                if(ev.keyCode==13){
-                    ev.preventDefault();
-                    loadPack();
-                    document.activeElement.blur();
-                }
-                
-            });
-            
-            window.addEventListener("DOMContentLoaded",async ()=>{
-                await loadCostumers();
-                <?php
-                if (isset($_SESSION["draft"]["Mitt"])) { ?>
-                            $("#clientiMitt option[value='<?php echo $_SESSION[
-                                "draft"
-                            ]["Mitt"]; ?>']").attr("selected","selected");
-                            fillCustomer(document.getElementById("clientiMitt"), "Mitt");
-                            <?php }
+        <?php
+        // if (isset($_SESSION["service"])) {
+        //     unset($_SESSION["service"]);
+        // }
 
-                if (isset($_SESSION["draft"]["Dest"])) { ?>
-                            $("#clientiDest option[value='<?php echo $_SESSION[
-                                "draft"
-                            ]["Dest"]; ?>']").attr("selected","selected");
-                            fillCustomer(document.getElementById("clientiDest"), "Dest");
-                            <?php }
-                ?>
-            });
-            window.addEventListener("DOMContentLoaded",()=>{
-                if(document.getElementById("interno").hasAttribute("checked"))
-                disableRif();
-                
-                setVisibility("Mitt",true);
-                setVisibility("Dest",true);
-                document.getElementById("packs").remove();
-                if(localStorage.refresh){
-                    localStorage.removeItem("refresh");
-                    location.reload();
-                }
-            });
-            document.getElementById("clientiDest").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiDest"),"Dest");});
-            document.getElementById("clientiMitt").addEventListener("change",()=>{fillCustomer(document.getElementById("clientiMitt"),"Mitt");});
-            document.getElementById("peso").addEventListener("keydown",(e)=>{
-                if(e.key=="."){
-                    e.preventDefault();
-                }
-            });
-            document.getElementById("colMitt").addEventListener("keydown",e=>{
-                if(e.key=="Enter"){
-                    e.preventDefault();
-                    checkForm();
-                }
-            });
-            document.getElementById("colDest").addEventListener("keydown",e=>{
-                if(e.key=="Enter"){
-                    e.preventDefault();
-                    checkForm();
-                }
-            });
-            document.getElementById("interno").addEventListener("change",function(){
-                if(this.checked){
-                    disableRif();
-                }else{
-                    document.getElementById("ddtN").removeAttribute("disabled");
-                    document.getElementById("ddtD").removeAttribute("disabled");
-                }
-            });
-
-            <?php
-            if (isset($_SESSION["service"])) {
-                unset($_SESSION["service"]);
-            }
-
-            if (isset($_SESSION["draft"])) {
-                unset($_SESSION["draft"]);
-            }
-            ?>
-        </script>
+        if (isset($_SESSION["draft"])) {
+            unset($_SESSION["draft"]);
+        }
+        ?>
     </body>
 </html>

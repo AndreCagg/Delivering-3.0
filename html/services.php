@@ -11,15 +11,29 @@
             rif. DDT n. <input type="text" name="ddtN" id="ddtN" class="form-control" style="width:170px;height:35px;" value="<?php echo isset($_SESSION["draft"]["ddtN"])?$_SESSION["draft"]["ddtN"]:"" ?>"><br>
             del &nbsp;<input type="date" name="ddtD" id="ddtD" class="form-control" style="width:170px;height:35px;" value="<?php echo isset($_SESSION["draft"]["ddtD"])?$_SESSION["draft"]["ddtD"]:"" ?>">
         </div>
-        <div class="col-auto mt-3">
-            <div class="form-check">
-                <input class="form-check-input form-check-input-xl" type="checkbox" name="interno" id="interno">
-                <label class="form-check-label" for="interno">
-                Interna
-                </label>
+        <div class="col-1">
+            <div class="row">
+                <div class="col mt-3">
+                    <div class="form-check">
+                        <input class="form-check-input form-check-input-xl" type="checkbox" name="interno" id="interno">
+                        <label class="form-check-label" for="interno">
+                        Interna
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mt-3">
+                    <div class="form-check">
+                        <input class="form-check-input form-check-input-xl" type="checkbox" name="contrassegno" id="contrassegno">
+                        <label class="form-check-label" for="contrassegno">
+                        Contrassegno
+                        </label>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-auto mt-3">
+        <div class="col mt-3">
             <div class="form-check">
                 <input class="form-check-input form-check-input-xl" type="checkbox" name="riserva" id="riserva">
                 <label class="form-check-label" for="riserva">
@@ -38,6 +52,12 @@
                 if(isset($_SESSION["draft"]["interno"]) && $_SESSION["draft"]["interno"]==1){
                     ?>
                     document.getElementById("interno").setAttribute("checked","checked");
+                    <?php
+                }
+
+                if(isset($_SESSION["draft"]["contrassegno"]) && $_SESSION["draft"]["contrassegno"]==1){
+                    ?>
+                    document.getElementById("contrassegno").setAttribute("checked","checked");
                     <?php
                 }
                 ?>

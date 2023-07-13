@@ -10,6 +10,7 @@
     $rifddtD=null;
     $interno=0;
     $riserva=0;
+    $contrassegno=0;
 
     require_once("../conf.php");
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -17,7 +18,7 @@
     try{
         if($_POST["id"]==""){
             $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
-            goback($interno,$riserva,true,$conn,null);
+            goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
             header("Location:setService.php?service=1");
             die();
         }
@@ -30,7 +31,8 @@
         if(!isset($_POST["interno"])){
             if($_POST["ddtN"]=="" || $_POST["ddtD"]=="0000-00-00"){
                 $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
-                goback($interno,$riserva,true,$conn,null);
+                goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
+                header("Location:setService.php?service=1");
                 die();
             }
         }
@@ -42,7 +44,8 @@
     try{
         if(!checkCustomerField("Mitt") || !checkCustomerField("Dest")){
             $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
-            goback($interno,$riserva,true,$conn,null);
+            goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
+            header("Location:setService.php?service=1");
             die();
         }
     }finally{
@@ -53,7 +56,8 @@
     try{
         if($_POST["tipo"]==""){
             $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
-            goback($interno,$riserva,true,$conn,null);
+            goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
+            header("Location:setService.php?service=1");
             die();
         }
     }finally{
@@ -64,7 +68,8 @@
     try{
         if($_POST["dataConsegna"]=="0000-00-00" || $_POST["dataConsegna"]<date("Y-m-d")){
             $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
-            goback($interno,$riserva,true,$conn,null);
+            goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
+            header("Location:setService.php?service=1");
             die();
         }
     }finally{
@@ -75,7 +80,8 @@
     try{
         if(count(json_decode($_POST["packs"],true))<=0){
             $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
-            goback($interno,$riserva,true,$conn,null);
+            goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
+            header("Location:setService.php?service=1");
             die();
         }
     }finally{
@@ -98,6 +104,9 @@
     $consegna=$_POST["dataConsegna"];
     if(isset($_POST["riserva"]))
         $riserva=1;
+    
+    if(isset($_POST["contrassegno"]))
+        $contrassegno=1;
 
     $note=trim($_POST["note"]);
     $message="";
@@ -146,8 +155,8 @@
 
         //salvataggio servizio
 
-        $servizio=$conn->prepare("INSERT INTO incarichi (id_inc,rifDDt,dataRif,mitt,dest,epal,tipologia,consegna,interno,riserva,note) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-        $servizio->bind_param("sssiiiisiis",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$note);
+        $servizio=$conn->prepare("INSERT INTO incarichi (id_inc,rifDDt,dataRif,mitt,dest,epal,tipologia,consegna,interno,riserva,contrassegno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+        $servizio->bind_param("sssiiiisiiis",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$note);
         $servizio->execute();
         $servizio->close();
         
@@ -185,7 +194,7 @@
         $goback=true;
         $message=$e->getMessage();
         $code=$e->getCode();
-        goback($interno,$riserva,true,new mysqli($dbAddress,$userLogger,$passLogger,$dbName),$code);
+        goback($interno,$riserva,true,new mysqli($dbAddress,$userLogger,$passLogger,$dbName),$code,$rifddt,$rifddtD,$contrassegno);
     }finally{
         if(isset($conn)){
             $conn->close();
@@ -208,13 +217,14 @@
     }
 
     //torno indietro
-    function goback($interno,$riserva,$goback,$conn,$code){
+    function goback($interno,$riserva,$goback,$conn,$code,$rifddt,$rifddtD,$contrassegno){
         if($goback==true){
             $_SESSION["draft"]["id"]=isset($_POST["id"])?$_POST["id"]:"";
             $_SESSION["draft"]["interno"]=$interno==1?$interno:0;
-            $_SESSION["draft"]["ddtN"]=isset($rifddt)?$rifddt:null;
-            $_SESSION["draft"]["ddtD"]=isset($rifddtD)?$rifddtD:null;
+            $_SESSION["draft"]["ddtN"]=$rifddt?$rifddt:null;
+            $_SESSION["draft"]["ddtD"]=$rifddtD?$rifddtD:null;
             $_SESSION["draft"]["riserva"]=$riserva==1?$riserva:0;
+            $_SESSION["draft"]["contrassegno"]=$contrassegno==1?$contrassegno:0;
             $_SESSION["draft"]["Mitt"]=isset($_POST["clientiMitt"])?$_POST["clientiMitt"]:"";
             $_SESSION["draft"]["Dest"]=isset($_POST["clientiDest"])?$_POST["clientiDest"]:"";
             $_SESSION["draft"]["epal"]=isset($_POST["epal"])?$_POST["epal"]:"";
