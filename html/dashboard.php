@@ -185,7 +185,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     <div class="col-auto mb-2">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="fs-5 float-none w-auto px-3">ID</legend>
-                                            <form action="#" method="get" id="id-form">
+                                            <form action="../php/getJob.php" method="get" id="id-form">
                                                 <input type="text" class="form-control form-control-sm" name="id" id="id" style="min-width:30%;">
                                             </form>
                                         </fieldset>
@@ -193,7 +193,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     <div class="col-auto">
                                         <fieldset class="border rounded-3 p-3" id="field-set">
                                             <legend class="fs-5 float-none w-auto px-3">ID collo/bancale</legend>
-                                            <form action="#" method="get" id="packs">
+                                            <form action="../php/getJob.php" method="get" id="packs">
                                                 <input type="text" class="form-control form-control-sm" name="idCollo" id="idCollo" style="min-width:30%;">
                                             </form>
                                         </fieldset>
@@ -202,7 +202,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 <div class="col">
                                     <fieldset class="border rounded-3 p-3" id="field-set">
                                         <legend class="fs-5 float-none w-auto px-3">Riferimenti</legend>
-                                        <form action="#" method="get" id="ext">
+                                        <form action="../php/getJob.php" method="get" id="ext">
                                             <label for="rifddtN" class="form-label">Rif. num</label>
                                             <input type="text" class="form-control form-control-sm" name="rifddtN" id="rifddtN"><br>
                                             <label for="rifddtN" class="form-label">Data rif.</label>
@@ -211,9 +211,9 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     </fieldset>
                                 </div>
                                 <div class="col-auto">
-                                    <form action="#" method="get" id="customer">
-                                        <fieldset class="border rounded-3 p-3" id="field-set">
-                                            <legend class="float-none w-auto px-3">Cliente</legend>
+                                    <fieldset class="border rounded-3 p-3" id="field-set">
+                                        <legend class="float-none w-auto px-3">Cliente</legend>
+                                        <form action="../php/getJob.php" method="get" id="customer-form">
                                             <div class="row">
                                                 <div class="col">
                                                     Seleziona 
@@ -248,40 +248,42 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                                 </div>
                                                 <div class="col-auto">
                                                     <div class="label-form" for="Cap">Cap</div>
-                                                    <input type="number" name="cap" id="cap" class="form-control my-1" style="width:100px;">
+                                                    <input type="number" name="cap" id="cap" class="form-control my-1" style="width:100px;"/>
                                                 </div>
                                             </div>
-                                        </fieldset>
-                                    </form>
+                                            <input type="submit" style="display: none;">
+                                        </form>
+                                    </fieldset>
                                 </div>
                             </div>
                             <div class="row">
-                                <button class="btn" style="background-color:#ffb3b3;" type="button" ><img src="../icons/cerca.png" width="18" class="me-1 pb-1">Cerca</button>
+                                <button class="btn mt-4" style="background-color:#ffb3b3;" type="button" ><img src="../icons/cerca.png" width="18" class="me-1 pb-1">Cerca</button>
                             </div>
                             <script>
                                 window.addEventListener("DOMContentLoaded",async()=>{
                                     await loadCostumers("clienti",null);
                                 });
                                 document.getElementById("clienti").addEventListener("change",()=>{fillCustomer(document.getElementById("clienti"),"");});
-                                document.getElementById("id-form").addEventListener("submit",async (e)=>{
-                                    e.preventDefault();
-                                    await getData(document.getElementById("id-form"));
-                                });
+                                // document.getElementById("id-form").addEventListener("submit",async (e)=>{
+                                //     e.preventDefault();
+                                //     await getData(document.getElementById("id-form"));
+                                // });
 
-                                document.getElementById("ext").addEventListener("submit",async (e)=>{
-                                    e.preventDefault();
-                                    await getData(document.getElementById("ext"));
-                                });
+                                // document.getElementById("ext").addEventListener("submit",async (e)=>{
+                                //     e.preventDefault();
+                                //     await getData(document.getElementById("ext"));
+                                // });
 
-                                document.getElementById("customer").addEventListener("submit",async (e)=>{
-                                    e.preventDefault();
-                                    await getData(document.getElementById("customer"));
-                                });
+                                // document.getElementById("customer-form").addEventListener("submit",async (e)=>{
+                                //     console.log("ciao");
+                                //     e.preventDefault();
+                                //     await getData(document.getElementById("customer"));
+                                // });
 
-                                document.getElementById("packs").addEventListener("submit",async (e)=>{
-                                    e.preventDefault();
-                                    await getData(document.getElementById("packs"));
-                                });
+                                // document.getElementById("packs").addEventListener("submit",async (e)=>{
+                                //     e.preventDefault();
+                                //     await getData(document.getElementById("packs"));
+                                // });
                             </script>
 
                         <?php
