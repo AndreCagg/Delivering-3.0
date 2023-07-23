@@ -32,6 +32,7 @@
         if(!isset($_SESSION["login"]) || $actualLvl<$minReqLvl){
             session_destroy();
             header("Location:$home");
+            die();
         }
     }
 ?>

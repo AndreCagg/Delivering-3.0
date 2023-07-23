@@ -35,13 +35,12 @@
                     }
 
                     //$query->free();
-                    $query->close();
-                    $conn->close();
-                    unset($result);
-                    unset($conn);
                     break;
                 }
             }
+            $query->close();
+            $conn->close();
+            unset($conn);
 
             if(isset($user) && isset($pass)){
                 $query = null;
