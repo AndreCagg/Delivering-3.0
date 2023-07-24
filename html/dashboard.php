@@ -259,31 +259,41 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                             <div class="row">
                                 <button class="btn mt-4" style="background-color:#ffb3b3;" type="button" ><img src="../icons/cerca.png" width="18" class="me-1 pb-1">Cerca</button>
                             </div>
+                            <br>
+                            <div class="row">
+                                <div class="row"><hr></div>
+
+                                <div class="row">
+                                    <table class="table table-striped table-hover" id="main-tab">
+                                        <tbody id="viewResult">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                             <script>
                                 window.addEventListener("DOMContentLoaded",async()=>{
                                     await loadCostumers("clienti",null);
                                 });
                                 document.getElementById("clienti").addEventListener("change",()=>{fillCustomer(document.getElementById("clienti"),"");});
-                                // document.getElementById("id-form").addEventListener("submit",async (e)=>{
-                                //     e.preventDefault();
-                                //     await getData(document.getElementById("id-form"));
-                                // });
+                                document.getElementById("id-form").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("id-form"));
+                                });
 
-                                // document.getElementById("ext").addEventListener("submit",async (e)=>{
-                                //     e.preventDefault();
-                                //     await getData(document.getElementById("ext"));
-                                // });
+                                document.getElementById("ext").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("ext"));
+                                });
 
-                                // document.getElementById("customer-form").addEventListener("submit",async (e)=>{
-                                //     console.log("ciao");
-                                //     e.preventDefault();
-                                //     await getData(document.getElementById("customer"));
-                                // });
+                                document.getElementById("customer-form").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("customer-form"));
+                                });
 
-                                // document.getElementById("packs").addEventListener("submit",async (e)=>{
-                                //     e.preventDefault();
-                                //     await getData(document.getElementById("packs"));
-                                // });
+                                document.getElementById("packs").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    await getData(document.getElementById("packs"));
+                                });
                             </script>
 
                         <?php
