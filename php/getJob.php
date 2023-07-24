@@ -52,27 +52,22 @@
 
             SELECT id_inc,data,stato
             FROM movimenti
-            WHERE id_inc IN (SELECT mitt
+            WHERE id_inc IN (SELECT id_inc 
             FROM incarichi 
-            WHERE mitt=".$_GET["clienti"]." 
-            
-            UNION 
-            
-            SELECT dest
-            FROM incarichi 
-            WHERE dest=".$_GET["clienti"].");
+            WHERE mitt=".$_GET["clienti"]." OR dest=".$_GET["clienti"]."
+            ORDER BY consegna DESC);
 
-            SELECT *
+            SELECT * 
             FROM clienti
-            WHERE id IN (SELECT mitt
-            FROM incarichi 
-            WHERE mitt=".$_GET["clienti"]." 
-            
-            UNION 
-            
-            SELECT dest
-            FROM incarichi 
-            WHERE dest=".$_GET["clienti"].");
+            WHERE id IN (
+                SELECT mitt 
+                FROM incarichi 
+                WHERE mitt=".$_GET["clienti"]." OR dest=".$_GET["clienti"]."
+                UNION
+                SELECT dest
+                FROM incarichi 
+                WHERE mitt=".$_GET["clienti"]." OR dest=".$_GET["clienti"]."
+            );
 
             SELECT * 
             FROM colli 
@@ -113,17 +108,13 @@
             FROM clienti 
             WHERE $link)); /*colli*/
             
-            SELECT * 
-            FROM clienti 
-            WHERE id IN (SELECT mitt 
-            FROM incarichi 
-            WHERE mitt IN (SELECT id 
-            FROM clienti 
-            WHERE $link) UNION SELECT dest 
-            FROM incarichi 
-            WHERE mitt IN (SELECT id 
-            FROM clienti 
-            WHERE $link));"; /*clienti*/
+            SELECT DISTINCT * FROM clienti WHERE id IN (
+                SELECT id FROM clienti WHERE $link
+                UNION
+                SELECT dest FROM incarichi WHERE mitt IN (SELECT id FROM clienti WHERE $link)
+                UNION
+                SELECT mitt FROM incarichi WHERE dest IN (SELECT id FROM clienti WHERE $link)
+            );"; /*clienti*/
         }
     }elseif($tabella=="incarichi" && isset($_GET["id"])){
         //query per ricerca da id

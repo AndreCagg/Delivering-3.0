@@ -264,7 +264,10 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 <div class="row"><hr></div>
 
                                 <div class="row">
-                                    <table class="table table-striped table-hover" id="main-tab">
+                                    <div class="row">
+                                        <div class="col mb-3 fw-bold" id="occourrences"></div>
+                                    </div>
+                                    <table class="table table-striped table-hover align-middle" id="main-tab">
                                         <tbody id="viewResult">
                                         </tbody>
                                     </table>
