@@ -425,7 +425,8 @@ function disableRif(){
     let ddtn=document.getElementById("ddtN");
     let ddtd=document.getElementById("ddtD");
     ddtn.value="";
-    ddtd.value="0000-00-00";
+    // ddtd.value="0000-00-00";
+    ddtd.value="";
     ddtn.setAttribute("disabled","");
     ddtd.setAttribute("disabled","");
     ddtn.classList.remove("is-invalid");

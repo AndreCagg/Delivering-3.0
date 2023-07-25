@@ -1,5 +1,11 @@
 <?php
    function insert(){
+    echo "sessione: ";
+    print_r($_SESSION);
+    if(isset($_SESSION["draft"]["noerror"])){
+        // unset($_SESSION["draft"]["noerror"]);
+        // $_SESSION["service"]=$_SESSION["backService"];
+    }
 ?>
     <form action="../php/validateInsert.php" method="post" id="main-form">
     <div class="row">
@@ -208,6 +214,7 @@
             </small>
             <script>
                 let packs=<?php echo $_SESSION["draft"]["packs"];?>;
+                console.log(packs);
                 for(let k in packs){
                     document.getElementById("segnacollo").value=k;
                     document.getElementById("bancale").checked=packs[k]["bancale"]=="true"?true:false;

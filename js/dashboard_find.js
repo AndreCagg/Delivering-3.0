@@ -69,9 +69,37 @@ async function getData(form){
                 let div=document.createElement("button");
                 div.classList.add("btn");
                 div.classList.add("btn-warning");
+                // div.id="viewmissionbtn";
+                // div.onclick("viewmission(this)");
                 div.innerHTML="Visualizza ";
                 div.appendChild(img4);
                 cell7.appendChild(div);
+
+                let cell8=line.insertCell(7);
+                cell8.style.display="none";
+                cell8.appendChild(document.createTextNode(k));
+
+                div.addEventListener("click",()=>{
+                    viewmission(div,k,resultset);
+                })
+
+                async function viewmission(div,id_inc,resultset){
+                    console.log(div.closest("tr").querySelector("td:nth-of-type(8)").innerHTML);
+
+                    //controllo esistenza id
+                    //invio della missione
+                    const response=await fetch("../php/createDraftForView.php",{
+                        method: "POST",
+                        headers:{
+                            "Content-Type":"application/json",
+                        },
+                        body: JSON.stringify(resultset[id_inc]),
+                    });
+                    const data=await response;
+
+                    //apertura scheda
+                    open("../php/setService.php?service=1","_blank","popup");
+                }
             }
 
             document.getElementById("occourrences").innerHTML="Trovati "+j+" risultati";

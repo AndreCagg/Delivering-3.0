@@ -220,6 +220,11 @@
             $resultset=[];
             foreach($incarichi as $k=>$v){
                 $missionString.=$k.", ";
+                if(!isset($incarichi[$k]["rifDDt"]))
+                    $incarichi[$k]["rifDDt"]="";
+
+                if(!isset($incarichi[$k]["dataRif"]))
+                    $incarichi[$k]["dataRif"]="";
                 $resultset[$k]=$incarichi[$k];
                 $resultset[$k]["Mittente"]=getSet($incarichi[$k]["mitt"],$clienti,"id");
                 $resultset[$k]["Destinatario"]=getSet($incarichi[$k]["dest"],$clienti,"id");
