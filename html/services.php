@@ -143,14 +143,12 @@
                 if(isset($_SESSION["draft"]["Mitt"])){
                     ?>
                     $("#clientiMitt option[value="+<?php echo $_SESSION["draft"]["Mitt"];?>+"]").attr("selected","selected");
-                    console.log("stocazzo "+<?php echo $_SESSION["draft"]["Mitt"];?>);
                     <?php
                 }
 
                 if(isset($_SESSION["draft"]["Dest"])){
                     ?>
                     $("#clientiDest option[value="+<?php echo $_SESSION["draft"]["Dest"];?>+"]").attr("selected","selected");
-                    console.log("stocazzone "+<?php echo $_SESSION["draft"]["Dest"];?>);
                     <?php
                 }
                 ?>

@@ -246,38 +246,7 @@
             
             if($code!=null){
                 $_SESSION["draft"]["error"]["code"]=$code;
-                switch($code){
-                    case 1044:
-                        $message="Impossibile trovare il Database";
-                    break;
-                    case 1045:
-                        $message="Errore di login al Database";
-                    break;
-                    case 1062:
-                        $message="Codice identificativo dell'incarico e/o già esistene nel Database, generarne uno nuovo";
-                    break;
-                    case 1146:
-                        $message="Impossibile salvare l'incarico a causa di una tabella inesistente";
-                    break;
-                    case 1216:
-                        $message="Impossibile salvare l'incarico a causa di una chiave esterna inesistente";
-                    break;
-                    case 1451:
-                        $message="Impossibile salvare l'incarico, violazione vincolo di chiave esterna";
-                    break;
-                    case 1064:
-                        $message="Impossibile salvare l'incarico, chiamare un tecnico per risolvere i problemi di sintassi";
-                    break;
-                    case 2006:
-                        $message="Connessione al Database persa, riprovare";
-                    break;
-                    case 2013:
-                        $message="Impossibile salvare i dati a causa di una configurazione che va in conflitto con quella esistente, riprovare. Se il problema persiste contattare un tecnico";
-                    break;
-                    default:
-                        $message="Impossibile salvare i dati. Errore generico. Se il problema persiste contattare il tecnico";
-                    break;
-                }
+                $message=mapSQLError($code);
             }else{
                 $message="Errore vincoli dei dati inseriti";
                 $code="Unk";

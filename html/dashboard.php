@@ -100,6 +100,17 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                         insert();
                         if(isset($_SESSION["draft"]["noerror"])){
                             $_SESSION["service"]=$_SESSION["backService"];
+                            ?>
+
+                            <script>
+                                logFromFront();
+                                async function logFromFront(){
+                                    const response=await fetch("../php/logFromFront.php?id="+<?php echo $_SESSION["draft"]["id"];?>);
+                                    const data=await response;
+                                }
+                            </script>
+
+                         <?php   
                         }
 
                         ?>
@@ -183,6 +194,12 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                         break;
                         case 2:?>
                             <script src="../js/dashboard_find.js"></script>
+                            <div class="row" id="ricercAlert" style="display:none;">
+                                <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                                    <div id="ricercAlertMessage"></div>
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-auto">
                                     <div class="col-auto mb-2">
@@ -283,10 +300,10 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 document.getElementById("clienti").addEventListener("change",()=>{
                                     let clienti=document.getElementById("clienti");
                                     fillCustomer(clienti,"");
-                                    if(clienti.value!="")
-                                        setVisibility("",true);
-                                    else
-                                        setVisibility("",false);
+                                    // if(clienti.value!="")
+                                    //     setVisibility("",true);
+                                    // else
+                                    //     setVisibility("",false);
 
                                 });
                                 document.getElementById("id-form").addEventListener("submit",async (e)=>{

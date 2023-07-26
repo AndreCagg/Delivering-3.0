@@ -4,7 +4,7 @@
     require_once("tool.php");
 
     session_start();
-    isLogged("../",$_SESSION["login"]["level"],"0");
+    // isLogged("../",$_SESSION["login"]["level"],"0");
 
     // print_r($_GET);
     // echo "<br>";
@@ -39,7 +39,7 @@
 
     /*NON USO LE VIEW VISTO CHE RICHIEDONO DROP E/O ALTER, NON USO LE TAB TEMP VISTO CHE AVREI CALO DI PRESTAZIONI*/
     if($tabella!="incarichi" && $tabella!="clienti"){
-        $mainQuery="SELECT * FROM colli WHERE $link;
+        $mainQuery="SELECT * FROM colli WHERE incarico=(SELECT incarico FROM colli WHERE $link);
         SELECT * FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link) ORDER BY consegna DESC;
         SELECT * FROM clienti WHERE clienti.id IN ((SELECT mitt FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)) UNION (SELECT dest FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)));
         SELECT id_inc,data,stato FROM movimenti WHERE id_inc=(SELECT id_inc FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link))";
@@ -137,7 +137,7 @@
 
         SELECT * 
         FROM colli 
-        WHERE incarico=".$_GET["id"].";"; /*colli*/
+        WHERE incarico='".$_GET["id"]."';"; /*colli*/
     }elseif($tabella=="incarichi" && isset($_GET["rifddtN"])){
         $mainQuery="SELECT * 
         FROM incarichi 
@@ -177,7 +177,7 @@
         $colli=[];
         $clienti=[];
         $movimenti=[];
-        $b=false;
+        // $b=false;
         
         // Recupera i risultati per ciascuna query
         do {
@@ -216,8 +216,8 @@
         //DA FARE COMPRESSIONE TESTO DEL RESULTSET
         $missionMatch=0;
         $missionString="";
+        $resultset=[];
         if(count($incarichi)>0){
-            $resultset=[];
             foreach($incarichi as $k=>$v){
                 $missionString.=$k.", ";
                 if(!isset($incarichi[$k]["rifDDt"]))
@@ -236,17 +236,17 @@
             // print_r(json_encode($resultset));
             // echo "<br><br>";
             // echo json_encode("Risultano ".count($resultset)." missioni");
-            echo json_encode(["error"=>["code"=>""],"resultset"=>$resultset]);
             $missionMatch=count($resultset);
             $missionString=substr($missionString,0,strlen($missionString)-2);
         }
+
+        echo json_encode(["error"=>["code"=>""],"resultset"=>$resultset]);
         
         
         //log attività
         $conn->change_user($userLogger,$passLogger,$dbName);
         logActivity($_SESSION["login"]["id"],"ricerca incarico attraverso [$criterio], [$missionMatch] match: [$missionString]",$conn);
 
-        $conn->close();
 
         unset($clienti);
         unset($incarichi);
@@ -262,8 +262,12 @@
         // echo "<br> Incarichi:";
         // print_r(json_encode($incarichi));
     } catch (Exception $e) {
-        echo "-- " . $e->getMessage() . " (" . $e->getCode() . ")";
-        echo json_encode(["error"=>["code"=>$e->getCode(),"message"=>$e->getMessage()]]);
+        $code=$e->getCode();
+        logActivity($_SESSION["login"]["id"],"Generated Error $code in module 'getJob'",new mysqli($dbAddress,$userLogger,$passLogger,$dbName));
+        echo json_encode(["error"=>["code"=>$e->getCode(),"message"=>mapSQLError($code)]]);
+    }finally{
+        if(isset($conn))
+            $conn->close();
     }
 
     function getSet($match,$arr,$mainKey){

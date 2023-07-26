@@ -13,7 +13,7 @@ async function getData(form){
         // console.log(link.link);
         const response = await fetch("../php/getJob.php"+link.link);
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         if(data.error.code==""){
             let resultset=data.resultset;
@@ -84,7 +84,7 @@ async function getData(form){
                 })
 
                 async function viewmission(div,id_inc,resultset){
-                    console.log(div.closest("tr").querySelector("td:nth-of-type(8)").innerHTML);
+                    // console.log(div.closest("tr").querySelector("td:nth-of-type(8)").innerHTML);
 
                     //controllo esistenza id
                     //invio della missione
@@ -104,9 +104,17 @@ async function getData(form){
 
             document.getElementById("occourrences").innerHTML="Trovati "+j+" risultati";
         }else{
-            alert(data.error.code+"\n"+data.error.message);
+            let row=document.getElementById("ricercAlert");
+            let text=document.getElementById("ricercAlertMessage");
+            text.innerHTML="("+data.error.code+") "+data.error.message;
+            row.style.display="block";
         }
 
+    }else{
+        let row=document.getElementById("ricercAlert");
+        let text=document.getElementById("ricercAlertMessage");
+        text.innerHTML="Errore nella parametrizzazione della ricerca";
+        row.style.display="block";
     }
 }
 
@@ -141,8 +149,8 @@ function makelink(form){
     for(let k in elements){
         if(elements[k].value!=""){
             elementForm++;
+            link+=elements[k]["name"]+"="+elements[k]["value"]+"&";
         }
-        link+=elements[k]["name"]+"="+elements[k]["value"]+"&";
     }
 
     if(elementForm>0){
