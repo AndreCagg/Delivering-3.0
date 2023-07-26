@@ -98,8 +98,9 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                         }
 
                         insert();
-                        if(isset($_SESSION["draft"]["noerror"]))
+                        if(isset($_SESSION["draft"]["noerror"])){
                             $_SESSION["service"]=$_SESSION["backService"];
+                        }
 
                         ?>
                         <script>
@@ -279,7 +280,15 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 window.addEventListener("DOMContentLoaded",async()=>{
                                     await loadCostumers("clienti",null);
                                 });
-                                document.getElementById("clienti").addEventListener("change",()=>{fillCustomer(document.getElementById("clienti"),"");});
+                                document.getElementById("clienti").addEventListener("change",()=>{
+                                    let clienti=document.getElementById("clienti");
+                                    fillCustomer(clienti,"");
+                                    if(clienti.value!="")
+                                        setVisibility("",true);
+                                    else
+                                        setVisibility("",false);
+
+                                });
                                 document.getElementById("id-form").addEventListener("submit",async (e)=>{
                                     e.preventDefault();
                                     await getData(document.getElementById("id-form"));
@@ -315,8 +324,8 @@ isLogged("../", $_SESSION["login"]["level"], "0");
         //     unset($_SESSION["service"]);
         // }
 
-        if (isset($_SESSION["draft"]) && !isset($_SESSION["draft"]["noerror"])) {
-            // unset($_SESSION["draft"]);
+        if (isset($_SESSION["draft"])) {
+            unset($_SESSION["draft"]);
 
             // if(isset($_SESSION["draft"]["noerror"])){
             //     $_SESSION["service"]=$_SESSION["backService"];

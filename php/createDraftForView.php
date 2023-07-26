@@ -20,9 +20,6 @@
     }
     
 
-    // $packs=$packs);
-    // echo "<br>****$packs";
-
     $_SESSION["draft"]["id"]=$arr["id_inc"];
     $_SESSION["draft"]["interno"]=$arr["interno"];
     $_SESSION["draft"]["ddtN"]=isset($arr["rifDDt"])?$arr["rifDDt"]:"";

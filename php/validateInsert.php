@@ -34,12 +34,23 @@
                 goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
                 header("Location:setService.php?service=1");
                 die();
+            }else{
+                $rifddt=trim($_POST["ddtN"]);
+                $rifddtD=trim($_POST["ddtD"]);
             }
+        }else{
+            $interno=1;
         }
     }finally{
         if(isset($conn))
             $conn->close();
     }
+
+    if(isset($_POST["riserva"]))
+        $riserva=1;
+    
+    if(isset($_POST["contrassegno"]))
+        $contrassegno=1;
 
     try{
         if(!checkCustomerField("Mitt") || !checkCustomerField("Dest")){
@@ -92,21 +103,21 @@
     if(empty($_POST["Epal"]))
         $_POST["Epal"]=0;
     
-    if(isset($_POST["interno"])){
-        $interno=1;
-    }else{
-        $rifddt=trim($_POST["ddtN"]);
-        $rifddtD=trim($_POST["ddtD"]);
-    }
+    // if(isset($_POST["interno"])){
+    //     $interno=1;
+    // }else{
+    //     $rifddt=trim($_POST["ddtN"]);
+    //     $rifddtD=trim($_POST["ddtD"]);
+    // }
     
     $epal=trim($_POST["Epal"]);
     $tipo=$_POST["tipo"];
     $consegna=$_POST["dataConsegna"];
-    if(isset($_POST["riserva"]))
-        $riserva=1;
+    // if(isset($_POST["riserva"]))
+    //     $riserva=1;
     
-    if(isset($_POST["contrassegno"]))
-        $contrassegno=1;
+    // if(isset($_POST["contrassegno"]))
+    //     $contrassegno=1;
 
     $note=trim($_POST["note"]);
     $message="";
@@ -268,7 +279,7 @@
                     break;
                 }
             }else{
-                $message="Errore vincoli dei dati inseriti. Ricontrolla i dati nel form, potrebbero non essere corretti";
+                $message="Errore vincoli dei dati inseriti";
                 $code="Unk";
                 $_SESSION["draft"]["error"]["code"]=$code;
             }

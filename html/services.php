@@ -1,11 +1,5 @@
 <?php
    function insert(){
-    echo "sessione: ";
-    print_r($_SESSION);
-    if(isset($_SESSION["draft"]["noerror"])){
-        // unset($_SESSION["draft"]["noerror"]);
-        // $_SESSION["service"]=$_SESSION["backService"];
-    }
 ?>
     <form action="../php/validateInsert.php" method="post" id="main-form">
     <div class="row">
@@ -77,7 +71,7 @@
             <fieldset class="border rounded-3 p-3" id="field-set">
                 <legend class="float-none w-auto px-3">Mittente</legend>
                 Seleziona 
-                <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;">
+                <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;" value="<?php echo isset($_SESSION["draft"]["Mitt"])?$_SESSION["draft"]["Mitt"]:"" ?>">
                 <option value=""></option>
                 <option value="0">NUOVO</option>
                 </select>
@@ -103,7 +97,7 @@
             <fieldset class="border rounded-3 p-3" id="field-set">
                 <legend class="float-none w-auto px-3">Destinatario</legend>
                 Seleziona 
-                <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;" value="<?php echo isset($_SESSION["draft"]["clientiDest"])?$_SESSION["draft"]["clientiDest"]:"" ?>">
+                <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;" value="<?php echo isset($_SESSION["draft"]["Dest"])?$_SESSION["draft"]["Dest"]:"" ?>">
                 <option value=""></option>
                 <option value="0">NUOVO</option>
                 </select>
@@ -132,7 +126,7 @@
             <input type="number" name="Epal" id="Epal" class="form-control my-1" min="0" max="1000" value="0" style="width:80px;margin-right:20px;" value="<?php echo isset($_SESSION["draft"]["epal"])?$_SESSION["draft"]["epal"]:"" ?>">&nbsp; 
             <div class="label-form" for="tipo">Tipologia</div>
             &nbsp; 
-            <select name="tipo" id="tipo" class="form-select" style="width:200px;margin-right:20px;" value="<?php echo isset($_SESSION["draft"]["tipo"])?$_SESSION["draft"]["tipo"]:"" ?>">
+            <select name="tipo" id="tipo" class="form-select" style="width:200px;margin-right:20px;">
                 <option value=""></option>
                 <option value="1">SPEDIZIONE</option>
                 <option value="2">RITIRO</option>
@@ -143,6 +137,20 @@
                 if(isset($_SESSION["draft"]["tipo"])){
                     ?>
                     $("#tipo option[value="+<?php echo $_SESSION["draft"]["tipo"];?>+"]").attr("selected","selected");
+                    <?php
+                }
+
+                if(isset($_SESSION["draft"]["Mitt"])){
+                    ?>
+                    $("#clientiMitt option[value="+<?php echo $_SESSION["draft"]["Mitt"];?>+"]").attr("selected","selected");
+                    console.log("stocazzo "+<?php echo $_SESSION["draft"]["Mitt"];?>);
+                    <?php
+                }
+
+                if(isset($_SESSION["draft"]["Dest"])){
+                    ?>
+                    $("#clientiDest option[value="+<?php echo $_SESSION["draft"]["Dest"];?>+"]").attr("selected","selected");
+                    console.log("stocazzone "+<?php echo $_SESSION["draft"]["Dest"];?>);
                     <?php
                 }
                 ?>
@@ -212,27 +220,29 @@
             <img src="../icons/!.png" width="15px" height="16px">
             Ci deve essere almeno un collo/bancale
             </small>
-            <script>
-                let packs=<?php echo $_SESSION["draft"]["packs"];?>;
-                console.log(packs);
-                for(let k in packs){
-                    document.getElementById("segnacollo").value=k;
-                    document.getElementById("bancale").checked=packs[k]["bancale"]=="true"?true:false;
-                    let peso=packs[k]["peso"].split(" ");
-                    document.getElementById("peso").value=peso[0];
-                    document.getElementById("um").value=peso[1]=="Kg"?1:2;
-                    document.getElementById("descrizione").value=packs[k]["descrizione"];
-                    document.getElementById("dimensioni").value=packs[k]["dimensioni"];
-                    loadPack();
-                }
-                
-                document.getElementById("segnacollo").value="";
-                document.getElementById("bancale").checked=false;
-                document.getElementById("peso").value="";
-                document.getElementById("um").value="";
-                document.getElementById("descrizione").value="";
-                document.getElementById("dimensioni").value="";
-            </script>
+            <?php if(isset($_SESSION["draft"]["packs"])){?>
+                <script>
+                    let packs=<?php echo $_SESSION["draft"]["packs"];?>;
+                    console.log(packs);
+                    for(let k in packs){
+                        document.getElementById("segnacollo").value=k;
+                        document.getElementById("bancale").checked=packs[k]["bancale"]=="true"?true:false;
+                        let peso=packs[k]["peso"].split(" ");
+                        document.getElementById("peso").value=peso[0];
+                        document.getElementById("um").value=peso[1]=="Kg"?1:2;
+                        document.getElementById("descrizione").value=packs[k]["descrizione"];
+                        document.getElementById("dimensioni").value=packs[k]["dimensioni"];
+                        loadPack();
+                    }
+                    
+                    document.getElementById("segnacollo").value="";
+                    document.getElementById("bancale").checked=false;
+                    document.getElementById("peso").value="";
+                    document.getElementById("um").value="";
+                    document.getElementById("descrizione").value="";
+                    document.getElementById("dimensioni").value="";
+                </script>
+            <?php } ?>
         </div>
     </div>
     <div class="row justify-content-right mx-1 mt-3">
