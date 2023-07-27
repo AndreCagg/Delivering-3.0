@@ -173,13 +173,13 @@
         
         //inserimento colli
         $colli=json_decode($_POST["packs"],true);
-        $inserisciColli=$conn->prepare("INSERT INTO colli (segnacollo,incarico,peso,um,descrizione,bancale) VALUES (?,?,?,?,?,?)");
+        $inserisciColli=$conn->prepare("INSERT INTO colli (segnacollo,incarico,peso,um,dimensioni,descrizione,bancale) VALUES (?,?,?,?,?,?,?)");
         
         foreach($colli as $k=>$v){
             $peso=explode(" ",$colli[$k]["peso"]);
             $bancale=0;
             if($colli[$k]["bancale"]=="true") $bancale=1;
-            $inserisciColli->bind_param("ssdssi",$k,$id,$peso[0],$peso[1],$colli[$k]["descrizione"],$bancale);
+            $inserisciColli->bind_param("ssdsssi",$k,$id,$peso[0],$peso[1],$colli[$k]["dimensioni"],$colli[$k]["descrizione"],$bancale);
             $inserisciColli->execute();
         }
         $inserisciColli->close();

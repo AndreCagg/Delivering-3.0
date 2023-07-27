@@ -14,8 +14,8 @@
         $packs[$colli[$k]["segnacollo"]]=[
             "bancale"=>$colli[$k]["bancale"]==1?"true":"false",
             "peso"=>$colli[$k]["peso"]." ".$colli[$k]["um"],
-            "descrizione"=>isset($colli[$k]["descrizione"])?$colli[$k]["descrizione"]:""
-            // "dimensioni"=>$colli[$k]["dimensioni"]
+            "descrizione"=>isset($colli[$k]["descrizione"])?$colli[$k]["descrizione"]:"",
+            "dimensioni"=>$colli[$k]["dimensioni"]
         ];
     }
     
