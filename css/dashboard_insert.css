@@ -80,4 +80,27 @@ thead{
 #colliList{
   max-width: 18%;
 }
-    
+  
+.stateLine{
+  min-height: 50px;
+  background-color: grey;
+  width: 0.01em;
+  margin-left: 5px;
+}
+
+.pallino{
+  margin-left: 0.04em;
+  height: 8px;
+  width: 8px;
+  background-color: gray;
+  border-radius: 100%;
+}
+
+#movementList{
+  max-height: 224px;
+  overflow-y: scroll;
+}
+
+#stateEvent{
+  bottom: 0!important;
+}

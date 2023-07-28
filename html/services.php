@@ -248,6 +248,51 @@
         <h5 class="fw-normal">Note</h5>
         <textarea class="form-control w-25" id="note" name="note" rows="5"><?php echo isset($_SESSION["draft"]["note"])?$_SESSION["draft"]["note"]:"" ?></textarea>
     </div>
+    <?php 
+    if(isset($_SESSION["draft"]["noerror"])){?>
+    <hr>
+    <div class="row" id="movementList">
+        <div class="row">
+            <div class="col fs-5 mb-3">Movimenti</div>
+        </div>
+        <?php
+        $movimenti=$_SESSION["draft"]["Movimenti"];
+        foreach($movimenti as $m){
+            echo "<div class='row'>
+                <div class='col-auto'> <!--movimento-->
+                    <div class='stateLine'></div>
+                    <div class='pallino'></div>
+                </div>
+                    
+                <div class='col-auto'><!--testo-->";
+                    echo "<div style='top:0;'>".$m["data"]."<br>".$m["stato"]."</div>";
+                echo "</div>
+            </div>";
+        } ?>
+
+            <div class="row">
+                <div class="col-auto"> <!--movimento-->
+                    <div class="stateLine"></div>
+                    <div class="pallino"></div>
+                </div>
+                    
+                <div class="col-auto"><!--testo-->
+                    <div>
+                        <select name="nuovoStato" class="form-select form-select-sm" style="bottom:0;">
+                            <option value="0"></option>
+                            <option value="1">IN CONSEGNA</option>
+                            <option value="2">CONSEGNATO</option>
+                            <option value="3">RITIRO EFFETTUATO</option>
+                            <option value="4">IN GIACENZA</option>
+                            <option value="5">RIFIUTATO</option>
+                            <option value="6">ASSEGNATO</option>
+                            <option value="7">SMARRITO</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+    </div>
+    <?php } ?>
     <div class="row m-4 mt-5 justify-content-center">
         <button class="btn btn-danger w-25" type="submit" onclick="event.preventDefault();checkForm();">Inserisci</button>
     </div>

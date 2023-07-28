@@ -33,6 +33,7 @@
     $_SESSION["draft"]["dataConsegna"]=$arr["consegna"];
     $_SESSION["draft"]["note"]=$arr["note"];
     $_SESSION["draft"]["packs"]=json_encode($packs);
+    $_SESSION["draft"]["Movimenti"]=$arr["Movimenti"];
     $_SESSION["draft"]["noerror"]="noerror";
     // echo json_encode($_SESSION["draft"], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 

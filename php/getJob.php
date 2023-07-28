@@ -42,7 +42,7 @@
         $mainQuery="SELECT * FROM colli WHERE incarico=(SELECT incarico FROM colli WHERE $link);
         SELECT * FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link) ORDER BY consegna DESC;
         SELECT * FROM clienti WHERE clienti.id IN ((SELECT mitt FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)) UNION (SELECT dest FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)));
-        SELECT id_inc,data,stato FROM movimenti WHERE id_inc=(SELECT id_inc FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link))";
+        SELECT id_inc,data,stato FROM movimenti WHERE id_inc=(SELECT id_inc FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)) ORDER BY data ASC;";
     }elseif($tabella=="clienti"){
         if($_GET["clienti"]!=""){
             $mainQuery="SELECT * 
@@ -55,7 +55,8 @@
             WHERE id_inc IN (SELECT id_inc 
             FROM incarichi 
             WHERE mitt=".$_GET["clienti"]." OR dest=".$_GET["clienti"]."
-            ORDER BY consegna DESC);
+            ORDER BY consegna DESC)
+            ORDER BY data ASC;
 
             SELECT * 
             FROM clienti
@@ -98,7 +99,8 @@
             FROM clienti 
             WHERE $link) OR dest IN (SELECT id 
             FROM clienti 
-            WHERE $link));
+            WHERE $link))
+            ORDER BY data ASC;
 
             SELECT * 
             FROM colli 
@@ -129,7 +131,8 @@
         FROM movimenti
         WHERE id_inc IN (SELECT id_inc 
         FROM incarichi 
-        WHERE $link);
+        WHERE $link)
+        ORDER BY data ASC;
 
         SELECT clienti.* 
         FROM clienti, incarichi 
@@ -148,7 +151,8 @@
         FROM movimenti
         WHERE id_inc IN (SELECT id_inc 
         FROM incarichi 
-        WHERE $link);
+        WHERE $link)
+        ORDER BY data ASC;
 
         SELECT clienti.*
         FROM clienti,incarichi 

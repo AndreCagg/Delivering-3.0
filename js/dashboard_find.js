@@ -13,7 +13,7 @@ async function getData(form){
         // console.log(link.link);
         const response = await fetch("../php/getJob.php"+link.link);
         const data = await response.json();
-        // console.log(data);
+        console.log(data);
 
         if(data.error.code==""){
             let resultset=data.resultset;
@@ -41,7 +41,7 @@ async function getData(form){
                 cell2.appendChild(img2);
                 cell2.appendChild(document.createTextNode(" "));
 
-                cell2.appendChild(document.createTextNode(resultset[k]["Movimenti"][0]["stato"]));
+                cell2.appendChild(document.createTextNode(resultset[k]["Movimenti"][resultset[k]["Movimenti"].length-1]["stato"]));
 
                 let cell3=line.insertCell(2);
                 let img3=document.createElement("img");
