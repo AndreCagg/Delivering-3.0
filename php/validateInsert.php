@@ -11,6 +11,10 @@
     $interno=0;
     $riserva=0;
     $contrassegno=0;
+    $GLOBALS["operation"]="inserting";
+
+    if(isset($_POST["oldID"]))
+        $GLOBALS["operation"]="editing";
 
     require_once("../conf.php");
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
@@ -77,7 +81,7 @@
     }
     
     try{
-        if($_POST["dataConsegna"]=="0000-00-00" || $_POST["dataConsegna"]<date("Y-m-d")){
+        if($_POST["dataConsegna"]=="0000-00-00" || ($_POST["dataConsegna"]<date("Y-m-d") && !isset($_POST["oldID"]))){
             $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
             goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
             header("Location:setService.php?service=1");
@@ -103,21 +107,11 @@
     if(empty($_POST["Epal"]))
         $_POST["Epal"]=0;
     
-    // if(isset($_POST["interno"])){
-    //     $interno=1;
-    // }else{
-    //     $rifddt=trim($_POST["ddtN"]);
-    //     $rifddtD=trim($_POST["ddtD"]);
-    // }
     
     $epal=trim($_POST["Epal"]);
     $tipo=$_POST["tipo"];
     $consegna=$_POST["dataConsegna"];
-    // if(isset($_POST["riserva"]))
-    //     $riserva=1;
-    
-    // if(isset($_POST["contrassegno"]))
-    //     $contrassegno=1;
+    // $contrassegno=1;
 
     $note=trim($_POST["note"]);
     $message="";
@@ -165,14 +159,31 @@
         $inserisciCliente->close();
 
         //salvataggio servizio
-
-        $servizio=$conn->prepare("INSERT INTO incarichi (id_inc,rifDDt,dataRif,mitt,dest,epal,tipologia,consegna,interno,riserva,contrassegno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
-        $servizio->bind_param("sssiiiisiiis",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$note);
+        $sql="";
+        if(isset($_POST["oldID"])){
+            $sql="UPDATE incarichi SET id_inc=?,rifDDt=?,dataRif=?,mitt=?,dest=?,epal=?,tipologia=?,consegna=?,interno=?,riserva=?,contrassegno=?,note=? WHERE id_inc=?";
+            $servizio=$conn->prepare($sql);
+            $oldInc=$_POST["oldID"];
+            $servizio->bind_param("sssiiiisiiiss",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$note,$oldInc);
+        }else{
+            $sql="INSERT INTO incarichi (id_inc,rifDDt,dataRif,mitt,dest,epal,tipologia,consegna,interno,riserva,contrassegno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            $servizio=$conn->prepare($sql);
+            $servizio->bind_param("sssiiiisiiis",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$note); 
+        }
+        
         $servizio->execute();
         $servizio->close();
+
         
         //inserimento colli
         $colli=json_decode($_POST["packs"],true);
+
+        if(isset($_POST["oldID"])){
+            $inserisciColli=$conn->prepare("DELETE FROM colli WHERE incarico=?");
+            $inserisciColli->bind_param("s",$id);
+            $inserisciColli->execute();
+        }
+
         $inserisciColli=$conn->prepare("INSERT INTO colli (segnacollo,incarico,peso,um,dimensioni,descrizione,bancale) VALUES (?,?,?,?,?,?,?)");
         
         foreach($colli as $k=>$v){
@@ -184,15 +195,16 @@
         }
         $inserisciColli->close();
 
-        // $movimenti=$conn->prepare("INSERT INTO movimenti (id_inc,data,stato) VALUES  (?,?,?)");
-        // $oggi=date("Y-m-d H:i:s");
-        // $stato="INSERITO";
-        // $movimenti->bind_param("sss",$id,$oggi,$stato);
-        // $movimenti->execute();
-        // $movimenti->close();
-
         $operatore=$_SESSION["login"]["id"];
-        $descrizione="inserito incarico ".$id;
+        $successMessage="";
+        
+        if(!isset($_POST["oldID"])){
+            $descrizione="inserito incarico ".$id;
+            $successMessage="salvato";
+        }else{
+            $descrizione="modificato incarico ".$_POST["oldID"]."->".$id;
+            $successMessage="modificato";
+        }
 
         logActivity($operatore,$descrizione,$conn);
         
@@ -206,6 +218,7 @@
         $message=$e->getMessage();
         $code=$e->getCode();
         goback($interno,$riserva,true,new mysqli($dbAddress,$userLogger,$passLogger,$dbName),$code,$rifddt,$rifddtD,$contrassegno);
+        // $_SESSION["draft"]["error"]["message"].=$e->getMessage()."<br>".$e->getTraceAsString();
     }finally{
         if(isset($conn)){
             $conn->close();
@@ -258,7 +271,7 @@
         }
 
         $operatore=$_SESSION["login"]["id"];
-        $descrizione="Generated Error ".$code;
+        $descrizione="Generated Error ".$code." in 'validateInsert' module during ".$GLOBALS["operation"];
 
         logActivity($operatore,$descrizione,$conn);
     }

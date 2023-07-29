@@ -2,6 +2,11 @@
    function insert(){
 ?>
     <form action="../php/validateInsert.php" method="post" id="main-form">
+        <?php 
+        if(isset($_SESSION["draft"]["noerror"])){
+            echo "<input name='oldID' id='oldID' type='hidden' value='".$_SESSION["draft"]["id"]."'>";
+        }
+        ?>
     <div class="row">
         <div class="col-auto me-2">
             ID&nbsp;<input type="text" name="id" id="ddt" size="14" class="form-control" style="width:170px;height:35px;" value="<?php echo isset($_SESSION["draft"]["id"])?$_SESSION["draft"]["id"]:"" ?>"><br>
@@ -251,34 +256,42 @@
     <?php 
     if(isset($_SESSION["draft"]["noerror"])){?>
     <hr>
-    <div class="row" id="movementList">
+    <div class="row">
         <div class="row">
             <div class="col fs-5 mb-3">Movimenti</div>
         </div>
-        <?php
-        $movimenti=$_SESSION["draft"]["Movimenti"];
-        foreach($movimenti as $m){
-            echo "<div class='row'>
-                <div class='col-auto'> <!--movimento-->
-                    <div class='stateLine'></div>
-                    <div class='pallino'></div>
-                </div>
-                    
-                <div class='col-auto'><!--testo-->";
-                    echo "<div style='top:0;'>".$m["data"]."<br>".$m["stato"]."</div>";
-                echo "</div>
-            </div>";
-        } ?>
+        <div id="movementList">
+            <?php
+            $movimenti=$_SESSION["draft"]["Movimenti"];
+            $i=0;
+            foreach($movimenti as $m){
+                echo "<div class='row'> <!--movimento-->
+                    <div class='col-auto'>";
+                        if($i==0){
+                            echo "<div class='containerElement'><div id='triangle'></div></div>";
+                        }
 
-            <div class="row">
-                <div class="col-auto"> <!--movimento-->
+
+                        echo "<div><div class='stateLine'></div></div>
+                        <div class='containerElement'><div class='pallino'></div></div>
+                    </div>
+                        
+                    <div class='col-auto'><!--testo-->";
+                        echo "<div style='top:0;'>".$m["data"]."<br>".$m["stato"]."</div>";
+                    echo "</div>
+                </div>";
+                $i++;
+            } ?>
+
+            <div class="row mb-1"> <!--movimento-->
+                <div class="col-auto"> 
                     <div class="stateLine"></div>
-                    <div class="pallino"></div>
+                    <div class="containerElement"><div class="pallino"></div></div>
                 </div>
                     
                 <div class="col-auto"><!--testo-->
                     <div>
-                        <select name="nuovoStato" class="form-select form-select-sm" style="bottom:0;">
+                        <select name="nuovoStato" class="form-select form-select-sm" id="stateEvent" style="bottom:0;">
                             <option value="0"></option>
                             <option value="1">IN CONSEGNA</option>
                             <option value="2">CONSEGNATO</option>
@@ -287,14 +300,16 @@
                             <option value="5">RIFIUTATO</option>
                             <option value="6">ASSEGNATO</option>
                             <option value="7">SMARRITO</option>
+                            <option value="8">AGGIUNTA/MODIFICA INFO</option>
                         </select>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
     <?php } ?>
     <div class="row m-4 mt-5 justify-content-center">
-        <button class="btn btn-danger w-25" type="submit" onclick="event.preventDefault();checkForm();">Inserisci</button>
+        <button class="btn btn-danger w-25" type="submit" onclick="event.preventDefault();checkForm();"><?php echo !isset($_SESSION["draft"]["noerror"])?"Inserisci":"Modifica"; ?></button>
     </div>
     </form>
 <?php 

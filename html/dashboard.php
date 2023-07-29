@@ -83,7 +83,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                 }
                 switch ($_SESSION["service"]) {
                     case 1:
-                        if (isset($_SESSION["draft"]) && !isset($_SESSION["draft"]["noerror"])) { ?>
+                        if ((!isset($_SESSION["draft"]["noerror"]) && isset($_SESSION["draft"]["error"]["code"])) || isset($_SESSION["draft"]["error"]["code"])) { ?>
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 Si è verificato un errore durante il salvataggio dell'incarico: (<?php echo $_SESSION["draft"]["error"]["code"]; ?>) <?php echo $_SESSION["draft"]["error"]["message"]; ?>.
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
@@ -337,16 +337,15 @@ isLogged("../", $_SESSION["login"]["level"], "0");
             </div>
         </div>
         <?php
-        // if (isset($_SESSION["service"])) {
-        //     unset($_SESSION["service"]);
-        // }
+        if (isset($_SESSION["service"])) {
+            unset($_SESSION["service"]);
+        }
 
         if (isset($_SESSION["draft"])) {
-            unset($_SESSION["draft"]);
+            if(isset($_SESSION["draft"]["noerror"]))
+                $_SESSION["service"]=$_SESSION["backService"];
 
-            // if(isset($_SESSION["draft"]["noerror"])){
-            //     $_SESSION["service"]=$_SESSION["backService"];
-            // }
+            unset($_SESSION["draft"]);
         }
         ?>
     </body>

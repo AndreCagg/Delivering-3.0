@@ -362,7 +362,8 @@ function checkForm(){
     }
 
     let dateAlert=document.getElementById("invaliDate-alert");
-    if(consegna<oggi){
+    if(consegna<oggi && document.getElementById("oldID")==null){
+        console.log("siamo in inserimento e non in modifica");
         dateAlert.style.display="block";
         return;
     }else{

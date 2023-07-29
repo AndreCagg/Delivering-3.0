@@ -2,10 +2,7 @@ async function getData(form){
     let link=makelink(form);
 
     //eliminazione dei precedenti
-    let table=document.getElementById("viewResult");
-    for(let i=table.rows.length-1;i>=0;i--){
-        table.deleteRow(i);
-    }
+    clearTable(document.getElementById("viewResult"));
     document.getElementById("occourrences").innerHTML="";
 
 
@@ -80,11 +77,13 @@ async function getData(form){
                 cell8.appendChild(document.createTextNode(k));
 
                 div.addEventListener("click",()=>{
-                    viewmission(div,k,resultset);
+                    viewmission(k,resultset);
                 })
 
-                async function viewmission(div,id_inc,resultset){
+                async function viewmission(id_inc,resultset){
                     // console.log(div.closest("tr").querySelector("td:nth-of-type(8)").innerHTML);
+                    clearTable(document.getElementById("viewResult"));
+                    document.getElementById("occourrences").innerHTML="";
 
                     //controllo esistenza id
                     //invio della missione
@@ -116,6 +115,13 @@ async function getData(form){
         text.innerHTML="Errore nella parametrizzazione della ricerca";
         row.style.display="block";
     }
+}
+
+function clearTable(table){
+    for(let i=table.rows.length-1;i>=0;i--){
+        table.deleteRow(i);
+    }
+    document.getElementById("occourrences").innerHTML="";
 }
 
 function aggiungiZero(n){

@@ -46,7 +46,7 @@
                 $message="Errore di login al Database";
             break;
             case 1062:
-                $message="Codice identificativo dell'incarico e/o già esistene nel Database, generarne uno nuovo";
+                $message="Codice identificativo dell'incarico e/o già esistente nel Database, generarne uno nuovo";
             break;
             case 1146:
                 $message="Impossibile salvare/trovare l'incarico a causa di una tabella inesistente";

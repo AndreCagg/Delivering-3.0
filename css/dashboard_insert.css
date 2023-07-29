@@ -89,7 +89,7 @@ thead{
 }
 
 .pallino{
-  margin-left: 0.04em;
+  /* margin-left: 0.04em; */
   height: 8px;
   width: 8px;
   background-color: gray;
@@ -103,4 +103,19 @@ thead{
 
 #stateEvent{
   bottom: 0!important;
+}
+
+.containerElement{
+  margin-left: 0.07em;
+}
+
+#triangle{
+  width: 0!important;
+  height: 0!important;
+
+  border-left: 6px solid transparent!important;
+  border-top: 6px solid grey!important;
+  border-right: 6px solid transparent!important;
+
+  margin-left: -0.1em;
 }
