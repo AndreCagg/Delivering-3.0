@@ -2,7 +2,8 @@ async function getData(form){
     let link=makelink(form);
 
     //eliminazione dei precedenti
-    clearTable(document.getElementById("viewResult"));
+    let table=document.getElementById("viewResult");
+    clearTable(table);
     document.getElementById("occourrences").innerHTML="";
 
 
@@ -97,7 +98,7 @@ async function getData(form){
                     const data=await response;
 
                     //apertura scheda
-                    open("../php/setService.php?service=1","_blank","popup");
+                    open("../php/setService.php?service=1","_blank","popup,width=1400px,height=600px,top=100px,left=50px,right=50px");
                 }
             }
 

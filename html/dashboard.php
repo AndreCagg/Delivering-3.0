@@ -277,7 +277,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 </div>
                             </div>
                             <div class="row">
-                                <button class="btn mt-4" style="background-color:#ffb3b3;" type="button" ><img src="../icons/cerca.png" width="18" class="me-1 pb-1">Cerca</button>
+                                <button class="btn mt-4" style="background-color:#ffb3b3;" type="button" id="searchbtn"><img src="../icons/cerca.png" width="18" class="me-1 pb-1">Cerca</button>
                             </div>
                             <br>
                             <div class="row">
@@ -306,9 +306,26 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     //     setVisibility("",false);
 
                                 });
+                                
+                                var $list=$("#id-form").find("input");
+
+                                $list.each(function(){
+                                    $(this).focus(function(){
+                                        $("#searchbtn").attr("onclick","getData(document.getElementById('id-form'))");
+                                    });
+                                });
+
                                 document.getElementById("id-form").addEventListener("submit",async (e)=>{
                                     e.preventDefault();
                                     await getData(document.getElementById("id-form"));
+                                });
+
+                                var $list=$("#ext").find("input");
+
+                                $list.each(function(){
+                                    $(this).focus(function(){
+                                        $("#searchbtn").attr("onclick","getData(document.getElementById('ext'))");
+                                    });
                                 });
 
                                 document.getElementById("ext").addEventListener("submit",async (e)=>{
@@ -316,11 +333,30 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     await getData(document.getElementById("ext"));
                                 });
 
+                                var $list=$("#customer-form").find("input");
+
+                                $list.each(function(){
+                                    $(this).focus(function(){
+                                        $("#searchbtn").attr("onclick","getData(document.getElementById('customer-form'))");
+                                    });
+                                });
+                                $list=$("#customer-form").find("select").focus(function(){
+                                        $("#searchbtn").attr("onclick","getData(document.getElementById('customer-form'))");
+                                    });
+
                                 document.getElementById("customer-form").addEventListener("submit",async (e)=>{
                                     e.preventDefault();
                                     await getData(document.getElementById("customer-form"));
                                 });
 
+                                var $list=$("#packs").find("input");
+
+                                $list.each(function(){
+                                    $(this).focus(function(){
+                                        $("#searchbtn").attr("onclick","getData(document.getElementById('packs'))");
+                                    });
+                                });
+                                
                                 document.getElementById("packs").addEventListener("submit",async (e)=>{
                                     e.preventDefault();
                                     await getData(document.getElementById("packs"));

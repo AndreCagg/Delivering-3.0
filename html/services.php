@@ -293,6 +293,7 @@
                     <div>
                         <select name="nuovoStato" class="form-select form-select-sm" id="stateEvent" style="bottom:0;">
                             <option value="0"></option>
+                            <option value="9">PRONTO PER PARTENZA</option>
                             <option value="1">IN CONSEGNA</option>
                             <option value="2">CONSEGNATO</option>
                             <option value="3">RITIRO EFFETTUATO</option>
