@@ -91,7 +91,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                             <?php }
                         if (isset($_SESSION["success"])) { ?>
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                Incarico salvato correttamente!
+                                <?php echo $_SESSION["success"]; ?>
                                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                             </div>
                             <?php unset($_SESSION["success"]);
@@ -377,11 +377,15 @@ isLogged("../", $_SESSION["login"]["level"], "0");
             unset($_SESSION["service"]);
         }
 
-        if (isset($_SESSION["draft"])) {
-            if(isset($_SESSION["draft"]["noerror"]))
-                $_SESSION["service"]=$_SESSION["backService"];
+        if(isset($_SESSION["draft"]["noerror"]))
+            $_SESSION["service"]=$_SESSION["backService"];
 
+        if (isset($_SESSION["draft"]["candelete"])) {
             unset($_SESSION["draft"]);
+
+            echo "<script>setTimeout(()=>{
+                window.close();
+            },1200);</script>";
         }
         ?>
     </body>

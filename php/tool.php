@@ -73,4 +73,47 @@
 
         return $message;
     }
+
+    function mapStates($stato){
+        $ret="";
+
+        switch($stato){
+            case 1:
+                $ret="IN CONSEGNA";
+                break;
+            case 2:
+                $ret="CONSEGNATO";
+                break;
+            case 3:
+                $ret="RITIRO EFFETTUATO";
+                break;
+            case 4:
+                $ret="IN GIACENZA";
+                break;
+            case 5:
+                $ret="RIFIUTATO";
+                break;
+            case 6:
+                $ret="ASSEGNATO";
+                break;
+            case 7:
+                $ret="SMARRITO";
+                break;
+            case 8:
+                $ret="AGGIUNTA ALLEGATI";
+                break;
+            case 9:
+                $ret="PRONTO PER PARTENZA";
+                break;
+            case 10:
+                $ret="RISPEDITO AL MITT";
+                break;
+            default:
+                $ret="new unknow state";
+                break;
+        }
+
+
+        return $ret;
+    }
 ?>

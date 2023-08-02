@@ -301,7 +301,8 @@
                             <option value="5">RIFIUTATO</option>
                             <option value="6">ASSEGNATO</option>
                             <option value="7">SMARRITO</option>
-                            <option value="8">AGGIUNTA/MODIFICA INFO</option>
+                            <option value="8">AGGIUNTA ALLEGATI</option>
+                            <option value="10">RISPEDITO AL MITT</option>
                         </select>
                     </div>
                 </div>

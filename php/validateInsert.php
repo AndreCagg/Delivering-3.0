@@ -195,6 +195,15 @@
         }
         $inserisciColli->close();
 
+        if(isset($_POST["nuovoStato"]) && $_POST["nuovoStato"]!=0){
+            $inserisciMov=$conn->prepare("INSERT INTO movimenti (id_inc,data,stato) VALUES (?,?,?)");
+            $data=date("Y-m-d H:i:s");
+            $stato=mapStates($_POST["nuovoStato"]);
+            $inserisciMov->bind_param("sss",$id,$data,$stato);
+            $inserisciMov->execute();
+            $inserisciMov->close();
+        }
+
         $operatore=$_SESSION["login"]["id"];
         $successMessage="";
         
@@ -209,7 +218,8 @@
         logActivity($operatore,$descrizione,$conn);
         
         $conn->commit();
-        $_SESSION["success"]="Incarico salvato correttamente!";
+        $_SESSION["success"]="Incarico $successMessage correttamente!";
+        $_SESSION["draft"]["candelete"]="";
     }catch(Exception $e){
         if(isset($conn))
             $conn->rollback();
@@ -256,7 +266,9 @@
             $_SESSION["draft"]["dataConsegna"]=isset($_POST["dataConsegna"])?$_POST["dataConsegna"]:"";
             $_SESSION["draft"]["note"]=isset($_POST["note"])?$_POST["note"]:"";
             $_SESSION["draft"]["packs"]=isset($_POST["packs"])?$_POST["packs"]:"";
-            
+            if(isset($_SESSION["draft"]["noerror"]))
+                $_SESSION["draft"]["noerror"]="";
+
             if($code!=null){
                 $_SESSION["draft"]["error"]["code"]=$code;
                 $message=mapSQLError($code);
