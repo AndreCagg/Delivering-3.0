@@ -1,5 +1,7 @@
 <?php
    function insert(){
+    if(isset($_SESSION["draft"]["id"]) && isset($_SESSION["draft"]["letto"]))
+        unset($_SESSION["draft"]);
 ?>
     <form action="../php/validateInsert.php" method="post" id="main-form">
         <?php 
@@ -322,5 +324,7 @@
     </div>
     </form>
 <?php 
+    if(isset($_SESSION["draft"]["noerror"]))
+        $_SESSION["draft"]["letto"]="";
    }
 ?>

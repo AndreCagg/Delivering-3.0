@@ -193,6 +193,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                             function imageAdderCreator(idCount){
                                 let imageAdder=document.createElement("div");
                                 imageAdder.classList.add("col-3");
+                                imageAdder.classList.add("mt-2");
                                 imageAdder.id="imageAdder"+idCount;
 
                                 let previewImage=document.createElement("img");
@@ -204,6 +205,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
 
                                 let fileLbl=document.createElement("label");
                                 fileLbl.setAttribute("for", "file"+idCount);
+                                previewImage.src="../icons/addImage.png";
                                 fileLbl.appendChild(previewImage);
 
                                 let deleteIc=document.createElement("img");
@@ -229,12 +231,25 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 fileInput.id="file"+idCount;
                                 fileInput.style.display="none";
 
-                                imageAdder.appendChild(fileLbl);
-                                imageAdder.appendChild(deleteIcLbl);
-                                imageAdder.appendChild(document.createElement("br"));
+                                let descrizione=document.createElement("textarea");
+                                descrizione.classList.add("form-control");
+                                descrizione.name="descrizione";
+                                descrizione.id="descrizione"+idCount;
+                                descrizione.style.height="50px";
+                                descrizione.style.width="150px";
+
+                                let previewContainer=document.createElement("div");
+                                previewContainer.id="previewContainer";
+                                previewContainer.classList.add("mx-auto");
+                                previewContainer.appendChild(fileLbl);
+                                previewContainer.appendChild(deleteIcLbl);
+                                previewContainer.appendChild(descrizione);
+
+                                imageAdder.appendChild(previewContainer);
                                 imageAdder.appendChild(filename);
                                 imageAdder.appendChild(fileInput);
-
+                                
+                                // fileInput.addEventListener("click", checkWhenClicked(idCount));
                                 fileInput.addEventListener("change", createFileInputChangeListener(idCount));
                                 deleteIc.addEventListener("click", createDeleteIconClickListener(idCount)); 
 
@@ -242,16 +257,22 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 idCount++;
                             }
 
+
                             function createFileInputChangeListener(idCount) {
                                 return function () {
                                     let file = document.getElementById("file" + idCount);
                                     if (file.files[0] != undefined) {
                                         imageAdderCreator(idCount+1);
+
                                         document.getElementById("fileName" + idCount).innerHTML = file.files[0].name;
                                         document.getElementById("previewImage" + idCount).src = URL.createObjectURL(file.files[0]);
+                                        document.getElementById("previewImage" + idCount).classList.add("m-1");
                                         document.getElementById("deleteIc" + idCount).style.display = "block";
+                                        file.addEventListener("click",(event)=>{
+                                            event.preventDefault();
+                                        });
                                     }
-                                };
+                                }
                             }
 
                             function createDeleteIconClickListener(idCount) {
@@ -265,7 +286,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
 
                                         document.getElementById("images").removeChild(document.getElementById("imageAdder"+idCount));
                                     }
-                                };
+                                }
                             }
 
 
