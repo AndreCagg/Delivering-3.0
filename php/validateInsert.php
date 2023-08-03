@@ -269,6 +269,9 @@
             if(isset($_SESSION["draft"]["noerror"]))
                 $_SESSION["draft"]["noerror"]="";
 
+            if(isset($_SESSION["draft"]["popup"]))
+                $_SESSION["draft"]["popup"]="";
+
             if($code!=null){
                 $_SESSION["draft"]["error"]["code"]=$code;
                 $message=mapSQLError($code);

@@ -119,3 +119,7 @@ thead{
 
   margin-left: -0.1em;
 }
+
+.addImages:hover, .deleteIc:hover{
+  opacity: 0.5;
+}

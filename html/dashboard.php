@@ -189,6 +189,88 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 }
                             });
 
+
+                            function imageAdderCreator(idCount){
+                                let imageAdder=document.createElement("div");
+                                imageAdder.classList.add("col-3");
+                                imageAdder.id="imageAdder"+idCount;
+
+                                let previewImage=document.createElement("img");
+                                previewImage.src="../icons/addImage.png";
+                                previewImage.style.height="50px";
+                                previewImage.style.width="50px";
+                                previewImage.classList.add("addImages");
+                                previewImage.id="previewImage"+idCount;
+
+                                let fileLbl=document.createElement("label");
+                                fileLbl.setAttribute("for", "file"+idCount);
+                                fileLbl.appendChild(previewImage);
+
+                                let deleteIc=document.createElement("img");
+                                deleteIc.src="../icons/delete.png";
+                                deleteIc.style.height="22px";
+                                deleteIc.style.width="22px";
+                                deleteIc.classList.add("addImages");
+                                deleteIc.id="deleteIc"+idCount;
+                                deleteIc.style.display="none";
+
+                                let deleteIcLbl=document.createElement("label");
+                                deleteIcLbl.setAttribute("for", "deleteIc"+idCount);
+                                deleteIcLbl.appendChild(deleteIc);
+
+                                let filename=document.createElement("small");
+                                filename.id="fileName"+idCount;
+                                filename.classList.add("text-break");
+
+                                let fileInput=document.createElement("input");
+                                fileInput.type="file";
+                                fileInput.accept="image/*";
+                                fileInput.name="file";
+                                fileInput.id="file"+idCount;
+                                fileInput.style.display="none";
+
+                                imageAdder.appendChild(fileLbl);
+                                imageAdder.appendChild(deleteIcLbl);
+                                imageAdder.appendChild(document.createElement("br"));
+                                imageAdder.appendChild(filename);
+                                imageAdder.appendChild(fileInput);
+
+                                fileInput.addEventListener("change", createFileInputChangeListener(idCount));
+                                deleteIc.addEventListener("click", createDeleteIconClickListener(idCount)); 
+
+                                document.getElementById("images").appendChild(imageAdder);
+                                idCount++;
+                            }
+
+                            function createFileInputChangeListener(idCount) {
+                                return function () {
+                                    let file = document.getElementById("file" + idCount);
+                                    if (file.files[0] != undefined) {
+                                        imageAdderCreator(idCount+1);
+                                        document.getElementById("fileName" + idCount).innerHTML = file.files[0].name;
+                                        document.getElementById("previewImage" + idCount).src = URL.createObjectURL(file.files[0]);
+                                        document.getElementById("deleteIc" + idCount).style.display = "block";
+                                    }
+                                };
+                            }
+
+                            function createDeleteIconClickListener(idCount) {
+                                return function () {
+                                    let file = document.getElementById("file" + idCount);
+                                    if (file.files[0] != undefined) {
+                                        document.getElementById("previewImage" + idCount).src = "../icons/addImage.png";
+                                        document.getElementById("fileName" + idCount).innerHTML = "";
+                                        file.value = "";
+                                        this.style.display = "none";
+
+                                        document.getElementById("images").removeChild(document.getElementById("imageAdder"+idCount));
+                                    }
+                                };
+                            }
+
+
+                            imageAdderCreator(0);
+
                         </script>
                         <?php
                         break;
@@ -380,12 +462,15 @@ isLogged("../", $_SESSION["login"]["level"], "0");
         if(isset($_SESSION["draft"]["noerror"]))
             $_SESSION["service"]=$_SESSION["backService"];
 
-        if (isset($_SESSION["draft"]["candelete"])) {
+        if(isset($_SESSION["draft"]["candelete"]) && isset($_SESSION["draft"]["popup"])){
             unset($_SESSION["draft"]);
-
             echo "<script>setTimeout(()=>{
                 window.close();
             },1200);</script>";
+        }
+
+        if (isset($_SESSION["draft"]["candelete"])) {
+            unset($_SESSION["draft"]); 
         }
         ?>
     </body>

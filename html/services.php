@@ -253,6 +253,13 @@
         <h5 class="fw-normal">Note</h5>
         <textarea class="form-control w-25" id="note" name="note" rows="5"><?php echo isset($_SESSION["draft"]["note"])?$_SESSION["draft"]["note"]:"" ?></textarea>
     </div>
+    <div class="row mx-1 mt-3">
+        <hr style="width:90%; opacity:20%;">
+        <h4 class="fw-normal fs-3">Allegati</h4>
+        <div class="row" id="images">
+            
+        </div>
+    </div>
     <?php 
     if(isset($_SESSION["draft"]["noerror"])){?>
     <hr>

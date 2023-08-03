@@ -35,6 +35,7 @@
     $_SESSION["draft"]["packs"]=json_encode($packs);
     $_SESSION["draft"]["Movimenti"]=$arr["Movimenti"];
     $_SESSION["draft"]["noerror"]="noerror";
+    $_SESSION["draft"]["popup"]="";
     // echo json_encode($_SESSION["draft"], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 
     $_SESSION["backService"]=2;
