@@ -227,13 +227,13 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 let fileInput=document.createElement("input");
                                 fileInput.type="file";
                                 fileInput.accept="image/*";
-                                fileInput.name="file";
+                                fileInput.name="file["+idCount+"]";
                                 fileInput.id="file"+idCount;
                                 fileInput.style.display="none";
 
                                 let descrizione=document.createElement("textarea");
                                 descrizione.classList.add("form-control");
-                                descrizione.name="descrizione";
+                                descrizione.name="descrizione["+idCount+"]";
                                 descrizione.id="descrizione"+idCount;
                                 descrizione.style.height="50px";
                                 descrizione.style.width="150px";
@@ -291,6 +291,8 @@ isLogged("../", $_SESSION["login"]["level"], "0");
 
 
                             imageAdderCreator(0);
+                            //ottenimento immagini
+                            
 
                         </script>
                         <?php

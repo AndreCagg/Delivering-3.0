@@ -3,7 +3,7 @@
     if(isset($_SESSION["draft"]["id"]) && isset($_SESSION["draft"]["letto"]))
         unset($_SESSION["draft"]);
 ?>
-    <form action="../php/validateInsert.php" method="post" id="main-form">
+    <form action="../php/validateInsert.php" method="post" id="main-form" enctype="multipart/form-data">
         <?php 
         if(isset($_SESSION["draft"]["noerror"])){
             echo "<input name='oldID' id='oldID' type='hidden' value='".$_SESSION["draft"]["id"]."'>";
@@ -303,6 +303,7 @@
                         <select name="nuovoStato" class="form-select form-select-sm" id="stateEvent" style="bottom:0;">
                             <option value="0"></option>
                             <option value="9">PRONTO PER PARTENZA</option>
+                            <option value="11">ARRIVATo IN MAGAZZINO</option>
                             <option value="1">IN CONSEGNA</option>
                             <option value="2">CONSEGNATO</option>
                             <option value="3">RITIRO EFFETTUATO</option>

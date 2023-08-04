@@ -1,6 +1,9 @@
 <?php
-    //login
     require_once("tool.php");
+    print_r($_POST);
+    echo "<br>*****<br>";
+    print_r($_FILES);
+    // die();
     session_start();
     isLogged("../",$_SESSION["login"]["level"],"0");
     date_default_timezone_set("Europe/Rome");
@@ -194,6 +197,25 @@
             $inserisciColli->execute();
         }
         $inserisciColli->close();
+
+        if(count($_FILES["file"]["tmp_name"])>1){ //ci sono file
+            $inserisciAllegati=$conn->prepare("INSERT INTO allegati (autore,incarico,data,foto,tipo,descrizione) VALUES (?,?,?,?,?,?)");
+
+            $files=$_FILES["file"]["tmp_name"];
+
+            for($i=0;$i<count($files)-1;$i++){
+                $data=date("Y-m-d H:i:s");
+                $file=addslashes(file_get_contents($files[$i]));
+                $utente=$_SESSION["login"]["id"];
+                $descrizione=$_POST["descrizione"][$i];
+                $tipo=$_FILES["file"]["type"][$i];
+                $inserisciAllegati->bind_param("issbss",$utente,$id,$data,$file,$tipo,$descrizione);
+                $inserisciAllegati->send_long_data(3,file_get_contents($files[$i]));
+                $inserisciAllegati->execute();
+            }
+
+            $inserisciAllegati->close();
+        }
 
         if(isset($_POST["nuovoStato"]) && $_POST["nuovoStato"]!=0){
             $inserisciMov=$conn->prepare("INSERT INTO movimenti (id_inc,data,stato) VALUES (?,?,?)");

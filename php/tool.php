@@ -31,7 +31,8 @@
     function isLogged($home,$actualLvl,$minReqLvl){
         if(!isset($_SESSION["login"]) || $actualLvl<$minReqLvl){
             session_destroy();
-            header("Location:$home");
+            // header("Location:$home");
+            goLogin($home);
             die();
         }
     }
@@ -107,6 +108,9 @@
                 break;
             case 10:
                 $ret="RISPEDITO AL MITT";
+                break;
+            case 11:
+                $ret="ARRIVATO IN MAGAZZINO";
                 break;
             default:
                 $ret="new unknow state";
