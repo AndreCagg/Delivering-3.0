@@ -11,7 +11,7 @@ async function getData(form){
         // console.log(link.link);
         const response = await fetch("../php/getJob.php"+link.link);
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
 
         if(data.error.code==""){
             let resultset=data.resultset;
@@ -78,11 +78,10 @@ async function getData(form){
                 cell8.appendChild(document.createTextNode(k));
 
                 div.addEventListener("click",()=>{
-                    viewmission(k,resultset);
+                    viewmission(resultset[k]);
                 })
 
-                async function viewmission(id_inc,resultset){
-                    // console.log(div.closest("tr").querySelector("td:nth-of-type(8)").innerHTML);
+                async function viewmission(resultset){
                     clearTable(document.getElementById("viewResult"));
                     document.getElementById("occourrences").innerHTML="";
 
@@ -93,7 +92,7 @@ async function getData(form){
                         headers:{
                             "Content-Type":"application/json",
                         },
-                        body: JSON.stringify(resultset[id_inc]),
+                        body: JSON.stringify(resultset),
                     });
                     const data=await response;
 

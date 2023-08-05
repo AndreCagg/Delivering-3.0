@@ -1,12 +1,9 @@
 <?php
     require_once("tool.php");
-    print_r($_POST);
-    echo "<br>*****<br>";
-    print_r($_FILES);
-    // die();
     session_start();
     isLogged("../",$_SESSION["login"]["level"],"0");
     date_default_timezone_set("Europe/Rome");
+
     $goback=false;
 
     $rifddt=null;
@@ -198,12 +195,33 @@
         }
         $inserisciColli->close();
 
-        if(count($_FILES["file"]["tmp_name"])>1){ //ci sono file
+        if(isset($_POST["oldID"]) && isset($_POST["delPic"])){
+            $numToDel=explode(";",$_POST["delPic"]);
+            unset($numToDel[count($numToDel)-1]);
+
+            if($numToDel>0){
+                $inserisciAllegati=$conn->prepare("DELETE FROM allegati WHERE id=? AND incarico=?");
+                foreach($numToDel as $v){
+                    $inserisciAllegati->bind_param("is",$v,$id);
+                    $inserisciAllegati->execute();
+                }
+            }
+        }
+
+        $files=$_FILES["file"]["tmp_name"];
+        $i=0;
+        foreach($files as $v){
+            if($v!="")
+                $i++;
+            else
+                unset($v);
+        }
+
+        if($i>0){ //ci sono file
             $inserisciAllegati=$conn->prepare("INSERT INTO allegati (autore,incarico,data,foto,tipo,descrizione) VALUES (?,?,?,?,?,?)");
+            unset($files[count($files)]);
 
-            $files=$_FILES["file"]["tmp_name"];
-
-            for($i=0;$i<count($files)-1;$i++){
+            foreach($files as $i=>$v){
                 $data=date("Y-m-d H:i:s");
                 $file=addslashes(file_get_contents($files[$i]));
                 $utente=$_SESSION["login"]["id"];

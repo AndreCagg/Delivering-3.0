@@ -1,7 +1,5 @@
 <?php
    function insert(){
-    if(isset($_SESSION["draft"]["id"]) && isset($_SESSION["draft"]["letto"]))
-        unset($_SESSION["draft"]);
 ?>
     <form action="../php/validateInsert.php" method="post" id="main-form" enctype="multipart/form-data">
         <?php 
@@ -78,7 +76,7 @@
             <fieldset class="border rounded-3 p-3" id="field-set">
                 <legend class="float-none w-auto px-3">Mittente</legend>
                 Seleziona 
-                <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;" value="<?php echo isset($_SESSION["draft"]["Mitt"])?$_SESSION["draft"]["Mitt"]:"" ?>">
+                <select name="clientiMitt" id="clientiMitt" class="form-select" style="width:250px;">
                 <option value=""></option>
                 <option value="0">NUOVO</option>
                 </select>
@@ -104,7 +102,7 @@
             <fieldset class="border rounded-3 p-3" id="field-set">
                 <legend class="float-none w-auto px-3">Destinatario</legend>
                 Seleziona 
-                <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;" value="<?php echo isset($_SESSION["draft"]["Dest"])?$_SESSION["draft"]["Dest"]:"" ?>">
+                <select name="clientiDest" id="clientiDest" class="form-select" style="width:250px;">
                 <option value=""></option>
                 <option value="0">NUOVO</option>
                 </select>
@@ -143,19 +141,19 @@
                 <?php
                 if(isset($_SESSION["draft"]["tipo"])){
                     ?>
-                    $("#tipo option[value="+<?php echo $_SESSION["draft"]["tipo"];?>+"]").attr("selected","selected");
+                    $("#tipo option[value="+<?php echo $_SESSION["draft"]["tipo"]; ?>+"]").attr("selected","selected");
                     <?php
                 }
 
                 if(isset($_SESSION["draft"]["Mitt"])){
                     ?>
-                    $("#clientiMitt option[value="+<?php echo $_SESSION["draft"]["Mitt"];?>+"]").attr("selected","selected");
+                    $("#clientiMitt option[value="+<?php echo $_SESSION["draft"]["Mitt"]; ?>+"]").attr("selected","selected");
                     <?php
                 }
 
                 if(isset($_SESSION["draft"]["Dest"])){
                     ?>
-                    $("#clientiDest option[value="+<?php echo $_SESSION["draft"]["Dest"];?>+"]").attr("selected","selected");
+                    $("#clientiDest option[value="+<?php echo $_SESSION["draft"]["Dest"]; ?>+"]").attr("selected","selected");
                     <?php
                 }
                 ?>
@@ -255,6 +253,7 @@
         <h5 class="fw-normal">Note</h5>
         <textarea class="form-control w-25" id="note" name="note" rows="5"><?php echo isset($_SESSION["draft"]["note"])?$_SESSION["draft"]["note"]:"" ?></textarea>
     </div>
+
     <div class="row mx-1 mt-3">
         <hr style="width:90%; opacity:20%;">
         <h4 class="fw-normal fs-3">Allegati</h4>
@@ -262,7 +261,7 @@
             
         </div>
     </div>
-    <?php 
+    <?php
     if(isset($_SESSION["draft"]["noerror"])){?>
     <hr>
     <div class="row">
@@ -325,7 +324,5 @@
     </div>
     </form>
 <?php 
-    if(isset($_SESSION["draft"]["noerror"]))
-        $_SESSION["draft"]["letto"]="";
    }
 ?>

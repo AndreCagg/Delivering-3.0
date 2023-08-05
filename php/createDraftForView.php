@@ -1,7 +1,7 @@
 <?php
     require_once("tool.php");
     session_start();
-    // isLogged("../",$_SESSION["login"]["level"],0);
+    isLogged("../",$_SESSION["login"]["level"],0);
 
     $arr=json_decode(file_get_contents("php://input"),true);
 
@@ -26,8 +26,8 @@
     $_SESSION["draft"]["ddtD"]=isset($arr["dataRif"])?$arr["dataRif"]:"";
     $_SESSION["draft"]["riserva"]=$arr["riserva"];
     $_SESSION["draft"]["contrassegno"]=$arr["contrassegno"];
-    $_SESSION["draft"]["Mitt"]=$arr["mitt"];
-    $_SESSION["draft"]["Dest"]=$arr["dest"];
+    $_SESSION["draft"]["Mitt"]=$arr["Mittente"][0]["id"];
+    $_SESSION["draft"]["Dest"]=$arr["Destinatario"][0]["id"];
     $_SESSION["draft"]["epal"]=$arr["epal"];
     $_SESSION["draft"]["tipo"]=$arr["tipologia"];
     $_SESSION["draft"]["dataConsegna"]=$arr["consegna"];
@@ -36,7 +36,7 @@
     $_SESSION["draft"]["Movimenti"]=$arr["Movimenti"];
     $_SESSION["draft"]["noerror"]="noerror";
     $_SESSION["draft"]["popup"]="";
-    // echo json_encode($_SESSION["draft"], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+    // echo json_encode($_SESSION["draft"]);
 
     $_SESSION["backService"]=2;
 

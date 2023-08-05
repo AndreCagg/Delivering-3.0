@@ -110,7 +110,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 }
                             </script>
 
-                         <?php   
+                         <?php  
                         }
 
                         ?>
@@ -135,19 +135,23 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 await loadCostumers("clientiMitt","clientiDest");
                                 <?php
                                 if (isset($_SESSION["draft"]["Mitt"])) { ?>
-                                            $("#clientiMitt option[value='<?php echo $_SESSION[
-                                                "draft"
-                                            ]["Mitt"]; ?>']").attr("selected","selected");
-                                            fillCustomer(document.getElementById("clientiMitt"), "Mitt");
-                                            <?php }
+                                    $("#clientiMitt option[value='<?php echo $_SESSION[
+                                        "draft"
+                                    ]["Mitt"]; ?>']").attr("selected","selected");
+                                    fillCustomer(document.getElementById("clientiMitt"), "Mitt");
+                                    <?php }
 
                                 if (isset($_SESSION["draft"]["Dest"])) { ?>
-                                            $("#clientiDest option[value='<?php echo $_SESSION[
-                                                "draft"
-                                            ]["Dest"]; ?>']").attr("selected","selected");
-                                            fillCustomer(document.getElementById("clientiDest"), "Dest");
-                                            <?php }
+                                    $("#clientiDest option[value='<?php echo $_SESSION[
+                                        "draft"
+                                    ]["Dest"]; ?>']").attr("selected","selected");
+                                    fillCustomer(document.getElementById("clientiDest"), "Dest");
+                                    <?php 
+                                    unset($_SESSION["draft"]); 
+                                    }
                                 ?>
+
+                                await getImg();
                             });
                             window.addEventListener("DOMContentLoaded",()=>{
                                 if(document.getElementById("interno").hasAttribute("checked"))
@@ -249,13 +253,47 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 imageAdder.appendChild(filename);
                                 imageAdder.appendChild(fileInput);
                                 
-                                // fileInput.addEventListener("click", checkWhenClicked(idCount));
                                 fileInput.addEventListener("change", createFileInputChangeListener(idCount));
                                 deleteIc.addEventListener("click", createDeleteIconClickListener(idCount)); 
 
                                 document.getElementById("images").appendChild(imageAdder);
                                 idCount++;
                             }
+
+                            //ottenimento immagini
+                            async function getImg(){
+                                const response=await fetch("../php/getPhoto.php?id="+document.getElementById("oldID").value);
+                                const data=await response.json();
+                                console.log(data);
+
+                                if(data.error!="yes" && data.num>0){//ci sono foto e posso inserirle
+                                    for(let i=0;i<data.resultset.filesName.length;i++){
+                                        imageAdderCreator(i);
+                                        let file=document.getElementById("file"+i);
+                                        let deleteIc=document.getElementById("deleteIc"+i);
+                                        let filename=[];
+                                        filename=data.resultset.filesName[i].split("/");
+                                        document.getElementById("fileName" + i).innerHTML = filename[filename.length-1];
+                                        document.getElementById("previewImage" + i).src = data.resultset.filesName[i];
+                                        document.getElementById("previewImage" + i).classList.add("m-1");
+                                        document.getElementById("descrizione"+i).innerHTML=data.resultset.descrizione[i];
+                                        deleteIc.style.display = "block";
+                                        document.getElementById("imageAdder"+i).setAttribute("fakePic","fakePic");
+                                        document.getElementById("imageAdder"+i).setAttribute("imgId",data.resultset.id[i]);
+
+                                        file.addEventListener("click",(event)=>{
+                                            event.preventDefault();
+                                        });
+
+                                        //el per eliminazione
+                                        deleteIc.addEventListener("click",createDeleteIconClickListener(i));
+                                    }
+
+                                    imageAdderCreator(data.resultset.filesName.length);
+                                }else{
+                                    imageAdderCreator(0);
+                                }
+                            }  
 
 
                             function createFileInputChangeListener(idCount) {
@@ -285,19 +323,34 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         this.style.display = "none";
 
                                         document.getElementById("images").removeChild(document.getElementById("imageAdder"+idCount));
+                                    }else if(document.getElementById("imageAdder"+idCount).hasAttribute("fakePic")){
+                                        //tenere traccia delle foto eliminate
+                                        if(document.getElementById("delPic")!=null){
+                                            document.getElementById("delPic").value+=document.getElementById("imageAdder"+idCount).getAttribute("imgId")+";";
+                                        }else{
+                                            let delPic=document.createElement("input");
+                                            delPic.type="hidden";
+                                            delPic.name="delPic";
+                                            delPic.id="delPic";
+                                            delPic.value="";
+                                            document.getElementById("images").appendChild(delPic);
+
+                                            delPic.value+=document.getElementById("imageAdder"+idCount).getAttribute("imgId")+";";
+                                        }
+
+                                        document.getElementById("images").removeChild(document.getElementById("imageAdder"+idCount));
                                     }
                                 }
                             }
 
 
-                            imageAdderCreator(0);
-                            //ottenimento immagini
-                            
+                            // imageAdderCreator(0);                          
 
                         </script>
                         <?php
                         break;
-                        case 2:?>
+                        case 2:
+                        ?>
                             <script src="../js/dashboard_find.js"></script>
                             <div class="row" id="ricercAlert" style="display:none;">
                                 <div class="alert alert-warning alert-dismissible fade show" role="alert">
