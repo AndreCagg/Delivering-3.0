@@ -1,4 +1,4 @@
-@media (min-width: 576px) {
+/* @media (min-width: 576px) {
     body::before {
       content: "SM";
     }
@@ -35,7 +35,7 @@
   .space{
     margin-top: 10% !important;
   }
-}
+} */
 
 .side-menu span{
     color: #e60000;

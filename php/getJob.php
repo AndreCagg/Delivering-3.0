@@ -4,7 +4,7 @@
     require_once("tool.php");
 
     session_start();
-    // isLogged("../",$_SESSION["login"]["level"],"0");
+    isLogged("../",$_SESSION["login"]["level"],"0");
 
     // print_r($_GET);
     // echo "<br>";
@@ -214,19 +214,13 @@
         $colli=[];
         $clienti=[];
         $movimenti=[];
-        // $foto=[];
-        // $b=false;
         
         // Recupera i risultati per ciascuna query
         do {
             if ($result = $conn->store_result()) {
                 while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-                    // $incarichi["incarichi"][]["id_inc"] = $row;
-                    // print_r($row);
-                    // echo "<br>-<br>";
                     $risultati=$row;
-                    // echo "RISULTATI: ";
-                    // print_r($risultati);
+
 
                     if(count($risultati)>0){
                         if(isset($risultati["segnacollo"])){
@@ -244,10 +238,6 @@
                         if(isset($risultati["stato"])){
                             $movimenti[]=$risultati;
                         }
-
-                        // if(isset($risultati["foto"])){
-                        //     $foto[]=$risultati;
-                        // }
                     }
                 }
                 $result->free(); // Liberare la memoria dal set di risultati
@@ -267,18 +257,13 @@
 
                 if(!isset($incarichi[$k]["dataRif"]))
                     $incarichi[$k]["dataRif"]="";
-                    $resultset[$k]=$incarichi[$k];
-                    $resultset[$k]["Mittente"]=getSet($incarichi[$k]["mitt"],$clienti,"id");
-                    $resultset[$k]["Destinatario"]=getSet($incarichi[$k]["dest"],$clienti,"id");
-                    $resultset[$k]["Colli"]=getSet($k,$colli,"incarico");
-                    $resultset[$k]["Movimenti"]=getSet($k,$movimenti,"id_inc");
-                    // $resultset[$k]["Foto"]=getSet($k,$foto,"incarico");
+                
+                $resultset[$k]=$incarichi[$k];
+                $resultset[$k]["Mittente"]=getSet($incarichi[$k]["mitt"],$clienti,"id");
+                $resultset[$k]["Destinatario"]=getSet($incarichi[$k]["dest"],$clienti,"id");
+                $resultset[$k]["Colli"]=getSet($k,$colli,"incarico");
+                $resultset[$k]["Movimenti"]=getSet($k,$movimenti,"id_inc");
             }
-
-            // echo "<br><br>";
-            // print_r(json_encode($resultset));
-            // echo "<br><br>";
-            // echo json_encode("Risultano ".count($resultset)." missioni");
             $missionMatch=count($resultset);
             $missionString=substr($missionString,0,strlen($missionString)-2);
         }
@@ -298,13 +283,6 @@
         unset($risultati);
         unset($movimenti);
 
-
-        // echo "<br><br> *** Clienti:";
-        // print_r(json_encode($clienti));
-        // echo "<br> Colli:";
-        // print_r(json_encode($colli));
-        // echo "<br> Incarichi:";
-        // print_r(json_encode($incarichi));
     } catch (Exception $e) {
         $code=$e->getCode();
         logActivity($_SESSION["login"]["id"],"Generated Error $code in module 'getJob'",new mysqli($dbAddress,$userLogger,$passLogger,$dbName));

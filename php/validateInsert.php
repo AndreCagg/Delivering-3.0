@@ -50,11 +50,27 @@
             $conn->close();
     }
 
+    try{
+        if(isset($_POST["contrassegno"])){
+            if($_POST["impContrassegno"]=="" || $_POST["impContrassegno"]<0){
+                $conn=new mysqli($dbAddress,$userLogger,$passLogger,$dbName);
+                goback($interno,$riserva,true,$conn,null,$rifddt,$rifddtD,$contrassegno);
+                header("Location:setService.php?service=1");
+                die();
+            }else{
+                $contrassegno=1;
+            }
+        }
+    }finally{
+        if(isset($conn))
+            $conn->close();
+    }
+
     if(isset($_POST["riserva"]))
         $riserva=1;
     
-    if(isset($_POST["contrassegno"]))
-        $contrassegno=1;
+    // if(isset($_POST["contrassegno"]))
+    //     $contrassegno=1;
 
     try{
         if(!checkCustomerField("Mitt") || !checkCustomerField("Dest")){
@@ -160,15 +176,16 @@
 
         //salvataggio servizio
         $sql="";
+        $impContr=isset($_POST["impContrassegno"])?trim($_POST["impContrassegno"]):0;
         if(isset($_POST["oldID"])){
-            $sql="UPDATE incarichi SET id_inc=?,rifDDt=?,dataRif=?,mitt=?,dest=?,epal=?,tipologia=?,consegna=?,interno=?,riserva=?,contrassegno=?,note=? WHERE id_inc=?";
+            $sql="UPDATE incarichi SET id_inc=?,rifDDt=?,dataRif=?,mitt=?,dest=?,epal=?,tipologia=?,consegna=?,interno=?,riserva=?,contrassegno=?,impContr=?,note=? WHERE id_inc=?";
             $servizio=$conn->prepare($sql);
             $oldInc=$_POST["oldID"];
-            $servizio->bind_param("sssiiiisiiiss",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$note,$oldInc);
+            $servizio->bind_param("sssiiiisiiidss",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$impContr,$note,$oldInc);
         }else{
-            $sql="INSERT INTO incarichi (id_inc,rifDDt,dataRif,mitt,dest,epal,tipologia,consegna,interno,riserva,contrassegno,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)";
+            $sql="INSERT INTO incarichi (id_inc,rifDDt,dataRif,mitt,dest,epal,tipologia,consegna,interno,riserva,contrassegno,impContr,note) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)";
             $servizio=$conn->prepare($sql);
-            $servizio->bind_param("sssiiiisiiis",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$note); 
+            $servizio->bind_param("sssiiiisiiids",$id,$rifddt,$rifddtD,$idMitt,$idDest,$epal,$tipo,$consegna,$interno,$riserva,$contrassegno,$impContr,$note); 
         }
         
         $servizio->execute();
@@ -209,7 +226,7 @@
         }
 
         foreach($_FILES["file"]["size"] as $v){
-            if($v/1024>1)
+            if($v/(1024*1024)>16)
                 throw new bigFileExc("Error big file inserted");
         }
 
@@ -249,6 +266,8 @@
             $inserisciMov->close();
         }
 
+        //NON VIENE CAMBIATO UTENTE ALTRIMENTI NON SALVEREBBE IL SERVIZIO, si puo provare a fare una connesione simultanea
+        logActivity($operatore,$descrizione,$conn);
         $operatore=$_SESSION["login"]["id"];
         $successMessage="";
         
@@ -259,11 +278,9 @@
             $descrizione="modificato incarico ".$_POST["oldID"]."->".$id;
             $successMessage="modificato";
         }
-
-        $conn->change_user($userLogger,$passLogger,$dbName);
-        logActivity($operatore,$descrizione,$conn);
         
         $conn->commit();
+
         $_SESSION["success"]="Incarico $successMessage correttamente!";
         $_SESSION["draft"]["candelete"]="";
     }catch(Exception $e){
@@ -278,7 +295,6 @@
             $code="bigFileExc";
 
         goback($interno,$riserva,true,new mysqli($dbAddress,$userLogger,$passLogger,$dbName),$code,$rifddt,$rifddtD,$contrassegno);
-        // $_SESSION["draft"]["error"]["message"].=$e->getMessage()."<br>".$e->getTraceAsString();
     }finally{
         if(isset($conn)){
             $conn->close();
@@ -303,7 +319,6 @@
     //torno indietro
     function goback($interno,$riserva,$goback,$conn,$code,$rifddt,$rifddtD,$contrassegno){
         if($goback==true){
-            // $_SESSION["draft"]["oldID"]=isset($_POST["oldID"])?$_POST["oldID"]:"";
             $_SESSION["draft"]["id"]=isset($_POST["id"])?$_POST["id"]:"";
             $_SESSION["draft"]["interno"]=$interno==1?$interno:0;
             $_SESSION["draft"]["ddtN"]=$rifddt?$rifddt:null;
@@ -319,9 +334,6 @@
             $_SESSION["draft"]["packs"]=isset($_POST["packs"])?$_POST["packs"]:"";
             if(isset($_SESSION["draft"]["noerror"]))
                 $_SESSION["draft"]["noerror"]="";
-
-            // if(isset($_SESSION["draft"]["Movimenti"]))
-            // $_SESSION["draft"]["Movimenti"]="";
 
             if(isset($_POST["oldID"]))
                 $_SESSION["draft"]["popup"]="";

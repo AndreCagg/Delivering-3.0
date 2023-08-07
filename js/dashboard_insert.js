@@ -326,6 +326,16 @@ function checkForm(){
         }
     }
 
+    let impContr=document.getElementById("impContrassegno");
+    if(!impContr.hasAttribute("disabled")){
+        if(impContr.value=="" || impContr.value<0){
+            impContr.classList.add("is-invalid");
+            return;
+        }else{
+            impContr.classList.remove("is-invalid");
+        }
+    }
+
     let mittAlert=document.getElementById("Mitt-alert");
     if(!checkField("Mitt")){
         mittAlert.style.display="block";

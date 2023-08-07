@@ -1,6 +1,4 @@
 <?php
-echo "<a href='../'>home</a>";
-
 session_start();
 require_once "../php/tool.php";
 isLogged("../", $_SESSION["login"]["level"], "0");
@@ -83,7 +81,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                 }
                 switch ($_SESSION["service"]) {
                     case 1:
-                        if(!isset($_SESSION["draft"]["popup"]) && isset($_SESSION["draft"]["noerror"]))
+                        if((!isset($_SESSION["draft"]["popup"]) && isset($_SESSION["draft"]["noerror"])) || isset($_SESSION["draft"]["candelete"]))
                             unset($_SESSION["draft"]);
 
                         if ((!isset($_SESSION["draft"]["noerror"]) && isset($_SESSION["draft"]["error"]["code"])) || isset($_SESSION["draft"]["error"]["code"])) { ?>
@@ -162,6 +160,8 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                             window.addEventListener("DOMContentLoaded",()=>{
                                 if(document.getElementById("interno").hasAttribute("checked"))
                                 disableRif();
+
+                                disableContr();
                                 
                                 setVisibility("Mitt",true);
                                 setVisibility("Dest",true);
@@ -198,6 +198,20 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     document.getElementById("ddtD").removeAttribute("disabled");
                                 }
                             });
+
+                            function disableContr(){
+                                let impContr=document.getElementById("impContrassegno");
+                                let contr=document.getElementById("contrassegno");
+
+                                if(!contr.checked && impContr.classList.contains("is-invalid"))
+                                    impContr.classList.remove("is-invalid");
+
+                                if(!contr.checked)
+                                    impContr.setAttribute("disabled","disabled");
+                                else
+                                    impContr.removeAttribute("disabled");
+                            }
+                            document.getElementById("contrassegno").addEventListener("change",disableContr);
 
 
                             function imageAdderCreator(idCount){
@@ -471,10 +485,10 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 document.getElementById("clienti").addEventListener("change",()=>{
                                     let clienti=document.getElementById("clienti");
                                     fillCustomer(clienti,"");
-                                    // if(clienti.value!="")
-                                    //     setVisibility("",true);
-                                    // else
-                                    //     setVisibility("",false);
+                                    if(clienti.value!="")
+                                        setVisibility("",true);
+                                    else
+                                        setVisibility("",false);
 
                                 });
                                 

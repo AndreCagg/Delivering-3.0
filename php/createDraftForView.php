@@ -26,6 +26,7 @@
     $_SESSION["draft"]["ddtD"]=isset($arr["dataRif"])?$arr["dataRif"]:"";
     $_SESSION["draft"]["riserva"]=$arr["riserva"];
     $_SESSION["draft"]["contrassegno"]=$arr["contrassegno"];
+    $_SESSION["draft"]["impContr"]=$arr["impContr"];
     $_SESSION["draft"]["Mitt"]=$arr["Mittente"][0]["id"];
     $_SESSION["draft"]["Dest"]=$arr["Destinatario"][0]["id"];
     $_SESSION["draft"]["epal"]=$arr["epal"];
