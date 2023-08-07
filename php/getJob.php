@@ -283,6 +283,7 @@
             $missionString=substr($missionString,0,strlen($missionString)-2);
         }
 
+        $_SESSION["popup"]="";
         echo json_encode(["error"=>["code"=>""],"resultset"=>$resultset]);
         
         

@@ -226,7 +226,7 @@
             <?php if(isset($_SESSION["draft"]["packs"])){?>
                 <script>
                     let packs=<?php echo $_SESSION["draft"]["packs"];?>;
-                    console.log(packs);
+                    // console.log(packs);
                     for(let k in packs){
                         document.getElementById("segnacollo").value=k;
                         document.getElementById("bancale").checked=packs[k]["bancale"]=="true"?true:false;

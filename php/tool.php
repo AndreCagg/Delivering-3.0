@@ -67,6 +67,9 @@
             case 2013:
                 $message="Impossibile salvare/trovare i dati a causa di una configurazione che va in conflitto con quella esistente, riprovare. Se il problema persiste contattare un tecnico";
             break;
+            case "bigFileExc":
+                $message="E' stato inserito un file troppo grande";
+                break;
             default:
                 $message="Impossibile salvare/trovare i dati. Errore generico. Se il problema persiste contattare il tecnico";
             break;

@@ -1,12 +1,20 @@
 <?php
+    class imageCreatorExc extends Exception{};
     require_once("tool.php");
     require_once("../conf.php");
 
     session_start();
     isLogged("../",$_SESSION["login"]["level"],0);
 
-    $id=$_GET["id"];
+    if(!isset($_GET["id"])){
+        session_destroy();
+        goLogin("../");
+    }
+
+    $id=trim($_GET["id"]);
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+    $conn=null;
+    $close=false;
     try{
         $conn=new mysqli($dbAddress,$userOperator,$passOperator,$dbName);
         $stmt=$conn->prepare("SELECT id,data,foto,tipo,descrizione FROM allegati WHERE incarico=? ORDER BY data ASC");
@@ -30,21 +38,33 @@
 
         $result->free();
         $stmt->close();
-        $conn->close();
 
         $i=0;
         foreach($files as $k=>$v){
             $ext=explode("/",$tipo[$k]);
             $img=imagecreatefromstring($files[$k]);
             if(!createImg($ext[1],$img,$id,$i)){
-                echo json_encode(["error"=>"yes"]);
-                return;
+                throw new imageCreatorExc("Error during image creation");
             }
 
             $filesName[]="../tmp/img".$id."_".$i.".".$ext[1];
 
             $i++;
         }
+
+        $filestring="[";
+        foreach($filesName as $v)
+            $filestring.=(basename($v)).", ";
+
+        $filestring=substr($filestring,0,strlen($filestring)-2);
+        $filestring.="]";
+
+        $conn->change_user($userLogger,$passLogger,$dbName);
+        logActivity($_SESSION["login"]["id"],"Created images $filestring",$conn);
+
+        $conn->close();
+        unset($filestring);
+        $close=true;
 
         $resultset=[];
         $resultset=[
@@ -71,6 +91,15 @@
         //log della visualizzazione img
     }catch(Exception $e){
         echo json_encode(["error"=>"yes"]);
+        $msg="Error while retriving images";
+        if($e instanceof imageCreatorExc)
+            $msg=$e->getMessage();
+
+        $conn->change_user($userLogger,$passLogger,$dbName);
+        logActivity($_SESSION["login"]["id"],$msg,$conn);
+    }finally{
+        if(!$close)
+            $conn->close();
     }
 
     function createImg($ext,$img,$id,$imgCount){

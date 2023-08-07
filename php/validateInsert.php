@@ -117,7 +117,7 @@
     $message="";
     $code="";
     
-    
+    class bigFileExc extends Exception{};
     //parte la transazione
     try{
         $conn=new mysqli($dbAddress,$userOperator,$passOperator,$dbName);
@@ -208,13 +208,18 @@
             }
         }
 
+        foreach($_FILES["file"]["size"] as $v){
+            if($v/1024>1)
+                throw new bigFileExc("Error big file inserted");
+        }
+
         $files=$_FILES["file"]["tmp_name"];
         $i=0;
-        foreach($files as $v){
+        foreach($files as $k=>$v){
             if($v!="")
                 $i++;
             else
-                unset($v);
+                unset($files[$k]);
         }
 
         if($i>0){ //ci sono file
@@ -255,6 +260,7 @@
             $successMessage="modificato";
         }
 
+        $conn->change_user($userLogger,$passLogger,$dbName);
         logActivity($operatore,$descrizione,$conn);
         
         $conn->commit();
@@ -267,6 +273,10 @@
         $goback=true;
         $message=$e->getMessage();
         $code=$e->getCode();
+
+        if($e instanceof bigFileExc)
+            $code="bigFileExc";
+
         goback($interno,$riserva,true,new mysqli($dbAddress,$userLogger,$passLogger,$dbName),$code,$rifddt,$rifddtD,$contrassegno);
         // $_SESSION["draft"]["error"]["message"].=$e->getMessage()."<br>".$e->getTraceAsString();
     }finally{
@@ -293,6 +303,7 @@
     //torno indietro
     function goback($interno,$riserva,$goback,$conn,$code,$rifddt,$rifddtD,$contrassegno){
         if($goback==true){
+            // $_SESSION["draft"]["oldID"]=isset($_POST["oldID"])?$_POST["oldID"]:"";
             $_SESSION["draft"]["id"]=isset($_POST["id"])?$_POST["id"]:"";
             $_SESSION["draft"]["interno"]=$interno==1?$interno:0;
             $_SESSION["draft"]["ddtN"]=$rifddt?$rifddt:null;
@@ -309,7 +320,10 @@
             if(isset($_SESSION["draft"]["noerror"]))
                 $_SESSION["draft"]["noerror"]="";
 
-            if(isset($_SESSION["draft"]["popup"]))
+            // if(isset($_SESSION["draft"]["Movimenti"]))
+            // $_SESSION["draft"]["Movimenti"]="";
+
+            if(isset($_POST["oldID"]))
                 $_SESSION["draft"]["popup"]="";
 
             if($code!=null){

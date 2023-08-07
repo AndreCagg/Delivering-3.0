@@ -83,6 +83,9 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                 }
                 switch ($_SESSION["service"]) {
                     case 1:
+                        if(!isset($_SESSION["draft"]["popup"]) && isset($_SESSION["draft"]["noerror"]))
+                            unset($_SESSION["draft"]);
+
                         if ((!isset($_SESSION["draft"]["noerror"]) && isset($_SESSION["draft"]["error"]["code"])) || isset($_SESSION["draft"]["error"]["code"])) { ?>
                             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                                 Si è verificato un errore durante il salvataggio dell'incarico: (<?php echo $_SESSION["draft"]["error"]["code"]; ?>) <?php echo $_SESSION["draft"]["error"]["message"]; ?>.
@@ -147,11 +150,14 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     ]["Dest"]; ?>']").attr("selected","selected");
                                     fillCustomer(document.getElementById("clientiDest"), "Dest");
                                     <?php 
-                                    unset($_SESSION["draft"]); 
+                                    unset($_SESSION["draft"]["popup"]);
                                     }
                                 ?>
 
-                                await getImg();
+                                if(document.getElementById("oldID")!=null)
+                                    await getImg();
+                                else
+                                    imageAdderCreator(0);
                             });
                             window.addEventListener("DOMContentLoaded",()=>{
                                 if(document.getElementById("interno").hasAttribute("checked"))
@@ -230,7 +236,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
 
                                 let fileInput=document.createElement("input");
                                 fileInput.type="file";
-                                fileInput.accept="image/*";
+                                fileInput.accept="image/jpeg, image/png";
                                 fileInput.name="file["+idCount+"]";
                                 fileInput.id="file"+idCount;
                                 fileInput.style.display="none";
@@ -258,13 +264,15 @@ isLogged("../", $_SESSION["login"]["level"], "0");
 
                                 document.getElementById("images").appendChild(imageAdder);
                                 idCount++;
+
+                                return imageAdder;
                             }
 
                             //ottenimento immagini
                             async function getImg(){
                                 const response=await fetch("../php/getPhoto.php?id="+document.getElementById("oldID").value);
                                 const data=await response.json();
-                                console.log(data);
+                                // console.log(data);
 
                                 if(data.error!="yes" && data.num>0){//ci sono foto e posso inserirle
                                     for(let i=0;i<data.resultset.filesName.length;i++){
@@ -274,24 +282,31 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         let filename=[];
                                         filename=data.resultset.filesName[i].split("/");
                                         document.getElementById("fileName" + i).innerHTML = filename[filename.length-1];
-                                        document.getElementById("previewImage" + i).src = data.resultset.filesName[i];
-                                        document.getElementById("previewImage" + i).classList.add("m-1");
+                                        let previewImg=document.getElementById("previewImage"+i);
+                                        previewImg.src = data.resultset.filesName[i];
+                                        previewImg.classList.add("m-1");
                                         document.getElementById("descrizione"+i).innerHTML=data.resultset.descrizione[i];
                                         deleteIc.style.display = "block";
-                                        document.getElementById("imageAdder"+i).setAttribute("fakePic","fakePic");
-                                        document.getElementById("imageAdder"+i).setAttribute("imgId",data.resultset.id[i]);
+
+                                        let imageAdder=document.getElementById("imageAdder"+i);
+                                        imageAdder.setAttribute("fakePic","fakePic");
+                                        imageAdder.setAttribute("imgId",data.resultset.id[i]);
 
                                         file.addEventListener("click",(event)=>{
                                             event.preventDefault();
                                         });
 
-                                        //el per eliminazione
+                                        //ev_list per eliminazione
                                         deleteIc.addEventListener("click",createDeleteIconClickListener(i));
                                     }
 
                                     imageAdderCreator(data.resultset.filesName.length);
-                                }else{
-                                    imageAdderCreator(0);
+                                }else if(data.error=="yes"){
+                                    let div=document.createElement("div");
+                                    div.classList.add("fs-5");
+                                    div.classList.add("fw-bold");
+                                    div.innerHTML="Impossibile caricare le immagini";
+                                    document.getElementById("images").insertBefore(div,imageAdderCreator(0));
                                 }
                             }  
 
@@ -299,7 +314,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                             function createFileInputChangeListener(idCount) {
                                 return function () {
                                     let file = document.getElementById("file" + idCount);
-                                    if (file.files[0] != undefined) {
+                                    if (file.files[0] != undefined && ((file.files[0].size)/(1024*1024))<=16) {
                                         imageAdderCreator(idCount+1);
 
                                         document.getElementById("fileName" + idCount).innerHTML = file.files[0].name;
@@ -309,6 +324,8 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         file.addEventListener("click",(event)=>{
                                             event.preventDefault();
                                         });
+                                    }else if(((file.files[0].size)/(1024*1024))>16){
+                                        alert("IL FILE NON PUO' SUPERARE I 16 MB!")
                                     }
                                 }
                             }
@@ -342,10 +359,6 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     }
                                 }
                             }
-
-
-                            // imageAdderCreator(0);                          
-
                         </script>
                         <?php
                         break;
