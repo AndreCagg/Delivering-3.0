@@ -239,9 +239,18 @@
                 unset($files[$k]);
         }
 
+        if(isset($_POST["newDesc"])){
+            $inserisciAllegati=$conn->prepare("UPDATE allegati SET descrizione=? WHERE id=?");
+            $newDesc=json_decode($_POST["newDesc"],true);
+
+            foreach($newDesc as $k=>$v){
+                $inserisciAllegati->bind_param("si",$v,$k);
+                $inserisciAllegati->execute();
+            }
+        }
+
         if($i>0){ //ci sono file
             $inserisciAllegati=$conn->prepare("INSERT INTO allegati (autore,incarico,data,foto,tipo,descrizione) VALUES (?,?,?,?,?,?)");
-            unset($files[count($files)]);
 
             foreach($files as $i=>$v){
                 $data=date("Y-m-d H:i:s");

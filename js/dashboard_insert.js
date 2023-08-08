@@ -404,10 +404,32 @@ function checkForm(){
     input.name="packs";
     input.id="packs";
     input.value=JSON.stringify(arr);
-    document.getElementById("main-form").appendChild(input);
-
 
     let form=document.getElementById("main-form");
+    form.appendChild(input);
+
+    //ottenimento descrizioni delle immagini caricate modificate
+    let images=document.getElementById("images");
+    let imagesAdder=images.querySelectorAll("div[id^='imageAdder']");
+    let newDesc=[];
+    let imgid=null;
+    for(let i=0;i<imagesAdder.length;i++){
+        imgid=imagesAdder[i].getAttribute("imgid");
+        if(imagesAdder[i].hasAttribute("fakepic")){
+            newDesc[imgid]=imagesAdder[i].querySelector("#previewContainer").querySelector("textarea[id^=descrizione]").value;
+        }
+    }
+
+
+    if(newDesc.length>0){
+        let textarea=document.createElement("textarea");
+        textarea.style.display="none";
+        textarea.innerHTML=JSON.stringify(newDesc);
+        textarea.name="newDesc";
+        form.appendChild(textarea);
+    }
+
+
     form.submit();
 }
 
