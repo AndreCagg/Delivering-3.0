@@ -225,9 +225,11 @@
             }
         }
 
-        foreach($_FILES["file"]["size"] as $v){
-            if($v/(1024*1024)>16)
-                throw new bigFileExc("Error big file inserted");
+        if(isset($_FILES["file"])){
+            foreach($_FILES["file"]["size"] as $v){
+                if($v/(1024*1024)>16)
+                    throw new bigFileExc("Error big file inserted");
+            }
         }
 
         $files=$_FILES["file"]["tmp_name"];

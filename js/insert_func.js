@@ -85,6 +85,8 @@ async function getImg() {
         div.classList.add("fw-bold");
         div.innerHTML = "Impossibile caricare le immagini";
         document.getElementById("images").insertBefore(div, imageAdderCreator(0));
+    }else if(data.error != "yes" && data.num ==0){
+        imageAdderCreator(0);
     }
 }
 

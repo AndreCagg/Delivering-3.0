@@ -53,10 +53,15 @@
         }
 
         $filestring="[";
-        foreach($filesName as $v)
+        $k=0;
+        foreach($filesName as $v){
             $filestring.=(basename($v)).", ";
+            $k++;
+        }
 
-        $filestring=substr($filestring,0,strlen($filestring)-2);
+        if($k>0)
+            $filestring=substr($filestring,0,strlen($filestring)-2);
+
         $filestring.="]";
 
         $conn->change_user($userLogger,$passLogger,$dbName);
