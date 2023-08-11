@@ -3,6 +3,7 @@
     session_start();
     isLogged("../",$_SESSION["login"]["level"],"0");
     date_default_timezone_set("Europe/Rome");
+    $operatore=$_SESSION["login"]["id"];
 
     $goback=false;
 
@@ -266,6 +267,8 @@
             }
 
             $inserisciAllegati->close();
+            $descrizione="nuovi allegati aggiunti a $id";
+            logActivity($operatore,$descrizione,$conn);
         }
 
         if(isset($_POST["nuovoStato"]) && $_POST["nuovoStato"]!=0){
@@ -279,7 +282,6 @@
 
         //NON VIENE CAMBIATO UTENTE ALTRIMENTI NON SALVEREBBE IL SERVIZIO, si puo provare a fare una connesione simultanea
         logActivity($operatore,$descrizione,$conn);
-        $operatore=$_SESSION["login"]["id"];
         $successMessage="";
         
         if(!isset($_POST["oldID"])){

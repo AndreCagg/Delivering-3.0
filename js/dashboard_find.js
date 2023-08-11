@@ -67,8 +67,6 @@ async function getData(form){
                 let div=document.createElement("button");
                 div.classList.add("btn");
                 div.classList.add("btn-warning");
-                // div.id="viewmissionbtn";
-                // div.onclick("viewmission(this)");
                 div.innerHTML="Visualizza ";
                 div.appendChild(img4);
                 cell7.appendChild(div);
@@ -77,28 +75,9 @@ async function getData(form){
                 cell8.style.display="none";
                 cell8.appendChild(document.createTextNode(k));
 
-                div.addEventListener("click",()=>{
+                div.addEventListener("click",async ()=>{
                     viewmission(resultset[k]);
                 })
-
-                async function viewmission(resultset){
-                    clearTable(document.getElementById("viewResult"));
-                    document.getElementById("occourrences").innerHTML="";
-
-                    //controllo esistenza id
-                    //invio della missione
-                    const response=await fetch("../php/createDraftForView.php",{
-                        method: "POST",
-                        headers:{
-                            "Content-Type":"application/json",
-                        },
-                        body: JSON.stringify(resultset),
-                    });
-                    const data=await response;
-
-                    //apertura scheda
-                    open("../php/setService.php?service=1","_blank","popup,width=1400px,height=600px,top=100px,left=50px,right=50px");
-                }
             }
 
             document.getElementById("occourrences").innerHTML="Trovati "+j+" risultati";
@@ -117,6 +96,25 @@ async function getData(form){
     }
 }
 
+async function viewmission(resultset){
+    clearTable(document.getElementById("viewResult"));
+    document.getElementById("occourrences").innerHTML="";
+
+    //controllo esistenza id
+    //invio della missione
+    const response=await fetch("../php/createDraftForView.php",{
+        method: "POST",
+        headers:{
+            "Content-Type":"application/json",
+        },
+        body: JSON.stringify(resultset),
+    });
+    const data=await response;
+
+    //apertura scheda
+    open("../php/setService.php?service=1","_blank","popup,width=1400px,height=600px,top=100px,left=50px,right=50px");
+}
+
 function clearTable(table){
     for(let i=table.rows.length-1;i>=0;i--){
         table.deleteRow(i);
@@ -132,7 +130,7 @@ function composedate(data){
     return aggiungiZero(data.getDate())+"/"+aggiungiZero(data.getMonth()+1)+"/"+data.getFullYear();
 }
 
-function composeAddress(set){
+function composeAddress(set){  /*!! ATTENZIONE: FUNZIONE RIDONDATA IN MAGAZZINO.JS*/
     let indirizzo="";
     indirizzo+=set["ragioneSociale"]+"\n";
     indirizzo+=set["indirizzo"]+"\n";
