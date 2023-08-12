@@ -1,42 +1,3 @@
-/* @media (min-width: 576px) {
-    body::before {
-      content: "SM";
-    }
-  }
-  
-@media (min-width: 768px) {
-  body::before {
-    content: "MD";
-  }
-}
-
-@media (min-width: 992px) {
-  body::before {
-    content: "LG";
-  }
-}
-
-@media (min-width: 1200px) {
-  body::before {
-    content: "XL";
-  }
-}
-
-@media (min-width: 1400px) {
-  body::before {
-    content: "XXL";
-  }
-}
-
-@media (max-width: 575px){
-  body::before{
-      content:"XS - SI CONSIGLIA UTILIZZO DA PC";
-  }
-  .space{
-    margin-top: 10% !important;
-  }
-} */
-
 .side-menu span{
     color: #e60000;
 }
@@ -89,7 +50,6 @@ thead{
 }
 
 .pallino{
-  /* margin-left: 0.04em; */
   height: 8px;
   width: 8px;
   background-color: gray;

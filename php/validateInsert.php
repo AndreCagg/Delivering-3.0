@@ -253,16 +253,15 @@
         }
 
         if($i>0){ //ci sono file
-            $inserisciAllegati=$conn->prepare("INSERT INTO allegati (autore,incarico,data,foto,tipo,descrizione) VALUES (?,?,?,?,?,?)");
+            $inserisciAllegati=$conn->prepare("INSERT INTO allegati (autore,incarico,data,foto,tipo,descrizione) VALUES (?,?,NOW(3),?,?,?)");
 
-            foreach($files as $i=>$v){
-                $data=date("Y-m-d H:i:s");
-                $file=addslashes(file_get_contents($files[$i]));
+            foreach($files as $k=>$v){
+                $file=addslashes(file_get_contents($files[$k]));
                 $utente=$_SESSION["login"]["id"];
-                $descrizione=$_POST["descrizione"][$i];
-                $tipo=$_FILES["file"]["type"][$i];
-                $inserisciAllegati->bind_param("issbss",$utente,$id,$data,$file,$tipo,$descrizione);
-                $inserisciAllegati->send_long_data(3,file_get_contents($files[$i]));
+                $descrizione=$_POST["descrizione"][$k];
+                $tipo=$_FILES["file"]["type"][$k];
+                $inserisciAllegati->bind_param("isbss",$utente,$id,$file,$tipo,$descrizione);
+                $inserisciAllegati->send_long_data(2,file_get_contents($files[$k]));
                 $inserisciAllegati->execute();
             }
 
@@ -272,10 +271,9 @@
         }
 
         if(isset($_POST["nuovoStato"]) && $_POST["nuovoStato"]!=0){
-            $inserisciMov=$conn->prepare("INSERT INTO movimenti (id_inc,data,stato) VALUES (?,?,?)");
-            $data=date("Y-m-d H:i:s");
+            $inserisciMov=$conn->prepare("INSERT INTO movimenti (id_inc,data,stato) VALUES (?,NOW(3),?)");
             $stato=mapStates($_POST["nuovoStato"]);
-            $inserisciMov->bind_param("sss",$id,$data,$stato);
+            $inserisciMov->bind_param("ss",$id,$stato);
             $inserisciMov->execute();
             $inserisciMov->close();
         }

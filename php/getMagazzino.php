@@ -3,7 +3,7 @@
     require_once("../conf.php");
 
     session_start();
-    // isLogged("../",$_SESSION["login"]["level"],0);
+    isLogged("../",$_SESSION["login"]["level"],0);
 
     mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
     try{
@@ -36,10 +36,10 @@
             $destinatario=explode(";",$row->destinatario);
             $obj["id_inc"]=$row->id_inc;
             $obj["rifDDt"]=isset($row->rifDDt)?$row->rifDDt:"INT";
-            $obj["dataRif"]=isset($row->dataRif)?$row->dataRif:"INT";
+            $obj["dataRif"]=isset($row->dataRif)?date("d-m-Y",strtotime($row->dataRif)):"INT";
             $obj["epal"]=$row->epal;
             $obj["tipologia"]=$row->tipologia==1?"SPE":"RIT";
-            $obj["consegna"]=$row->consegna;
+            $obj["consegna"]=date("d-m-Y",strtotime($row->consegna));
             $obj["riserva"]=$row->riserva;
             $obj["impContr"]=isset($row->impContr)?$row->impContr:0;
             
@@ -62,7 +62,7 @@
             $obj["Mittente"]=$mitt;
             $obj["Destinatario"]=$dest;
 
-            $arr[$row->nome_zona][$row->id_inc]=$obj;
+            $arr[strtoupper($row->nome_zona)][$row->id_inc]=$obj;
         }
         $stmt->close();
 

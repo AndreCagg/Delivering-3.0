@@ -18,10 +18,9 @@
     }
 
     function logActivity($id,$descrizione,$conn){
-        @$query = $conn->prepare("INSERT INTO logoffice (autore,descrizione,data) VALUES (?,?,?)");
-        date_default_timezone_set('Europe/Rome');
-        $data = date("Y-m-d H:i:s");
-        $query->bind_param("iss",$id,$descrizione,$data);
+        @$query = $conn->prepare("INSERT INTO logoffice (autore,descrizione,data) VALUES (?,?,NOW(3))");
+
+        $query->bind_param("is",$id,$descrizione);
         $query->execute();
         $query->close();
 
