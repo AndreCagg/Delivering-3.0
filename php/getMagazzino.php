@@ -23,7 +23,7 @@
                         WHERE id_inc = m.id_inc
                     )
                 )
-                ORDER BY zone.nome) AS t;";
+                ORDER BY zone.nome,incarichi.consegna DESC) AS t;";
 
         $conn=new mysqli($dbAddress,$userOperator,$passOperator,$dbName);
         $stmt=$conn->query($sql);
@@ -36,10 +36,10 @@
             $destinatario=explode(";",$row->destinatario);
             $obj["id_inc"]=$row->id_inc;
             $obj["rifDDt"]=isset($row->rifDDt)?$row->rifDDt:"INT";
-            $obj["dataRif"]=isset($row->dataRif)?date("d-m-Y",strtotime($row->dataRif)):"INT";
+            $obj["dataRif"]=isset($row->dataRif)?date("d/m/Y",strtotime($row->dataRif)):"INT";
             $obj["epal"]=$row->epal;
             $obj["tipologia"]=$row->tipologia==1?"SPE":"RIT";
-            $obj["consegna"]=date("d-m-Y",strtotime($row->consegna));
+            $obj["consegna"]=date("d/m/Y",strtotime($row->consegna));
             $obj["riserva"]=$row->riserva;
             $obj["impContr"]=isset($row->impContr)?$row->impContr:0;
             

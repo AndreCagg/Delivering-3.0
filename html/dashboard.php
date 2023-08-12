@@ -282,6 +282,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                     case 3: ?>
                         <!-- caricamento dati-->
                         <script src="../js/magazzino.js"></script>
+                        <div id="alert-space"></div>
                         <div id="table-container"></div>
                         <script>
                             getMagazzino();
@@ -291,7 +292,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                 }
                 ?>
             </div>
-            <div class="col-1 mt-2" style="right:0;">
+            <div class="col-1 mt-2">
                 <a href="../php/setService.php?service=0"><button type="button" class="btn btn-danger">X</button></a>
             </div>
         </div>

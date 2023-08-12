@@ -43,7 +43,6 @@
         SELECT * FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link) ORDER BY consegna DESC;
         SELECT * FROM clienti WHERE clienti.id IN ((SELECT mitt FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)) UNION (SELECT dest FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)));
         SELECT id_inc,data,stato FROM movimenti WHERE id_inc=(SELECT id_inc FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link)) ORDER BY data ASC;";
-        // SELECT data, foto,descrizione,incarico FROM allegati WHERE allegati.incarico IN (SELECT id_inc FROM incarichi WHERE id_inc=(SELECT incarico FROM colli WHERE $link) ORDER BY consegna DESC);";
         
     }elseif($tabella=="clienti"){
         if($_GET["clienti"]!=""){
@@ -75,21 +74,9 @@
             SELECT * 
             FROM colli 
             WHERE incarico IN (SELECT id_inc FROM incarichi WHERE mitt=".$_GET["clienti"]." OR dest=".$_GET["clienti"].");"; /*colli*/
-            
-            // SELECT data,foto,descrizione,incarico
-            // FROM allegati
-            // WHERE allegati.incarico IN (SELECT id_inc 
-            // FROM incarichi 
-            // WHERE mitt=".$_GET["clienti"]." OR dest=".$_GET["clienti"]."
-            // ORDER BY consegna DESC);"; 
         }else{
             unset($_GET["clienti"]);
             $link=doLink($_GET,$tabella,"like");
-        
-
-            // $subquery="SELECT id 
-            // FROM clienti 
-            // WHERE $link"; 
 
             $mainQuery="SELECT * 
             FROM incarichi 
@@ -126,17 +113,6 @@
                 UNION
                 SELECT mitt FROM incarichi WHERE dest IN (SELECT id FROM clienti WHERE $link)
             );";/*clienti*/
-            
-            // SELECT data,foto,descrizione,incarico
-            // FROM allegati
-            // WHERE allegati.incarico IN (SELECT id_inc 
-            // FROM incarichi 
-            // WHERE mitt IN (SELECT id 
-            // FROM clienti 
-            // WHERE $link) OR dest IN (SELECT id 
-            // FROM clienti 
-            // WHERE $link)
-            // ORDER BY consegna DESC);"; /*foto*/
         }
     }elseif($tabella=="incarichi" && isset($_GET["id"])){
         //query per ricerca da id
@@ -161,13 +137,6 @@
         SELECT * 
         FROM colli 
         WHERE incarico='".$_GET["id"]."';";/*colli*/
-        
-        // SELECT data,foto,descrizione,incarico
-        // FROM allegati
-        // WHERE allegati.incarico IN (SELECT id_inc 
-        // FROM incarichi 
-        // WHERE $link
-        // ORDER BY consegna DESC);"; /*foto*/
     }elseif($tabella=="incarichi" && isset($_GET["rifddtN"])){
         $mainQuery="SELECT * 
         FROM incarichi 
@@ -188,13 +157,6 @@
         SELECT * 
         FROM colli 
         WHERE incarico = (SELECT id_inc FROM incarichi WHERE $link);"; /*colli*/
-        
-        // SELECT data,foto,descrizione,incarico
-        // FROM allegati
-        // WHERE allegati.incarico IN (SELECT id_inc 
-        // FROM incarichi 
-        // WHERE $link
-        // ORDER BY consegna DESC);"; /*foto*/
     }
 
     // echo $mainQuery;

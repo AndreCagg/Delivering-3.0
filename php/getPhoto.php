@@ -4,7 +4,7 @@
     require_once("../conf.php");
 
     session_start();
-    isLogged("../",$_SESSION["login"]["level"],0);
+    // isLogged("../",$_SESSION["login"]["level"],0);
 
     if(!isset($_GET["id"])){
         session_destroy();
@@ -82,14 +82,14 @@
 
         echo json_encode(["error"=>"no","num"=>$i,"resultset"=>$resultset]);
 
-        //controllo file presenti da piu di un ora
+        // controllo file presenti da piu di un ora
         date_default_timezone_set("Europe/Rome");
         $filesInDir=scandir("../tmp",SCANDIR_SORT_DESCENDING);
         unset($filesInDir[count($filesInDir)-1]);
         unset($filesInDir[count($filesInDir)-1]);
         foreach($filesInDir as $v){
             $h=((time()-filemtime("../tmp/$v"))/3600);
-            if($h>0)
+            if($h>1)
                 unlink("../tmp/$v");
         }
 

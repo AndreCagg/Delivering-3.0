@@ -313,6 +313,7 @@ function insert(){
                                 <select name="nuovoStato" class="form-select form-select-sm" id="stateEvent" style="bottom:0;">
                                     <option value="0"></option>
                                     <option value="9">PRONTO PER PARTENZA</option>
+                                    <option value="17">PRONTO PER RITIRO</option>
                                     <option value="11">ARRIVATO IN MAGAZZINO</option>
                                     <option value="14">RIENTRATO IN MAGAZZINO</option>
                                     <option value="15">ACCANTONA MERCE</option>
@@ -321,7 +322,7 @@ function insert(){
                                     <option value="2">CONSEGNATO</option>
                                     <option value="16">CONSEGNA FALLITA (specifica in note)</option>
                                     <option value="3">RITIRO EFFETTUATO</option>
-                                    <option value="13">RITIRATO DA CORRIERE</option>
+                                    <option value="13">RITIRATO DA CORRIERE PRESSO NS SEDE</option>
                                     <option value="4">IN GIACENZA</option>
                                     <option value="5">RIFIUTATO</option>
                                     <option value="6">ASSEGNATO</option>

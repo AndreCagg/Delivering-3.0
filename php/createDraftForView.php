@@ -37,9 +37,9 @@
     $_SESSION["draft"]["Movimenti"]=$arr["Movimenti"];
     $_SESSION["draft"]["noerror"]="noerror";
     $_SESSION["draft"]["popup"]="";
-    // echo json_encode($_SESSION["draft"]);
 
-    $_SESSION["backService"]=2;
-
-    // print_r(json_encode($_SESSION["draft"]));
+    if(!isset($_GET["backservice"]))
+        $_SESSION["backService"]=2;
+    else
+        $_SESSION["backService"]=$_GET["backservice"];
 ?>
