@@ -52,9 +52,8 @@
                     $descrizione="login";
                     $conn=logActivity($id,$descrizione,$conn);
                     
-                    $data = date("Y-m-d H:i:s");
-                    $query = $conn->prepare("UPDATE utenti SET last_login=? WHERE id=?");
-                    $query->bind_param("si",$data,$id);
+                    $query = $conn->prepare("UPDATE utenti SET last_login=NOW(3) WHERE id=?");
+                    $query->bind_param("i",$id);
                     $query->execute();
                     $conn->commit();
 
