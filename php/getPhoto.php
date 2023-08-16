@@ -4,7 +4,7 @@
     require_once("../conf.php");
 
     session_start();
-    // isLogged("../",$_SESSION["login"]["level"],0);
+    isLogged("../",$_SESSION["login"]["level"],0);
 
     if(!isset($_GET["id"])){
         session_destroy();

@@ -15,10 +15,10 @@ async function getMagazzino(){
             tabCont.appendChild(div);
             
             let table=document.createElement("table");
-            table.classList.add("table");
-            table.classList.add("table-striped");
-            table.classList.add("table-hover");
-            table.classList.add("align-middle");
+            table.classList.add("table","table-striped","table-hover","align-middle");
+            // table.classList.add("table-striped");
+            // table.classList.add("table-hover");
+            // table.classList.add("align-middle");
 
             //header
 

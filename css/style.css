@@ -2,7 +2,7 @@ body{
     background-color: #f4f4f4 !important;
 }
 
-input[type="text"],input[type="number"],input[type="checkbox"],input[type="date"],input[type="password"],textarea,select{
+input[type="text"],input[type="number"],input[type="checkbox"],input[type="date"],input[type="password"],input[type="email"],textarea,select{
     border-style: ridge !important;
     border-color: #acafb3 !important;
 }
