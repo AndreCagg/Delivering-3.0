@@ -108,7 +108,8 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                     <!--CODICI SERVIZI 
                     1: INSERIMENTO
                     2: RICERCA
-                    3: MAGAZZINO-->
+                    3: MAGAZZINO
+                    4: AUTISTI-->
                     <?php
                     require_once "services.php";
                     if (!isset($_SESSION["service"]) || $_SESSION["service"] == 0) {
@@ -323,55 +324,11 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                             break;
                         case 4:
                             ?>
-                            <div id="alert-space"></div>
-                            <div id="draft-space" class="d-flex fw-bold"></div>
-                            <form action="../php/validateAut.php" method="post" id="autisti-form">
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="cognome">Cognome</label>
-                                        <input type="text" class="form-control" name="cognome" id="cognome">
-                                    </div>
-                                    <div class="col">
-                                        <label for="nome">Nome</label>
-                                        <input type="text" class="form-control" name="nome" id="nome">
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col">
-                                        <label for="email">Email</label>
-                                        <input type="email" class="form-control" name="email" id="email">
-                                    </div>
-                                    <div class="col">
-                                        <label for="tel">Cellulare</label>
-                                        <input type="text" class="form-control" name="tel" id="tel">
-                                    </div>
-                                </div>
-                                <div class="row mx-auto" style="width:200px;">
-                                    <input type="submit" class="mt-5 btn" value="Inserisci" id="saveAutisti" style="background-color:#cc0000;color:white;">
-                                </div>
-                            </form>
-                            <table id="autisti-tab">
-
-                            </table>
+                            <script src="../js/autisti.js"></script>
+                            <?php
+                            autisti();
+                            ?>
                             <script>
-                                function createAlert(type, text, space){
-                                    let alert=document.createElement("div");
-                                    alert.classList.add("alert", "alert-"+type, "alert-dismissible", "fade", "show");
-                                    alert.role="alert";
-                                    alert.appendChild(document.createTextNode(text));
-                                    let btn=document.createElement("button");
-                                    btn.type="button";
-                                    btn.classList.add("btn-close");
-                                    btn.setAttribute("data-bs-dismiss", "alert");
-                                    btn.setAttribute("aria-label", "Close");
-                                    alert.appendChild(btn);
-                                    space.appendChild(alert);
-
-                                    setTimeout(()=>{
-                                        space.removeChild(alert);
-                                    },2000);
-                                }
-
                                 document.getElementById("autisti-form").addEventListener("submit",async (e)=>{
                                     e.preventDefault();
                                     let b=true;
@@ -429,144 +386,6 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 });
 
                                 window.addEventListener("DOMContentLoaded",async ()=>{loadAutisti()});
-
-                                async function loadAutisti(){
-                                    clearTable();
-                                    const response=await fetch("../php/getAutisti.php");
-                                    const data=await response.json();
-
-                                    if(data.error=="false"){
-                                        autisti=data.autisti;
-                                        let table=document.getElementById("autisti-tab");
-                                        table.classList.add("table","table-striped","table-hover","align-middle","mt-5");
-
-                                        let line=table.insertRow();
-                                        line.classList.add("fw-bold","text-center");
-
-                                        let cell1=line.insertCell(0);
-                                        cell1.appendChild(document.createTextNode("COGNOME"));
-
-                                        let cell2=line.insertCell(1);
-                                        cell2.appendChild(document.createTextNode("NOME"));
-
-                                        let cell3=line.insertCell(2);
-                                        cell3.appendChild(document.createTextNode("EMAIL"));
-
-                                        let cell4=line.insertCell(3);
-                                        cell4.appendChild(document.createTextNode("TEL"));
-
-                                        let cell5=line.insertCell(4);
-
-                                        let cell6=line.insertCell(5);
-
-                                        for(let k in autisti){
-                                            let line=table.insertRow();
-                                            line.classList.add("text-center");
-
-                                            let cell1=line.insertCell(0);
-                                            cell1.appendChild(document.createTextNode(autisti[k]["cognome"]));
-
-                                            let cell2=line.insertCell(1);
-                                            cell2.appendChild(document.createTextNode(autisti[k]["nome"]));
-
-                                            let cell3=line.insertCell(2);
-                                            cell3.appendChild(document.createTextNode(autisti[k]["email"]));
-
-                                            let cell4=line.insertCell(3);
-                                            cell4.appendChild(document.createTextNode(autisti[k]["tel"]));
-
-                                            let cell5=line.insertCell(4);
-                                            let modifica=document.createElement("button");
-                                            modifica.classList.add("btn","btn-sm","btn-warning");
-                                            modifica.innerHTML="MODIFICA";
-                                            modifica.addEventListener("click",()=>{
-                                                compileForm(autisti[k]);
-                                            });
-                                            cell5.appendChild(modifica);
-
-                                            let cell6=line.insertCell(5);
-                                            let elimina=document.createElement("button");
-                                            elimina.classList.add("btn","btn-sm","btn-danger");
-                                            elimina.innerHTML="ELIMINA";
-                                            elimina.addEventListener("click",function(){
-                                                deleteAut(autisti[k]["id"]);
-                                            });
-                                            cell6.appendChild(elimina);
-
-                                        }
-                                    }
-                                }
-
-                                function compileForm(obj){
-                                    let space=document.getElementById("draft-space");
-                                    let input=document.getElementById("draft");
-                                    if(input!=null){
-                                        input.setAttribute("userid",obj["id"]);
-                                    }else{
-                                        input=document.createElement("input");
-                                        input.type="hidden";
-                                        input.name="draft";
-                                        input.id="draft";
-                                        input.setAttribute("userid",obj["id"]);
-                                        document.getElementById("autisti-form").appendChild(input);
-                                    }
-
-                                    populateFields(obj["nome"],obj["cognome"],obj["email"],obj["tel"]);
-
-                                    document.getElementById("saveAutisti").value="Modifica";
-
-                                    space.innerHTML="Stai modificando '"+obj["cognome"]+" "+obj["nome"]+"'";
-                                    let hint=document.createElement("div");
-                                    hint.classList.add("form-text","fw-normal");
-                                    hint.innerHTML="&nbsp;(Clicca qui per uscire dalla modifica)";
-                                    hint.addEventListener("click",()=>{
-                                        clearForm();
-                                    });
-                                    hint.style.cursor="pointer";
-                                    space.appendChild(hint);
-                                }
-
-                                function clearForm(){
-                                    if(document.getElementById("draft")!=null)
-                                        document.getElementById("autisti-form").removeChild(document.getElementById("draft"));
-
-                                    populateFields("","","","");
-                                    document.getElementById("draft-space").innerHTML="";
-                                    document.getElementById("saveAutisti").value="Inserisci"; 
-                                }
-
-                                function populateFields(nome,cognome,email,tel){
-                                    document.getElementById("nome").value=nome;
-                                    document.getElementById("cognome").value=cognome;
-                                    document.getElementById("email").value=email;
-                                    document.getElementById("tel").value=tel;
-                                }
-
-                                function clearTable(){ /*ATTENZIONE: FUNZIONE RIDONDATA IN FIND*/
-                                    let table=document.getElementById("autisti-tab");
-                                    for(let i=table.rows.length-1;i>=0;i--){
-                                        table.deleteRow(i);
-                                    }
-                                }
-
-                                async function deleteAut(id){
-                                    const response=await fetch("../php/validateAut.php",{
-                                            method: "DELETE",
-                                            headers:{
-                                                "Content-Type":"text/plain",
-                                            },
-                                            body: JSON.stringify({"id":id}),
-                                        });
-                                    const data=await response.json();
-                                    loadAutisti();
-
-                                    if(data.error=="no"){
-                                        createAlert("info","L'autista è stato correttamente eliminato",document.getElementById("alert-space"));
-                                    }else{
-                                        createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile eliminare l'autista",document.getElementById("alert-space"));
-                                    }
-                                }
-                                
                             </script>
                             <?php
                             break;
