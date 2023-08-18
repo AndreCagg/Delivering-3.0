@@ -377,7 +377,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     let b=true;
                                     $inputs=$("#autisti-form").find("input");
                                     $inputs.each(function(){
-                                        if(this.value==""){
+                                        if(this.value=="" && this.id!="draft"){
                                             this.classList.add("is-invalid");
                                             b=false;
                                         }else if(this.classList.contains("is-invalid")){
@@ -386,21 +386,41 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     });
 
                                     if(b){
+                                        let jsonobj={"Nome":document.getElementById("nome").value,
+                                                "Cognome":document.getElementById("cognome").value,
+                                                "Email":document.getElementById("email").value,
+                                                "Tel":document.getElementById("tel").value};
+                                        if(document.getElementById("draft")!=null){
+                                            jsonobj["draft"]=document.getElementById("draft").getAttribute("userid");
+                                        }
                                         const response=await fetch("../php/validateAut.php",{
                                             method: "POST",
                                             headers:{
                                                 "Content-Type":"text/plain",
                                             },
-                                            body: JSON.stringify({"Nome":document.getElementById("nome").value,
-                                                "Cognome":document.getElementById("cognome").value,
-                                                "Email":document.getElementById("email").value,
-                                                "Tel":document.getElementById("tel").value}),
+                                            body: JSON.stringify(jsonobj),
                                         });
 
                                         const data=await response.json();
                                         if(data.error=="no"){
-                                            createAlert("success","Autista creato con successo",document.getElementById("alert-space"));
+                                            populateFields("","","","");
+                                            let keyword="";
+                                            if(document.getElementById("draft")!=null){
+                                                keyword="modificato";
+                                            }else{
+                                                keyword="creato";
+                                            }
+
+                                            if(document.getElementById("draft")!=null)
+                                                document.getElementById("autisti-form").removeChild(document.getElementById("draft"));
+
+                                            createAlert("success","Autista "+keyword+" con successo",document.getElementById("alert-space"));
+                                            document.getElementById("draft-space").innerHTML="";
                                             loadAutisti();
+                                            let inputs=$("#autisti-form").find("input");
+                                            inputs.each(function(){
+                                                this.blur();
+                                            })
                                         }else{
                                             createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile salvere l'autista",document.getElementById("alert-space"));
                                         }
@@ -424,10 +444,10 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         line.classList.add("fw-bold","text-center");
 
                                         let cell1=line.insertCell(0);
-                                        cell1.appendChild(document.createTextNode("NOME"));
+                                        cell1.appendChild(document.createTextNode("COGNOME"));
 
                                         let cell2=line.insertCell(1);
-                                        cell2.appendChild(document.createTextNode("COGNOME"));
+                                        cell2.appendChild(document.createTextNode("NOME"));
 
                                         let cell3=line.insertCell(2);
                                         cell3.appendChild(document.createTextNode("EMAIL"));
@@ -444,10 +464,10 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                             line.classList.add("text-center");
 
                                             let cell1=line.insertCell(0);
-                                            cell1.appendChild(document.createTextNode(autisti[k]["nome"]));
+                                            cell1.appendChild(document.createTextNode(autisti[k]["cognome"]));
 
                                             let cell2=line.insertCell(1);
-                                            cell2.appendChild(document.createTextNode(autisti[k]["cognome"]));
+                                            cell2.appendChild(document.createTextNode(autisti[k]["nome"]));
 
                                             let cell3=line.insertCell(2);
                                             cell3.appendChild(document.createTextNode(autisti[k]["email"]));
@@ -468,6 +488,9 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                             let elimina=document.createElement("button");
                                             elimina.classList.add("btn","btn-sm","btn-danger");
                                             elimina.innerHTML="ELIMINA";
+                                            elimina.addEventListener("click",function(){
+                                                deleteAut(autisti[k]["id"]);
+                                            });
                                             cell6.appendChild(elimina);
 
                                         }
@@ -476,11 +499,18 @@ isLogged("../", $_SESSION["login"]["level"], "0");
 
                                 function compileForm(obj){
                                     let space=document.getElementById("draft-space");
-                                    let input=document.createElement("input");
-                                    input.type="hidden";
-                                    input.name="draft";
-                                    input.id="draft";
-        
+                                    let input=document.getElementById("draft");
+                                    if(input!=null){
+                                        input.setAttribute("userid",obj["id"]);
+                                    }else{
+                                        input=document.createElement("input");
+                                        input.type="hidden";
+                                        input.name="draft";
+                                        input.id="draft";
+                                        input.setAttribute("userid",obj["id"]);
+                                        document.getElementById("autisti-form").appendChild(input);
+                                    }
+
                                     populateFields(obj["nome"],obj["cognome"],obj["email"],obj["tel"]);
 
                                     document.getElementById("saveAutisti").value="Modifica";
@@ -516,6 +546,24 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     let table=document.getElementById("autisti-tab");
                                     for(let i=table.rows.length-1;i>=0;i--){
                                         table.deleteRow(i);
+                                    }
+                                }
+
+                                async function deleteAut(id){
+                                    const response=await fetch("../php/validateAut.php",{
+                                            method: "DELETE",
+                                            headers:{
+                                                "Content-Type":"text/plain",
+                                            },
+                                            body: JSON.stringify({"id":id}),
+                                        });
+                                    const data=await response.json();
+                                    loadAutisti();
+
+                                    if(data.error=="no"){
+                                        createAlert("info","L'autista è stato correttamente eliminato",document.getElementById("alert-space"));
+                                    }else{
+                                        createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile eliminare l'autista",document.getElementById("alert-space"));
                                     }
                                 }
                                 

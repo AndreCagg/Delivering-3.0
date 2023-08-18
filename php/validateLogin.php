@@ -71,16 +71,6 @@
                     //echo $e->getMessage();
                     $conn->rollback();
 
-                    if(isset($query)){
-                        $query->close();
-                        unset($query);
-                    }
-
-                    if(isset($conn)){
-                        $conn->close();
-                        unset($conn);
-                    }
-
                     throw new mysqli_sql_exception();
                 }
 
@@ -98,13 +88,14 @@
             if($e instanceof InvalidUser)
                 $_SESSION["error"]["message"] = "Utente non trovato. Riprova con username e/o password corretti";
 
+
+            goLogin("../html/login.php");
+        }finally{
             if(isset($query))
-                $query->close();
+            $query->close();
 
             if(isset($conn))
                 $conn->close();
-
-            goLogin("../html/login.php");
         }
     }else{
         goLogin("../html/login.php");
