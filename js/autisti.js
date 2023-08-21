@@ -1,4 +1,4 @@
-function createAlert(type, text, space){
+function createAlert(type, text, space){ //ATTENZIONE funzione ridondata in 
     let alert=document.createElement("div");
     alert.classList.add("alert", "alert-"+type, "alert-dismissible", "fade", "show");
     alert.role="alert";
@@ -18,11 +18,11 @@ function createAlert(type, text, space){
 
 async function loadAutisti(){
     clearTable();
-    const response=await fetch("../php/getAutisti.php");
+    const response=await fetch("../php/getAutisti.php?detail=true");
     const data=await response.json();
 
     if(data.error=="false"){
-        autisti=data.autisti;
+        let autisti=data.autisti;
         let table=document.getElementById("autisti-tab");
         table.classList.add("table","table-striped","table-hover","align-middle","mt-5");
 
@@ -80,6 +80,8 @@ async function loadAutisti(){
             cell6.appendChild(elimina);
 
         }
+    }else{
+        createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile caricare gli autisti",document.getElementById("alert-space"));
     }
 }
 

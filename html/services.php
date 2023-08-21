@@ -451,36 +451,36 @@ function search(){
 }
 function autisti(){
     ?>
-<div id="alert-space"></div>
-<div id="draft-space" class="d-flex fw-bold"></div>
-<form action="../php/validateAut.php" method="post" id="autisti-form">
-    <div class="row">
-        <div class="col">
-            <label for="cognome">Cognome</label>
-            <input type="text" class="form-control" name="cognome" id="cognome">
+    <div id="alert-space"></div>
+    <div id="draft-space" class="d-flex fw-bold"></div>
+    <form action="../php/validateAut.php" method="post" id="autisti-form">
+        <div class="row">
+            <div class="col">
+                <label for="cognome">Cognome</label>
+                <input type="text" class="form-control" name="cognome" id="cognome">
+            </div>
+            <div class="col">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" name="nome" id="nome">
+            </div>
         </div>
-        <div class="col">
-            <label for="nome">Nome</label>
-            <input type="text" class="form-control" name="nome" id="nome">
+        <div class="row">
+            <div class="col">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="email" id="email">
+            </div>
+            <div class="col">
+                <label for="tel">Cellulare</label>
+                <input type="text" class="form-control" name="tel" id="tel">
+            </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <label for="email">Email</label>
-            <input type="email" class="form-control" name="email" id="email">
+        <div class="row mx-auto" style="width:200px;">
+            <input type="submit" class="mt-5 btn" value="Inserisci" id="saveAutisti" style="background-color:#cc0000;color:white;">
         </div>
-        <div class="col">
-            <label for="tel">Cellulare</label>
-            <input type="text" class="form-control" name="tel" id="tel">
-        </div>
-    </div>
-    <div class="row mx-auto" style="width:200px;">
-        <input type="submit" class="mt-5 btn" value="Inserisci" id="saveAutisti" style="background-color:#cc0000;color:white;">
-    </div>
-</form>
-<table id="autisti-tab">
+    </form>
+    <table id="autisti-tab">
 
-</table>
-    <?php
+    </table>
+<?php
 }
 ?>

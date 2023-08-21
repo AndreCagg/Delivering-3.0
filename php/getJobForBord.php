@@ -10,12 +10,9 @@
     $tmp=[];
     $conn=null;
     try{
-        $field="*";
-        if(!$_GET["detail"])
-            $field="id,nome,cognome";
 
         $conn=new mysqli($dbAddress,$userOperator,$passOperator,$dbName);
-        $query=$conn->query("SELECT $field FROM autisti ORDER BY cognome ASC");
+        $query=$conn->query("SELECT  FROM autisti ORDER BY cognome ASC");
 
         while($row=$query->fetch_object()){
             $autisti[]=$row;

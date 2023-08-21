@@ -74,7 +74,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         <a href="#" class="nav-link px-0"><i><img src="../icons/visualizza.png" width="18px" alt="Visualizza borderò" /></i> <span class="d-none d-sm-inline">Visualizza</span></a>
                                     </li>
                                     <li>
-                                        <a href="#" class="nav-link px-0"><i><img src="../icons/crea.png" width="21px" alt="Crea borderò" /></i> <span class="d-none d-sm-inline">Crea</span></a>
+                                        <a href="../php/setService.php?service=5" class="nav-link px-0"><i><img src="../icons/crea.png" width="21px" alt="Crea borderò" /></i> <span class="d-none d-sm-inline">Crea</span></a>
                                     </li>
                                 </ul>
                             </li>
@@ -318,7 +318,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                             <div id="alert-space"></div>
                             <div id="table-container"></div>
                             <script>
-                                getMagazzino();
+                                getMagazzino("button");
                             </script>
                             <?php
                             break;
@@ -386,6 +386,116 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 });
 
                                 window.addEventListener("DOMContentLoaded",async ()=>{loadAutisti()});
+                            </script>
+                            <?php
+                            break;
+                        case 5:
+                            ?>
+                            <script src="../js/magazzino.js"></script>
+                            <div id="alert-space"></div>
+                            <div class="row">
+                                <div class="col-3" id="div-tab">
+                                    <table id="bord-aut-tab"></table>
+                                </div>
+                                <div class="col-auto overflow-auto mb-3" id="selectedMissions"></div>
+                                <hr>
+                                <div class="col-auto overflow-auto" id="table-container"></div>
+                            </div>
+                            <form action="" method="post">
+                                <input type="hidden" name="autid" id="autid" value="">
+                                <input type="hidden" name="missions" id="missions" value="">
+                            </form>
+                            <script>
+                                getMagazzino("checkbox");
+                                window.addEventListener("DOMContentLoaded",async ()=>{
+                                    let missionCont=document.getElementById("table-container");//tabella delle missioni
+                                    missionCont.style.display="block";
+                                    missionCont.style.maxHeight="500px";
+                                    missionCont.style.maxWidth="100%";
+                                    missionCont.style.fontSize="13px";
+
+
+                                    const response=await fetch("../php/getAutisti.php?detail=false");
+                                    const data=await response.json();
+
+                                    if(data.error=="false"){
+                                        let autisti=data.autisti;
+                                        let table=document.getElementById("bord-aut-tab");
+                                        table.style.display="block";
+                                        table.style.height="300px";
+                                        table.style.width="210px";
+                                        table.classList.add("table","table-striped","table-hover","align-middle","mt-3","fs-6","overflow-auto");
+
+                                        let line=table.insertRow();
+                                        line.classList.add("fw-bold","text-center");
+
+                                        let cell1=line.insertCell(0);
+                                        cell1.appendChild(document.createTextNode("COGNOME"));
+
+                                        let cell2=line.insertCell(1);
+                                        cell2.appendChild(document.createTextNode("NOME"));
+
+                                        for(let k in autisti){
+                                            let line=table.insertRow();
+                                            line.classList.add("text-center");
+
+                                            let cell1=line.insertCell(0);
+                                            line.id=autisti[k]["id"];
+                                            cell1.appendChild(document.createTextNode(autisti[k]["cognome"]));
+
+                                            let cell2=line.insertCell(1);
+                                            cell2.appendChild(document.createTextNode(autisti[k]["nome"]));
+
+                                            line.addEventListener("click",function(){
+                                                //controllo di altri eventuali autisti selezionati
+                                                //scorrere la tabella per cercare background color
+                                                for(let i=0;i<table.rows.length;i++){
+                                                    if(table.rows[i].style.backgroundColor!=""){
+                                                        table.rows[i].style.backgroundColor="";
+                                                    }
+                                                }
+
+                                                document.getElementById("autid").value=autisti[k]["id"];
+                                                this.style.backgroundColor="yellow";
+                                            });
+                                        }
+                                        if(autisti.length>0){
+                                            let text=document.createElement("div");
+                                            text.innerHTML="Clicca sulla riga corrispondente per selezionare l'autista";
+                                            text.classList.add("text-form","mb-3");
+                                            text.style.fontSize="13px";
+                                            document.getElementById("div-tab").appendChild(text);
+                                        }
+                                    }else{
+                                        createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile caricare gli autisti",document.getElementById("alert-space"));
+                                    }
+
+                                    // let missionTab=missionCont.querySelectorAll("table");
+                                    // console.log(missionTab);
+
+                                    // for(let k in missionTab){//scorro le tabelle
+                                    //     console.log(missionTab[k].cells);
+                                    //     // missionTab[k].cells[9]="<input type='checkbox' class='form-checkbox-control'>";
+                                    // }
+                                });
+
+                                function createAlert(type, text, space){
+                                    let alert=document.createElement("div");
+                                    alert.classList.add("alert", "alert-"+type, "alert-dismissible", "fade", "show");
+                                    alert.role="alert";
+                                    alert.appendChild(document.createTextNode(text));
+                                    let btn=document.createElement("button");
+                                    btn.type="button";
+                                    btn.classList.add("btn-close");
+                                    btn.setAttribute("data-bs-dismiss", "alert");
+                                    btn.setAttribute("aria-label", "Close");
+                                    alert.appendChild(btn);
+                                    space.appendChild(alert);
+
+                                    setTimeout(()=>{
+                                        space.removeChild(alert);
+                                    },2000);
+                                }
                             </script>
                             <?php
                             break;
