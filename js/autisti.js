@@ -74,7 +74,7 @@ async function loadAutisti(){
             let elimina=document.createElement("button");
             elimina.classList.add("btn","btn-sm","btn-danger");
             elimina.innerHTML="ELIMINA";
-            elimina.addEventListener("click",function(){
+            elimina.addEventListener("click",async function(){
                 deleteAut(autisti[k]["id"]);
             });
             cell6.appendChild(elimina);
@@ -130,7 +130,7 @@ function populateFields(nome,cognome,email,tel){
     document.getElementById("tel").value=tel;
 }
 
-function clearTable(){ /*ATTENZIONE: FUNZIONE RIDONDATA IN FIND*/
+function clearTable(){ /*ATTENZIONE: FUNZIONE RIDONDATA IN FIND,veicoli*/
     let table=document.getElementById("autisti-tab");
     for(let i=table.rows.length-1;i>=0;i--){
         table.deleteRow(i);

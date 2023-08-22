@@ -29,7 +29,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
             }
         </script>
         <?php
-            $banServ=[4];
+            $banServ=[4,6];
             if(isset($_SESSION["service"]) && in_array($_SESSION["service"],$banServ) && $_SESSION["login"]["level"]<=0)
                 goLogin("../");
         ?>
@@ -97,6 +97,11 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         </li>
                                     </ul>
                                 </li> 
+                                <li class="nav-item">
+                                    <a href="../php/setService.php?service=6" class="nav-link align-middle px-0">
+                                        <i><img src="../icons/camion.png" width="23px" alt="Gestisci le macchine" /></i><span class="ms-1 d-none d-sm-inline">Veicoli</span>
+                                    </a>
+                                </li>
                                 <?php
                             }
                             ?>
@@ -401,9 +406,10 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 <hr>
                                 <div class="col-auto overflow-auto" id="table-container"></div>
                             </div>
-                            <form action="" method="post">
+                            <form action="#" method="post" id="form-bord">
                                 <input type="hidden" name="autid" id="autid" value="">
                                 <input type="hidden" name="missions" id="missions" value="">
+                                <input type="submit" value="Crea" class="btn btn-primary mt-3" id="submitBord">
                             </form>
                             <script>
                                 getMagazzino("checkbox");
@@ -469,14 +475,14 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     }else{
                                         createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile caricare gli autisti",document.getElementById("alert-space"));
                                     }
+                                });
 
-                                    // let missionTab=missionCont.querySelectorAll("table");
-                                    // console.log(missionTab);
-
-                                    // for(let k in missionTab){//scorro le tabelle
-                                    //     console.log(missionTab[k].cells);
-                                    //     // missionTab[k].cells[9]="<input type='checkbox' class='form-checkbox-control'>";
-                                    // }
+                                document.getElementById("form-bord").addEventListener("submit",function(e){
+                                    e.preventDefault();
+                                    if(document.getElementById("missions").value=="" || document.getElementById("autid").value=="")
+                                        alert("ciao");
+                                    else
+                                        this.submit();
                                 });
 
                                 function createAlert(type, text, space){
@@ -496,6 +502,90 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         space.removeChild(alert);
                                     },2000);
                                 }
+                            </script>
+                            <?php
+                            break;
+                        case 6:
+                            ?>
+                            <script src="../js/veicoli.js"></script>
+                            <?php
+                            veicoli();
+                            ?>
+                            <script>
+                                document.getElementById("veic-form").addEventListener("submit",async (e)=>{
+                                    e.preventDefault();
+                                    let b=true;
+                                    $inputs=$("#veic-form").find("input");
+                                    $inputs.each(function(){
+                                        if(this.value=="" && this.id!="draft"){
+                                            this.classList.add("is-invalid");
+                                            b=false;
+                                        }else if(this.classList.contains("is-invalid")){
+                                            this.classList.remove("is-invalid");
+                                        }
+                                    });
+
+                                    if(b){
+                                        let jsonobj={"Targa":document.getElementById("targa").value,
+                                                "Nome":document.getElementById("nome").value};
+                                        if(document.getElementById("draft")!=null){
+                                            jsonobj["draft"]=document.getElementById("draft").getAttribute("veicid");
+                                        }
+                                        const response=await fetch("../php/validateVeic.php",{
+                                            method: "POST",
+                                            headers:{
+                                                "Content-Type":"text/plain",
+                                            },
+                                            body: JSON.stringify(jsonobj),
+                                        });
+
+                                        const data=await response.json();
+                                        if(data.error=="no"){
+                                            document.getElementById("targa").value="";
+                                            document.getElementById("nome").value="";
+                                            let keyword="";
+                                            if(document.getElementById("draft")!=null){
+                                                keyword="modificato";
+                                            }else{
+                                                keyword="creato";
+                                            }
+
+                                            if(document.getElementById("draft")!=null)
+                                                document.getElementById("veic-form").removeChild(document.getElementById("draft"));
+
+                                            createAlert("success","Veicolo "+keyword+" con successo",document.getElementById("alert-space"));
+                                            document.getElementById("draft-space").innerHTML="";
+                                            loadVeicoli();
+                                            let inputs=$("#veic-form").find("input");
+                                            inputs.each(function(){
+                                                this.blur();
+                                            })
+                                        }else{
+                                            createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile salvere il veicolo",document.getElementById("alert-space"));
+                                        }
+
+                                    }
+                                });
+
+                                function createAlert(type, text, space){
+                                    let alert=document.createElement("div");
+                                    alert.classList.add("alert", "alert-"+type, "alert-dismissible", "fade", "show");
+                                    alert.role="alert";
+                                    alert.appendChild(document.createTextNode(text));
+                                    let btn=document.createElement("button");
+                                    btn.type="button";
+                                    btn.classList.add("btn-close");
+                                    btn.setAttribute("data-bs-dismiss", "alert");
+                                    btn.setAttribute("aria-label", "Close");
+                                    alert.appendChild(btn);
+                                    space.appendChild(alert);
+
+                                    setTimeout(()=>{
+                                        space.removeChild(alert);
+                                    },2000);
+                                }
+
+                                window.addEventListener("DOMContentLoaded",async ()=>{loadVeicoli()});
                             </script>
                             <?php
                             break;

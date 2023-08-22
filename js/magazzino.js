@@ -90,9 +90,11 @@ async function getMagazzino(type){
                     elem.style.width="25px";
                     elem.style.height="25px";
 
-                    line.addEventListener("click",function(){
+                    line.addEventListener("click",function(e){
                         let missions=document.getElementById("missions");
-                        if(!elem.checked){
+                        
+                        let target=e.target.type;//undefined è line
+                        if((!elem.checked && target==undefined) || (elem.checked && target=="checkbox")){
                             addSelection(j,obj);
                             missions.value+=j+";";
                             elem.checked=true;
@@ -111,7 +113,6 @@ async function getMagazzino(type){
                             elem.checked=false;
                         }
                     });
-                    
                 }
                 cell10.appendChild(elem);
 
@@ -122,6 +123,10 @@ async function getMagazzino(type){
     }else{
         createAlert("Si è verificato un errore durante l'ottenimento dei dati");
     }
+}
+
+function selectLine(){
+    
 }
 
 function addSelection(j,obj){

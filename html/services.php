@@ -483,4 +483,28 @@ function autisti(){
     </table>
 <?php
 }
+function veicoli(){
+    ?>
+    <div id="alert-space"></div>
+    <div id="draft-space" class="d-flex fw-bold"></div>
+    <form action="../php/saveVeic.php" method="post" id="veic-form">
+        <div class="row">
+            <div class="col">
+                <label for="targa">Targa</label>
+                <input type="text" class="form-control" name="targa" id="targa">
+            </div>
+            <div class="col">
+                <label for="nome">Nome</label>
+                <input type="text" class="form-control" name="nome" id="nome">
+            </div>
+        </div>
+        <div class="row mx-auto" style="width:200px;">
+            <input type="submit" class="mt-5 btn" value="Inserisci" id="saveVeic" style="background-color:#cc0000;color:white;">
+        </div>
+    </form>
+    <table id="veic-tab">
+
+    </table>
+    <?php
+}
 ?>
