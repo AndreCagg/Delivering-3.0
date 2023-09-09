@@ -406,10 +406,15 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                 <hr>
                                 <div class="col-auto overflow-auto" id="table-container"></div>
                             </div>
-                            <form action="#" method="post" id="form-bord">
+                            <form action="../php/saveBordero.php" method="post" id="form-bord">
                                 <input type="hidden" name="autid" id="autid" value="">
                                 <input type="hidden" name="missions" id="missions" value="">
-                                <input type="submit" value="Crea" class="btn btn-primary mt-3" id="submitBord">
+                                <select name="targa" id="targa" class="form-select my-3" style="width:auto;">
+                                    <option value=""></option>
+                                </select>
+                                <div class="row mx-auto" style="width:200px;">
+                                    <input type="submit" value="Crea" class="btn btn-primary mt-3" id="submitBord">
+                                </div>
                             </form>
                             <script>
                                 getMagazzino("checkbox");
@@ -433,7 +438,7 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                         table.classList.add("table","table-striped","table-hover","align-middle","mt-3","fs-6","overflow-auto");
 
                                         let line=table.insertRow();
-                                        line.classList.add("fw-bold","text-center");
+                                        line.classList.add("fw-bold","text-center","sticky-top","bg-light");
 
                                         let cell1=line.insertCell(0);
                                         cell1.appendChild(document.createTextNode("COGNOME"));
@@ -475,17 +480,53 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     }else{
                                         createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile caricare gli autisti",document.getElementById("alert-space"));
                                     }
+
+                                    const response2=await fetch("../php/getVeic.php");
+                                    const data2=await response2.json();
+
+                                    if(data2.error=="false"){
+                                        let sel=document.getElementById("targa");
+                                        let opt=null;
+                                        for(let k in data2.veicoli){
+                                            opt=document.createElement("option");
+                                            opt.text=(data2.veicoli[k].targa+" - "+data2.veicoli[k].nome).toUpperCase();
+                                            opt.value=data2.veicoli[k].targa;
+                                            sel.add(opt);
+                                        }
+                                    }else{
+                                        createAlert("warning","Si è verificato un errore imprevisto e non è stato possibibile caricare i veicoli",document.getElementById("alert-space"));
+                                    }
                                 });
 
-                                document.getElementById("form-bord").addEventListener("submit",function(e){
+                                document.getElementById("form-bord").addEventListener("submit",async function(e){
                                     e.preventDefault();
-                                    if(document.getElementById("missions").value=="" || document.getElementById("autid").value=="")
-                                        alert("ciao");
-                                    else
-                                        this.submit();
+                                    if(document.getElementById("missions").value=="" || document.getElementById("autid").value=="" || document.getElementById("targa").value==""){
+                                        createAlert("warning","Compila correttamente il form",document.getElementById("alert-space"),false);
+                                    }else{
+                                        const response=await fetch("../php/saveBordero.php",{
+                                            method: "POST",
+                                            headers:{
+                                                "Content-Type":"text/plain",
+                                            },
+                                            body: JSON.stringify({"autid":document.getElementById("autid").value,
+                                                "missions":document.getElementById("missions").value,
+                                                "targa":document.getElementById("targa").value}),
+                                        });
+
+                                        const data=await response.json();
+                                        let type="success";
+                                        let message="Borderò salvato correttamente!";
+                                        
+                                        if(data.error==true){
+                                            type="warning";
+                                            message="Si è verificato un errore imprevisto e non è stato possibibile salvare il borderò";
+                                        }
+                                    
+                                        createAlert(type,message,document.getElementById("alert-space"),!(type=="warning"));
+                                    }
                                 });
 
-                                function createAlert(type, text, space){
+                                function createAlert(type, text, space,autodel){
                                     let alert=document.createElement("div");
                                     alert.classList.add("alert", "alert-"+type, "alert-dismissible", "fade", "show");
                                     alert.role="alert";
@@ -498,9 +539,11 @@ isLogged("../", $_SESSION["login"]["level"], "0");
                                     alert.appendChild(btn);
                                     space.appendChild(alert);
 
-                                    setTimeout(()=>{
-                                        space.removeChild(alert);
-                                    },2000);
+                                    if((autodel!=undefined && autodel) || autodel==undefined){
+                                        setTimeout(()=>{
+                                            space.removeChild(alert);
+                                        },2000);
+                                    }
                                 }
                             </script>
                             <?php

@@ -102,7 +102,7 @@ async function getMagazzino(type){
                             let selectedMis=document.getElementById("selectedMissions").querySelector("table");
                             let rows=selectedMis.rows;
                             let thisid=this.querySelector("td").innerHTML;
-                            missions=missions.value.replace(j+";","");
+                            missions.value=missions.value.replace(j+";","");
 
                             //eliminazione
                             for(let k=0;k<rows.length;k++){
